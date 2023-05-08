@@ -33,19 +33,46 @@ instInfoPtr_t decodeInstruction(uint32_t fullInstruction)
 		//TODO: Return somthing other than NULL. Should trigger a hazard?
 		return NULL;
 	}
+
+	//Allocate struct
+	instInfoPtr_t instruction = new instInfo_t;
 	
 	switch (format)
 	{
 	case instFormat::Rtype:
-		//TODO: allocate struct, fill out and return
-		break;
+		//TODO: fill out and return struct
+
+		//Get the Rs bits
+		instruction->Rs = (fullInstruction >> 21) & 0x1F;
+
+		//Get the Rt bits
+		instruction->Rt = (fullInstruction >> 16) & 0x1F;
+
+		//Get the Rd bits
+		instruction->Rd = fullInstruction >> 12;
+
+		return instruction;
+	
 
 	case instFormat::Itype:
-		//TODO: allocate struct, fill out and return
-		break;
+		//TODO: fill out and return struct
+
+		//Get the Rs bits
+		instruction->Rs = (fullInstruction >> 21) & 0x1F;
+
+		//Get the Rt bits
+		instruction->Rt = (fullInstruction >> 16) & 0x1F;
+
+		//Get immediate bits
+		instruction->immediate = fullInstruction & 0xFFFF;
+
+		return instruction;
+
 
 	default:
 		std::cout << "\nERROR: Invalid instruction format!\n" << std::endl;
+		delete instruction;
+		
 		//TODO: Return somthing other than NULL. Should trigger a hazard?
 		return NULL;
 	}
