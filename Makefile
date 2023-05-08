@@ -4,7 +4,7 @@ CPPFLAGS = -std=c++2a -Wall -g
 # Directories
 SRC_DIR = ./src
 INC_DIR = ./include
-OBJ_DIR = ./obj
+OBJ_DIR = .
 
 # If any files are called 'all', 'default', or 'clean', make will ignore and
 # use the below targets instead
