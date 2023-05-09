@@ -8,7 +8,5 @@ int main(int argc, char *argv[])
 
     std::cout << "Hello World!" << std::endl;
 
-    decodeInstruction(0x24A60001);
-
 	return 0;
 }
