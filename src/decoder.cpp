@@ -43,13 +43,13 @@ instInfoPtr_t decodeInstruction(uint32_t fullInstruction)
 		//TODO: fill out and return struct
 
 		//Get the Rs bits
-		instruction->Rs = (fullInstruction >> 21) & 0x1F;
+		instruction->RsAddr = (fullInstruction >> 21) & 0x1F;
 
 		//Get the Rt bits
-		instruction->Rt = (fullInstruction >> 16) & 0x1F;
+		instruction->RtAddr = (fullInstruction >> 16) & 0x1F;
 
 		//Get the Rd bits
-		instruction->Rd = fullInstruction >> 12;
+		instruction->RdAddr = fullInstruction >> 12;
 
 		return instruction;
 	
@@ -58,10 +58,10 @@ instInfoPtr_t decodeInstruction(uint32_t fullInstruction)
 		//TODO: fill out and return struct
 
 		//Get the Rs bits
-		instruction->Rs = (fullInstruction >> 21) & 0x1F;
+		instruction->RsAddr = (fullInstruction >> 21) & 0x1F;
 
 		//Get the Rt bits
-		instruction->Rt = (fullInstruction >> 16) & 0x1F;
+		instruction->RtAddr = (fullInstruction >> 16) & 0x1F;
 
 		//Get immediate bits
 		instruction->immediate = fullInstruction & 0xFFFF;

@@ -39,14 +39,17 @@ enum instFormat
 	Itype,
 	Invalid
 };
-
+ 
 typedef struct instInfo
 {
 	opcodes opcode;
 	instFormat type;
-	uint8_t Rs;
-	uint8_t Rt;
-	uint8_t Rd;
+	uint8_t RsAddr;
+	uint8_t RtAddr;
+	uint8_t RdAddr;
+	uint32_t RsVal;
+	uint32_t RtVal;
+	uint32_t RdVal;
 	uint16_t immediate;
 }instInfo_t, *instInfoPtr_t;
 
