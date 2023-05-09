@@ -36,11 +36,15 @@ instInfoPtr_t decodeInstruction(uint32_t fullInstruction)
 
 	//Allocate struct
 	instInfoPtr_t instruction = new instInfo_t;
-	
+
+	//Set opcode and type
+	instruction->opcode = static_cast<opcodes>(opcodeBits);
+	instruction->type = format;
+
 	switch (format)
 	{
 	case instFormat::Rtype:
-		//TODO: fill out and return struct
+		//Fill out and return struct
 
 		//Get the Rs bits
 		instruction->RsAddr = (fullInstruction >> 21) & 0x1F;
@@ -49,13 +53,13 @@ instInfoPtr_t decodeInstruction(uint32_t fullInstruction)
 		instruction->RtAddr = (fullInstruction >> 16) & 0x1F;
 
 		//Get the Rd bits
-		instruction->RdAddr = fullInstruction >> 12;
+		instruction->RdAddr = (fullInstruction >> 11) & 0x1F;
 
 		return instruction;
 	
 
 	case instFormat::Itype:
-		//TODO: fill out and return struct
+		//Fill out and return struct
 
 		//Get the Rs bits
 		instruction->RsAddr = (fullInstruction >> 21) & 0x1F;
@@ -76,7 +80,7 @@ instInfoPtr_t decodeInstruction(uint32_t fullInstruction)
 		//TODO: Return somthing other than NULL. Should trigger a hazard?
 		return NULL;
 	}
-
-	return instInfoPtr_t();
 }
 //0010_0100_1010_0110_0000_0000_0000_0001   <-Value used for testing 24A60001
+//001000 01010 00010 11010 00000000000  <- 2142D000
+//001000 01010 00010 1101000001001100  <- 2D42D04C
