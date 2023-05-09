@@ -4,6 +4,7 @@
 #include <iostream>
 #include <queue>
 #include <cstdint>
+#include "decoder.h"
 
 class Sys_Core {
 private:
@@ -20,10 +21,10 @@ public:
     int IF, ID, EX, MEM, WB;
 
     // Buffers in between the stages
-    std::queue<int> IFtoID;
-    std::queue<int> IDtoEX;
-    std::queue<int> EXtoMEM;
-    std::queue<int> MEMtoWB;
+    std::queue<instInfoPtr_t> IFtoID;
+    std::queue<instInfoPtr_t> IDtoEX;
+    std::queue<instInfoPtr_t> EXtoMEM;
+    std::queue<instInfoPtr_t> MEMtoWB;
 
     // Memory Read and Write methods
     uint32_t mem_read();
