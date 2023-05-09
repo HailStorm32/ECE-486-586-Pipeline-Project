@@ -64,7 +64,7 @@ instInfoPtr_t decodeInstruction(uint32_t fullInstruction)
 		instruction->RtAddr = (fullInstruction >> 16) & 0x1F;
 
 		//Get immediate bits
-		instruction->immediate = fullInstruction & 0xFFFF;
+		instruction->immediate = ((fullInstruction & 0xFFFF) >> 2) | 0xC000;
 
 		return instruction;
 
