@@ -1,6 +1,6 @@
 #include <iostream>
-#include "../include/decoder.h"
-#include "../include/sys_core.h"
+#include "decoder.h"
+#include "sys_core.h"
 
 int main(int argc, char *argv[])
 {
