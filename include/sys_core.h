@@ -12,15 +12,15 @@ private:
     // Stage struct to keep track of threads/stages
     typedef struct stage{
         // flags
-        bool use_fwd;
-        bool error;
-        bool ok_run;
+        volatile bool use_fwd;
+        volatile bool error;
+        volatile bool ok_run;
 
         // forwarded vals
-        uint32_t Rs;
-        uint32_t Rt;
-        uint32_t Rd;
-        uint16_t immediate;
+        volatile uint32_t Rs;
+        volatile uint32_t Rt;
+        volatile uint32_t Rd;
+        volatile uint16_t immediate;
     } stage_thread_t;
 
 public:        
@@ -28,7 +28,7 @@ public:
     uint32_t PC;
 
     // Array of registers 0-31
-    uint32_t reg[31];
+    uint32_t reg[32];
 
     // Clock
     long long clk;
