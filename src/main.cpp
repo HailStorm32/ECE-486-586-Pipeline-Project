@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     std::cout << "Sys_Core.PC = " << sys_core.PC << '\n'; 
     
     for (int i = 0; i < 32; i++){
-        std::cout << "Sys_Core.reg = " << sys_core.reg[i] << '\n';
+        std::cout << "Sys_Core.reg = " << sys_core.reg[i] << " i=" << i << '\n';
     }
 
     std::cout << "Sys_Core.clk = " << sys_core.clk << '\n';
