@@ -31,7 +31,7 @@ void IDthread(Sys_Core& sysCore)
 
 				if (instructionData == NULL)
 				{
-					std::cout << "\nERROR: Invalid instruction: 0x" << std::hex << fullInstruction << std::dec << "\n\n";
+					std::cout << "\nERROR: Invalid instruction: 0x" << std::hex << fullInstruction << std::dec << ", Skipping...\n\n";
 					//TODO: Report to master thread that we have an invalid instruction
 					continue;
 				}
@@ -54,10 +54,14 @@ void IDthread(Sys_Core& sysCore)
 					break;
 
 				default:
-					std::cout << "\nERROR: Format check bypassed [IDthread]\n" << std::endl;
-					break;
+					std::cout << "\nERROR: Format check bypassed [IDthread], Skipping instruction..\n" << std::endl;
+					continue;
 				}
 
+				//Pass instruction data to EX stage
+				sysCore.IDtoEX.push(instructionData);
+
+				//TODO: Take note of current clock value
 			}
 		}
 
