@@ -18,7 +18,7 @@ void IDthread(Sys_Core& sysCore)
 		if (!sysCore.IFtoID.empty())
 		{
 			//Get the instruction out of the queue
-			uint32_t fullInstruction = sysCore.IFtoID.front();
+			uint32_t fullInstruction = 0;//sysCore.IFtoID.front(); //TODO: Reenable when sys_core has been changed
 
 			//Only coninue if the clock has changed and we have the go ahead from the master
 			if (1) //TODO: Check the core class clock and go ahead variable
