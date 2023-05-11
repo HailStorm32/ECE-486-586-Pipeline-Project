@@ -6,15 +6,15 @@
 #include "decoder.h"
 
 class Sys_Core {
-private:
-
-
 public:        
     // Program Counter
     uint32_t PC;
 
     // Array of registers 0-31
     uint32_t reg[31];
+
+    // Clock
+    long long clk;
 
     // 5 stages of pipline
     int IF, ID, EX, MEM, WB;
