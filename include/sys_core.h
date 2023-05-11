@@ -11,9 +11,16 @@ private:
 
     // Stage struct to keep track of threads/stages
     typedef struct stage{
+        // flags
         bool use_fwd;
         bool error;
         bool ok_run;
+
+        // forwarded vals
+        uint32_t Rs;
+        uint32_t Rt;
+        uint32_t Rd;
+        uint16_t immediate;
     } stage_thread_t;
 
 public:        
@@ -27,7 +34,11 @@ public:
     long long clk;
 
     // 5 stages of pipline
-    stage_thread_t IF, ID, EX, MEM, WB;
+    stage_thread_t stageInfoIF;
+    stage_thread_t stageInfoID;
+    stage_thread_t stageInfoEX;
+    stage_thread_t stageInfoMEM;
+    stage_thread_t stageInfoWB;
 
     // Buffers in between the stages
     std::queue<uint32_t> IFtoID;
