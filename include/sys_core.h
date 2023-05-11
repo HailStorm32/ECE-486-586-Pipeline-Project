@@ -8,6 +8,8 @@
 
 class Sys_Core {
 private:
+
+    // Stage struct to keep track of threads/stages
     typedef struct stage{
         bool use_fwd;
         bool error;
@@ -32,6 +34,9 @@ public:
     std::queue<instInfoPtr_t> IDtoEX;
     std::queue<instInfoPtr_t> EXtoMEM;
     std::queue<instInfoPtr_t> MEMtoWB;
+
+    // Core Constructor
+    Sys_Core();
 
     // Memory Read and Write methods
     uint32_t mem_read();
