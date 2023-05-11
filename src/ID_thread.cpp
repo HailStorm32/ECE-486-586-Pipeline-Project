@@ -18,11 +18,14 @@ void IDthread(Sys_Core& sysCore)
 		if (!sysCore.IFtoID.empty())
 		{
 			//Get the instruction out of the queue
-			uint32_t fullInstruction = 0;//sysCore.IFtoID.front(); //TODO: Reenable when sys_core has been changed
+			uint32_t fullInstruction = sysCore.IFtoID.front();
 
 			//Only coninue if the clock has changed and we have the go ahead from the master
-			if (1) //TODO: Check the core class clock and go ahead variable
+			if (pastClkVal < sysCore.clk && sysCore.stageInfoID.ok_run) 
 			{
+				//Record the new clock value
+				pastClkVal = sysCore.clk;
+
 				//Since we can contiue, pop the instruction off the stack
 				sysCore.IFtoID.pop();
 
@@ -33,6 +36,7 @@ void IDthread(Sys_Core& sysCore)
 				{
 					std::cout << "\nERROR: Invalid instruction: 0x" << std::hex << fullInstruction << std::dec << ", Skipping...\n\n";
 					//TODO: Report to master thread that we have an invalid instruction
+					sysCore.stageInfoID.error = true;
 					continue;
 				}
 
@@ -60,8 +64,6 @@ void IDthread(Sys_Core& sysCore)
 
 				//Pass instruction data to EX stage
 				sysCore.IDtoEX.push(instructionData);
-
-				//TODO: Take note of current clock value
 			}
 		}
 
