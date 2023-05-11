@@ -11,10 +11,10 @@ Sys_Core::Sys_Core(){
 
 // Memory Read method: 
 uint32_t Sys_Core::mem_read(){
-
+    return 0;
 }
 
 // Memory Write method:
 uint32_t Sys_Core::mem_write(){
-
+    return 0;
 }
