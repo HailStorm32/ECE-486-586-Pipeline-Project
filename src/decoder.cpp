@@ -1,4 +1,4 @@
-#include "../include/decoder.h"
+#include "decoder.h"
 #include <iostream>
 
 instFormat returnInstType(uint8_t opcodeBits)
