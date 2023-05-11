@@ -1,7 +1,6 @@
 #ifndef __SYS_CORE_H
 #define __SYS_CORE_H
 
-#include <iostream>
 #include <queue>
 #include <cstdint>
 #include "decoder.h"
@@ -21,7 +20,7 @@ public:
     int IF, ID, EX, MEM, WB;
 
     // Buffers in between the stages
-    std::queue<instInfoPtr_t> IFtoID;
+    std::queue<uint32_t> IFtoID;
     std::queue<instInfoPtr_t> IDtoEX;
     std::queue<instInfoPtr_t> EXtoMEM;
     std::queue<instInfoPtr_t> MEMtoWB;
