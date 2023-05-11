@@ -3,9 +3,17 @@
 
 #include <queue>
 #include <cstdint>
+
 #include "decoder.h"
 
 class Sys_Core {
+private:
+    typedef struct stage{
+        bool use_fwd;
+        bool error;
+        bool ok_run;
+    } stage_thread_t;
+
 public:        
     // Program Counter
     uint32_t PC;
@@ -17,7 +25,7 @@ public:
     long long clk;
 
     // 5 stages of pipline
-    int IF, ID, EX, MEM, WB;
+    stage_thread_t IF, ID, EX, MEM, WB;
 
     // Buffers in between the stages
     std::queue<uint32_t> IFtoID;
