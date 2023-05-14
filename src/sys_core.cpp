@@ -1,6 +1,6 @@
 #include <cstring>
 
-#include "../include/sys_core.h"
+#include "sys_core.h"
 
 // Core Constructor: Initialize variables and arrays to 0s
 Sys_Core::Sys_Core(){

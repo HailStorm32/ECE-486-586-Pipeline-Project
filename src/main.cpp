@@ -2,8 +2,8 @@
 #include <chrono>   // researched that chrono header might be the choice 
                     // since it is portable to Windows and Linux
 
-#include "../include/decoder.h"
-#include "../include/sys_core.h"
+#include "decoder.h"
+#include "sys_core.h"
 
 int main(int argc, char *argv[])
 {
