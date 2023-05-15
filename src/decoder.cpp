@@ -19,7 +19,7 @@ instFormat returnInstType(uint8_t opcodeBits)
 }
 
 
-instInfoPtr_t decodeInstruction(uint32_t fullInstruction)
+instInfoPtr_t decodeInstruction(const uint32_t fullInstruction)
 {
 	uint8_t opcodeBits;
 	instFormat format;

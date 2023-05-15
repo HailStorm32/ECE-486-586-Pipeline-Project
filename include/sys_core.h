@@ -55,7 +55,7 @@ private:
     *	string -- Line at given line number
     *   empty string -- If error
     */
-    std::string get_line_from_line_num(uint32_t target_line_num);
+    std::string get_line_from_line_num(const uint32_t target_line_num);
     
     /*
     * Description:
@@ -68,7 +68,9 @@ private:
     *	uint32_t -- total number of lines
     *   UINT_MAX -- On error
     */
-    uint32_t get_file_size(std::string file_path);
+    uint32_t get_file_size(const std::string file_path);
+
+    uint32_t ceil_div(const uint32_t dividend, const uint32_t divisor);
     
 
 public:        
@@ -101,7 +103,7 @@ public:
     Sys_Core(std::string file_path);
 
     // Memory Read and Write methods
-    uint32_t mem_read();
+    uint32_t mem_read(const uint32_t address, const bool is_inst_mem);
     uint32_t mem_write();
 };
 #endif

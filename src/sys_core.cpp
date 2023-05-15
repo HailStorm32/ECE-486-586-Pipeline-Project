@@ -48,7 +48,7 @@ uint32_t Sys_Core::find_data_mem(){
     return UINT32_MAX;
 }
 
-std::string Sys_Core::get_line_from_line_num(uint32_t target_line_num)
+std::string Sys_Core::get_line_from_line_num(const uint32_t target_line_num)
 {
     std::string line_data = "";
     uint32_t adjusted_target_line = UINT32_MAX;
@@ -85,7 +85,7 @@ std::string Sys_Core::get_line_from_line_num(uint32_t target_line_num)
     return line_data;
 }
 
-uint32_t Sys_Core::get_file_size(std::string file_path)
+uint32_t Sys_Core::get_file_size(const std::string file_path)
 {
     uint32_t total_num_of_lines = 0;
     
@@ -137,7 +137,7 @@ Sys_Core::Sys_Core(std::string file_path){
 }
 
 // Memory Read method: 
-uint32_t Sys_Core::mem_read(uint32_t address, bool is_inst_mem){
+uint32_t Sys_Core::mem_read(const uint32_t address, const bool is_inst_mem){
     uint32_t line_number = 0;
 
     if (is_inst_mem)

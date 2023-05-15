@@ -65,4 +65,4 @@ typedef struct instInfo
 *	instInfoPtr_t -- Pointer to struct containing instuction parts
 *	NULL -- If invalid instruction
 */
-instInfoPtr_t decodeInstruction(uint32_t fullInstruction);
+instInfoPtr_t decodeInstruction(const uint32_t fullInstruction);
