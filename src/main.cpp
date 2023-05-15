@@ -8,7 +8,7 @@
 int main(int argc, char *argv[])
 {
     // Initialize system core
-    Sys_Core sys_core;
+    Sys_Core sys_core("test.txt");
 
     // Check what Sys_Core vars initialized to
     std::cout << "Sys_Core.PC = " << sys_core.PC << '\n'; 

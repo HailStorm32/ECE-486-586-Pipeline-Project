@@ -8,8 +8,9 @@ uint32_t Sys_Core::find_data_mem(){
 
     //Make sure the file opened
     if (!file.is_open()){
-
+        std::cerr << "\nERROR: unable to open file: " << file_path << std::endl;
     }
+    return 0;
 }
 
 // Core Constructor: Initialize variables and arrays to 0s
