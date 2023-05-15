@@ -70,7 +70,17 @@ private:
     */
     uint32_t get_file_size(const std::string file_path);
 
-    uint32_t ceil_div(const uint32_t dividend, const uint32_t divisor);
+    /*
+    * Description:
+    *	Finds the line containing the specific address
+    *
+    * Arguments:
+    *	(INPUT) address -- address location in memory file
+    *
+    * Return:
+    *	uint32_t -- line that contains given address
+    */
+    uint32_t addr_to_line(const uint32_t address);
     
 
 public:        

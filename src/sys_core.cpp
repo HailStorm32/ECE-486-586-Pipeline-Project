@@ -39,7 +39,6 @@ uint32_t Sys_Core::find_data_mem(){
             return ++current_line_num;
         }
         else {
-            //std::cout << "Opcode found "
             current_line_num++;
         }
     }
@@ -112,12 +111,19 @@ uint32_t Sys_Core::get_file_size(const std::string file_path)
     return total_num_of_lines;
 }
 
+uint32_t Sys_Core::addr_to_line(const uint32_t address)
+{
+    //Each line is 4 simulated bytes long. We add one b/c we index the lines from 1. 
+    //  Integer division already floors the result, so we dont have to worry about that
+    return (address / 4) + 1; 
+}
+
 // Core Constructor: Initialize variables and arrays to 0s
 Sys_Core::Sys_Core(std::string file_path){
     PC = 0;
     memset(reg, 0, sizeof(reg));
     clk = 0;
-
+ 
     this->file_path = file_path;
 
     //Get the total number of lines the file has
@@ -143,7 +149,7 @@ uint32_t Sys_Core::mem_read(const uint32_t address, const bool is_inst_mem){
     if (is_inst_mem)
     {
         //Find line number
-        address / 4;
+        //address / 4;
     }
 
 
