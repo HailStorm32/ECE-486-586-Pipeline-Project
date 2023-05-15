@@ -38,6 +38,19 @@ private:
     *	UINT_MAX -- On error
     */
     uint32_t find_data_mem();
+
+    /*
+    * Description:
+    *	Returns given line from file
+    *
+    * Arguments:
+    *	(INPUT) targ_line_num -- line of file (counts from 0)
+    *
+    * Return:
+    *	string -- Line at given line number
+    *   NULL -- If error
+    */
+    std::string get_line_from_line_num(uint32_t targ_line_num);
     
 
 public:        

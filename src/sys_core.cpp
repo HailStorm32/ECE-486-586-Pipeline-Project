@@ -8,7 +8,7 @@ uint32_t Sys_Core::find_data_mem(){
     uint32_t current_line_num = 0;
     std::string line_data = "";
     instInfoPtr_t inst_info = NULL;
-    
+   
     //Open the file
     std::ifstream file(file_path);
 
@@ -43,6 +43,30 @@ uint32_t Sys_Core::find_data_mem(){
 
     //If we have gotten this far, we never found the HALT instruction
     return UINT32_MAX;
+}
+
+std::string Sys_Core::get_line_from_line_num(uint32_t targ_line_num)
+{
+    std::ifstream file(file_path);
+    uint32_t current_line_number = 0;
+    std::string line = "";
+
+    if (file.is_open()) {
+        
+        while (std::getline(file, line)) {
+      
+            if (current_line_number == targ_line_num) {
+                break;
+            }
+            current_line_number++;
+        }
+        file.close();
+    }
+    else {
+        std::cerr << "\nERROR: Unable to open file: " << file_path << "\n\n";
+    }
+
+    return line;
 }
 
 // Core Constructor: Initialize variables and arrays to 0s
