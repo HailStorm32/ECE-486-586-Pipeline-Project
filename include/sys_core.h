@@ -49,13 +49,13 @@ private:
     *	Returns given line from file
     *
     * Arguments:
-    *	(INPUT) targ_line_num -- line of file (counts from 0)
+    *	(INPUT) target_line_num -- line of file (counts from 0)
     *
     * Return:
     *	string -- Line at given line number
     *   empty string -- If error
     */
-    std::string get_line_from_line_num(uint32_t targ_line_num);
+    std::string get_line_from_line_num(uint32_t target_line_num);
     
     /*
     * Description:

@@ -14,15 +14,10 @@ uint32_t Sys_Core::find_data_mem(){
     std::ifstream file(file_path);
 
     //Make sure the file opened
-    if (!file.is_open()){
+    if (!file.is_open()) {
         std::cerr << "\nERROR: Unable to open file: " << file_path << "\n\n";
         exit(1);
     }
-    get_line_from_line_num(42);
-    
-
-    std::getline(file, line_data);
-
 
     //Cycle through all the lines
     while (std::getline(file, line_data))
@@ -51,10 +46,10 @@ uint32_t Sys_Core::find_data_mem(){
     return UINT32_MAX;
 }
 
-std::string Sys_Core::get_line_from_line_num(uint32_t targ_line_num)
+std::string Sys_Core::get_line_from_line_num(uint32_t target_line_num)
 {
-    uint32_t total_num_of_lines = 0;
-    std::string line = "";
+    std::string line_data = "";
+    uint32_t adjusted_target_line = UINT32_MAX;
 
     std::ifstream file(file_path);
    
@@ -64,20 +59,28 @@ std::string Sys_Core::get_line_from_line_num(uint32_t targ_line_num)
         exit(1);
     }
 
-    //Get the total number of lines the file has
-    total_num_of_lines = std::ios_base::end / TOTAL_FILE_LINE_LENGTH;
+    //NOTE: We will need to offest our target by -1 b/c (total line length * our target line number) will always put us at the end of that line
+    //  Given a line length of 9 bytes, if we want to read line 2, then 9*2=18 which will put the pointer at the end of line 2, and when we do a 
+    //  getline, it will read the next line (3). Hence why we offset by -1. So with the offset, it will be 9*1=9 putting us at the end of line 1, 
+    //  and the getline will read line 2, what we want
+    adjusted_target_line = (target_line_num - 1);
 
-    if (file.is_open()) {
-       
-        file.seekg(TOTAL_FILE_LINE_LENGTH * 341, std::ios_base::beg);
-       
-        file.close();
-    }
-    else {
-        std::cerr << "\nERROR: Unable to open file: " << file_path << "\n\n";
+    //Return if we are given an invalid line number
+    if (adjusted_target_line > total_num_of_lines)
+    {
+        std::cerr << "\nERROR: Given invalid line number [" << target_line_num << "], max # of lines in file is: " << total_num_of_lines << "\n\n";
+        return line_data;
     }
 
-    return line;
+    //Move the file pointer to the target line
+    file.seekg(TOTAL_FILE_LINE_LENGTH * adjusted_target_line, std::ios_base::beg); 
+
+    //Get the next line
+    std::getline(file, line_data);
+
+    file.close();
+
+    return line_data;
 }
 
 uint32_t Sys_Core::get_file_size(std::string file_path)
@@ -115,6 +118,7 @@ Sys_Core::Sys_Core(std::string file_path){
 
     this->file_path = file_path;
 
+    //Get the total number of lines the file has
     if ((total_num_of_lines = get_file_size(file_path)) == UINT32_MAX) {
         std::cerr << "\nERROR: get_file_size returned UINT32_MAX" << "\n\n";
         exit(1);
