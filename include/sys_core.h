@@ -3,7 +3,7 @@
 
 #include <queue>
 #include <cstdint>
-
+#include <iostream>
 #include "decoder.h"
 
 class Sys_Core {
@@ -22,6 +22,23 @@ private:
         volatile uint32_t Rd;
         volatile uint16_t immediate;
     } stage_thread_t;
+
+    std::string file_path;
+
+    /*
+    * Description:
+    *	Finds and returns the line number of the file
+    *   for where data memory begins
+    *
+    * Arguments:
+    *	None
+    *
+    * Return:
+    *	uint32_t -- Line that marks the beginning of data memory
+    *	UINT_MAX -- If cant find line
+    */
+    uint32_t find_data_mem();
+    
 
 public:        
     // Program Counter
@@ -46,8 +63,11 @@ public:
     std::queue<instInfoPtr_t> EXtoMEM;
     std::queue<instInfoPtr_t> MEMtoWB;
 
+    // Contains line of file that starts data memory
+    uint32_t data_mem_start_line;
+
     // Core Constructor
-    Sys_Core();
+    Sys_Core(std::string file_path);
 
     // Memory Read and Write methods
     uint32_t mem_read();
