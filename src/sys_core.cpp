@@ -1,9 +1,15 @@
 #include <cstring>
+#include <fstream>
 #include "sys_core.h"
 
 uint32_t Sys_Core::find_data_mem(){
     //Open the file
+    std::ifstream file(file_path);
 
+    //Make sure the file opened
+    if (!file.is_open()){
+
+    }
 }
 
 // Core Constructor: Initialize variables and arrays to 0s
@@ -14,7 +20,7 @@ Sys_Core::Sys_Core(std::string file_path){
 
     //Find the start of the data memory
     if ((data_mem_start_line = find_data_mem()) == UINT32_MAX){
-        std::cout << "\nERROR: unable to find start of data memory" << std::endl;
+        std::cerr << "\nERROR: unable to find start of data memory" << std::endl;
     }
     else{
         std::cout << "Found start of data memory on line: " << data_mem_start_line << std::endl;

@@ -74,7 +74,7 @@ instInfoPtr_t decodeInstruction(uint32_t fullInstruction)
 
 
 	default:
-		std::cout << "\nERROR: Invalid instruction format!\n" << std::endl;
+		std::cerr << "\nERROR: Invalid instruction format!\n" << std::endl;
 		delete instruction;
 		
 		//TODO: Return somthing other than NULL. Should trigger a hazard?

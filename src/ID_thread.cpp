@@ -34,7 +34,7 @@ void IDthread(Sys_Core& sysCore)
 
 				if (instructionData == NULL)
 				{
-					std::cout << "\nERROR: Invalid instruction: 0x" << std::hex << fullInstruction << std::dec << ", Skipping...\n\n";
+					std::cerr << "\nERROR: Invalid instruction: 0x" << std::hex << fullInstruction << std::dec << ", Skipping...\n\n";
 					//TODO: Report to master thread that we have an invalid instruction
 					sysCore.stageInfoID.error = true;
 					continue;
@@ -58,7 +58,7 @@ void IDthread(Sys_Core& sysCore)
 					break;
 
 				default:
-					std::cout << "\nERROR: Format check bypassed [IDthread], Skipping instruction..\n" << std::endl;
+					std::cerr << "\nERROR: Format check bypassed [IDthread], Skipping instruction..\n" << std::endl;
 					continue;
 				}
 
