@@ -6,7 +6,7 @@
 #include "decoder.h"
 
 uint32_t Sys_Core::find_data_mem(){
-    uint32_t current_line_num = 0;
+    uint32_t current_line_num = 1;
     std::string line_data = "";
     instInfoPtr_t inst_info = NULL;
    
