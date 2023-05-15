@@ -145,11 +145,15 @@ Sys_Core::Sys_Core(std::string file_path){
 // Memory Read method: 
 uint32_t Sys_Core::mem_read(const uint32_t address, const bool is_inst_mem){
     uint32_t line_number = 0;
+    std::string line_data = "";
 
+    //If its an instruction memory access, we access the whole line
     if (is_inst_mem)
     {
-        //Find line number
-        //address / 4;
+        //Get line number
+        line_number = addr_to_line(address);
+
+        line_data = get_line_from_line_num(line_number);
     }
 
 
