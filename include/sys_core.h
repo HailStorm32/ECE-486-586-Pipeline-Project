@@ -112,8 +112,23 @@ public:
     // Core Constructor
     Sys_Core(std::string file_path);
 
-    // Memory Read and Write methods
+    /*
+    * Description:
+    *	Reads the value at a given address of the the memory file
+    *       if the instrucion flag is true, then it will return
+    *       the full line that the address belongs to and not just
+    *       that address
+    *
+    * Arguments:
+    *	(INPUT) address -- address location in memory file
+    *   (INPUT) is_isnt_mem -- boolean flag to indicate if reading from instruction memory
+    *
+    * Return:
+    *	uint32_t -- data at give address, or full line (if an instrucion read)
+    *   UINT_MAX -- On error
+    */
     uint32_t mem_read(const uint32_t address, const bool is_inst_mem);
+
     uint32_t mem_write();
 };
 #endif

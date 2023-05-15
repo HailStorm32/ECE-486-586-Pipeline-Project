@@ -2,7 +2,6 @@
 #include <fstream>
 #include <string>
 #include <cstdlib>
-#include <cmath>
 #include "sys_core.h"
 #include "decoder.h"
 
@@ -140,6 +139,8 @@ Sys_Core::Sys_Core(std::string file_path){
     else{
         std::cout << "Found start of data memory on line: " << data_mem_start_line << std::endl;
     }
+
+    uint32_t test = mem_read(32, true);
 }
 
 // Memory Read method: 
@@ -153,7 +154,18 @@ uint32_t Sys_Core::mem_read(const uint32_t address, const bool is_inst_mem){
         //Get line number
         line_number = addr_to_line(address);
 
+        //Get line
         line_data = get_line_from_line_num(line_number);
+
+        //Report error if we didnt get the full line
+        if (line_data.size() != FILE_LINE_LENGTH) {
+            std::cerr << "\nERROR: Recieved [" << line_data.size() << "] characters from line, "
+                << "expected " << FILE_LINE_LENGTH << "\n\n";
+            return UINT32_MAX;
+        }
+        
+        //Convert the string to uint32_t and return
+        return static_cast<uint32_t>(std::stoll(line_data, nullptr, 16));
     }
 
 
