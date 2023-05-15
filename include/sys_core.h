@@ -6,6 +6,10 @@
 #include <iostream>
 #include "decoder.h"
 
+#define FILE_LINE_LENGTH        8 //In bytes
+#define FILE_LINE_END_LENGTH    1 //In bytes
+#define TOTAL_FILE_LINE_LENGTH  (FILE_LINE_LENGTH + FILE_LINE_END_LENGTH)
+
 class Sys_Core {
 private:
 
@@ -24,6 +28,7 @@ private:
     } stage_thread_t;
 
     std::string file_path;
+    uint32_t total_num_of_lines;
 
     /*
     * Description:
@@ -51,6 +56,19 @@ private:
     *   empty string -- If error
     */
     std::string get_line_from_line_num(uint32_t targ_line_num);
+    
+    /*
+    * Description:
+    *	Returns the total number of lines the given file has
+    *
+    * Arguments:
+    *	(INPUT) file_path -- path to the file
+    *
+    * Return:
+    *	uint32_t -- total number of lines
+    *   UINT_MAX -- On error
+    */
+    uint32_t get_file_size(std::string file_path);
     
 
 public:        

@@ -17,6 +17,11 @@ uint32_t Sys_Core::find_data_mem(){
         std::cerr << "\nERROR: Unable to open file: " << file_path << "\n\n";
         return UINT32_MAX;
     }
+    get_line_from_line_num(42);
+    
+
+    std::getline(file, line_data);
+
 
     //Cycle through all the lines
     while (std::getline(file, line_data))
@@ -47,19 +52,24 @@ uint32_t Sys_Core::find_data_mem(){
 
 std::string Sys_Core::get_line_from_line_num(uint32_t targ_line_num)
 {
-    std::ifstream file(file_path);
-    uint32_t current_line_number = 0;
+    uint32_t total_num_of_lines = 0;
     std::string line = "";
 
+    std::ifstream file(file_path);
+   
+    //Make sure the file opened
+    if (!file.is_open()) {
+        std::cerr << "\nERROR: Unable to open file: " << file_path << "\n\n";
+        return line;
+    }
+
+    //Get the total number of lines the file has
+    total_num_of_lines = std::ios_base::end / TOTAL_FILE_LINE_LENGTH;
+
     if (file.is_open()) {
-        
-        while (std::getline(file, line)) {
-      
-            if (current_line_number == targ_line_num) {
-                break;
-            }
-            current_line_number++;
-        }
+       
+        file.seekg(TOTAL_FILE_LINE_LENGTH * 341, std::ios_base::beg);
+       
         file.close();
     }
     else {
@@ -69,6 +79,33 @@ std::string Sys_Core::get_line_from_line_num(uint32_t targ_line_num)
     return line;
 }
 
+uint32_t Sys_Core::get_file_size(std::string file_path)
+{
+    uint32_t total_num_of_lines = 0;
+    
+    //Open the file
+    std::ifstream file(file_path);
+
+    //Make sure the file opened
+    if (!file.is_open()) {
+        std::cerr << "\nERROR: Unable to open file: " << file_path << "\n\n";
+        return UINT32_MAX;
+    }
+
+    //Move the "get" pointer to the end of the file
+    file.seekg(0, std::ios_base::end);
+
+    //Get the current position of the "get" pointer, which is the size of the file in bytes
+    std::streamsize file_size = file.tellg();
+
+    //Get the total number of lines the file has
+    total_num_of_lines = file_size / TOTAL_FILE_LINE_LENGTH;
+
+    file.close();
+
+    return total_num_of_lines;
+}
+
 // Core Constructor: Initialize variables and arrays to 0s
 Sys_Core::Sys_Core(std::string file_path){
     PC = 0;
@@ -76,6 +113,8 @@ Sys_Core::Sys_Core(std::string file_path){
     clk = 0;
 
     this->file_path = file_path;
+
+    total_num_of_lines = get_file_size(file_path);
 
     //Find the start of the data memory
     if ((data_mem_start_line = find_data_mem()) == UINT32_MAX){
