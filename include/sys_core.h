@@ -48,7 +48,7 @@ private:
     *
     * Return:
     *	string -- Line at given line number
-    *   NULL -- If error
+    *   empty string -- If error
     */
     std::string get_line_from_line_num(uint32_t targ_line_num);
     
