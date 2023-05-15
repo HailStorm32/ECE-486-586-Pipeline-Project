@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <cstdlib>
+#include <cmath>
 #include "sys_core.h"
 #include "decoder.h"
 
@@ -34,6 +35,7 @@ uint32_t Sys_Core::find_data_mem(){
 
         //Check if instruction is of HALT opcode
         if (inst_info->opcode == opcodes::HALT){
+            delete inst_info;
             return ++current_line_num;
         }
         else {
@@ -41,7 +43,7 @@ uint32_t Sys_Core::find_data_mem(){
             current_line_num++;
         }
     }
-
+    delete inst_info;
     //If we have gotten this far, we never found the HALT instruction
     return UINT32_MAX;
 }
@@ -135,7 +137,16 @@ Sys_Core::Sys_Core(std::string file_path){
 }
 
 // Memory Read method: 
-uint32_t Sys_Core::mem_read(){
+uint32_t Sys_Core::mem_read(uint32_t address, bool is_inst_mem){
+    uint32_t line_number = 0;
+
+    if (is_inst_mem)
+    {
+        //Find line number
+        address / 4;
+    }
+
+
     return 0;
 }
 
