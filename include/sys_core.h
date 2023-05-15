@@ -35,7 +35,7 @@ private:
     *
     * Return:
     *	uint32_t -- Line that marks the beginning of data memory
-    *	UINT_MAX -- If cant find line
+    *	UINT_MAX -- On error
     */
     uint32_t find_data_mem();
     
