@@ -1,6 +1,7 @@
 #include <cstring>
 #include <fstream>
 #include <string>
+#include <cstdlib>
 #include "sys_core.h"
 #include "decoder.h"
 
@@ -15,7 +16,7 @@ uint32_t Sys_Core::find_data_mem(){
     //Make sure the file opened
     if (!file.is_open()){
         std::cerr << "\nERROR: Unable to open file: " << file_path << "\n\n";
-        return UINT32_MAX;
+        exit(1);
     }
     get_line_from_line_num(42);
     
@@ -60,7 +61,7 @@ std::string Sys_Core::get_line_from_line_num(uint32_t targ_line_num)
     //Make sure the file opened
     if (!file.is_open()) {
         std::cerr << "\nERROR: Unable to open file: " << file_path << "\n\n";
-        return line;
+        exit(1);
     }
 
     //Get the total number of lines the file has
@@ -114,11 +115,15 @@ Sys_Core::Sys_Core(std::string file_path){
 
     this->file_path = file_path;
 
-    total_num_of_lines = get_file_size(file_path);
+    if ((total_num_of_lines = get_file_size(file_path)) == UINT32_MAX) {
+        std::cerr << "\nERROR: get_file_size returned UINT32_MAX" << "\n\n";
+        exit(1);
+    }
 
     //Find the start of the data memory
     if ((data_mem_start_line = find_data_mem()) == UINT32_MAX){
         std::cerr << "\nERROR: Unable to find start of data memory" << "\n\n";
+        exit(1);
     }
     else{
         std::cout << "Found start of data memory on line: " << data_mem_start_line << std::endl;
