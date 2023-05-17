@@ -1,6 +1,9 @@
 //Adapted from https://www.geeksforgeeks.org/implement-thread-safe-queue-in-c/
 
 #pragma once
+
+#include <condition_variable>
+#include <mutex>
 #include <queue>
 
 template <typename T>
