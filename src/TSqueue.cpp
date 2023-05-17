@@ -13,9 +13,9 @@ void TSQueue<T>::push(T item)
     // Add item
     mQueue.push(item);
 
-    // Notify one thread that
-    // is waiting
-    mCond.notify_one();
+    //// Notify one thread that
+    //// is waiting
+    //mCond.notify_one();
 }
 
 template<typename T>
@@ -24,9 +24,14 @@ T TSQueue<T>::pop()
     // acquire lock
     std::unique_lock<std::mutex> lock(mMutex);
 
-    // wait until queue is not empty
-    mCond.wait(lock,
-        [this]() { return !mQueue.empty(); });
+    //// wait until queue is not empty
+    //mCond.wait(lock,
+    //    [this]() { return !mQueue.empty(); });
+
+    if (mQueue.empty())
+    {
+        return NULL;
+    }
 
     // retrieve item
     T item = mQueue.front();
