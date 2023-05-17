@@ -1,10 +1,10 @@
 #ifndef __SYS_CORE_H
 #define __SYS_CORE_H
 
-#include <queue>
 #include <cstdint>
 #include <iostream>
 #include "decoder.h"
+#include "TSqueue.h"
 
 #define FILE_LINE_LENGTH        8 //In bytes
 #define FILE_LINE_END_LENGTH    1 //In bytes
@@ -101,10 +101,10 @@ public:
     stageThread_t stageInfoWB;
 
     // Buffers in between the stages
-    std::queue<uint32_t> IFtoID;
-    std::queue<instInfoPtr_t> IDtoEX;
-    std::queue<instInfoPtr_t> EXtoMEM;
-    std::queue<instInfoPtr_t> MEMtoWB;
+    TSQueue<uint32_t> IFtoID;
+    TSQueue<instInfoPtr_t> IDtoEX;
+    TSQueue<instInfoPtr_t> EXtoMEM;
+    TSQueue<instInfoPtr_t> MEMtoWB;
 
     // Contains line of file that starts data memory
     uint32_t dataMemStartLine;
