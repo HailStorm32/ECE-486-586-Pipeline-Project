@@ -5,174 +5,174 @@
 #include "sys_core.h"
 #include "decoder.h"
 
-uint32_t Sys_Core::find_data_mem(){
-    uint32_t current_line_num = 1;
-    std::string line_data = "";
-    instInfoPtr_t inst_info = NULL;
-   
-    //Open the file
-    std::ifstream file(file_path);
+uint32_t SysCore::findDataMem() {
+	uint32_t currentLineNum = 1;
+	std::string lineData = "";
+	instInfoPtr_t instInfo = NULL;
 
-    //Make sure the file opened
-    if (!file.is_open()) {
-        std::cerr << "\nERROR: Unable to open file: " << file_path << "\n\n";
-        exit(1);
-    }
+	//Open the file
+	std::ifstream file(filePath);
 
-    //Cycle through all the lines
-    while (std::getline(file, line_data))
-    {
-        //Decode the instruction
-        inst_info = decodeInstruction(static_cast<uint32_t>(std::stoll(line_data, nullptr, 16)));
-        
-        if (inst_info == NULL){
-            std::cerr << "\nWARN: Invalid instruction: 0x" << std::hex << static_cast<uint32_t>(stoi(line_data)) << std::dec 
-                    << " on line [" << current_line_num << "], Skipping...\n\n";
-            current_line_num++;
-            continue;
-        }
+	//Make sure the file opened
+	if (!file.is_open()) {
+		std::cerr << "\nERROR: Unable to open file: " << filePath << "\n\n";
+		exit(1);
+	}
 
-        //Check if instruction is of HALT opcode
-        if (inst_info->opcode == opcodes::HALT){
-            delete inst_info;
-            return ++current_line_num;
-        }
-        else {
-            current_line_num++;
-        }
-    }
-    delete inst_info;
-    //If we have gotten this far, we never found the HALT instruction
-    return UINT32_MAX;
+	//Cycle through all the lines
+	while (std::getline(file, lineData))
+	{
+		//Decode the instruction
+		instInfo = decodeInstruction(static_cast<uint32_t>(std::stoll(lineData, nullptr, 16)));
+
+		if (instInfo == NULL) {
+			std::cerr << "\nWARN: Invalid instruction: 0x" << std::hex << static_cast<uint32_t>(stoi(lineData)) << std::dec
+				<< " on line [" << currentLineNum << "], Skipping...\n\n";
+			currentLineNum++;
+			continue;
+		}
+
+		//Check if instruction is of HALT opcode
+		if (instInfo->opcode == opcodes::HALT) {
+			delete instInfo;
+			return ++currentLineNum;
+		}
+		else {
+			currentLineNum++;
+		}
+	}
+	delete instInfo;
+	//If we have gotten this far, we never found the HALT instruction
+	return UINT32_MAX;
 }
 
-std::string Sys_Core::get_line_from_line_num(const uint32_t target_line_num)
+std::string SysCore::getLineFromLineNum(const uint32_t targetLineNum)
 {
-    std::string line_data = "";
-    uint32_t adjusted_target_line = UINT32_MAX;
+	std::string lineData = "";
+	uint32_t adjustedTargetLine = UINT32_MAX;
 
-    std::ifstream file(file_path);
-   
-    //Make sure the file opened
-    if (!file.is_open()) {
-        std::cerr << "\nERROR: Unable to open file: " << file_path << "\n\n";
-        exit(1);
-    }
+	std::ifstream file(filePath);
 
-    //NOTE: We will need to offest our target by -1 b/c (total line length * our target line number) will always put us at the end of that line
-    //  Given a line length of 9 bytes, if we want to read line 2, then 9*2=18 which will put the pointer at the end of line 2, and when we do a 
-    //  getline, it will read the next line (3). Hence why we offset by -1. So with the offset, it will be 9*1=9 putting us at the end of line 1, 
-    //  and the getline will read line 2, what we want
-    adjusted_target_line = (target_line_num - 1);
+	//Make sure the file opened
+	if (!file.is_open()) {
+		std::cerr << "\nERROR: Unable to open file: " << filePath << "\n\n";
+		exit(1);
+	}
 
-    //Return if we are given an invalid line number
-    if (adjusted_target_line > total_num_of_lines)
-    {
-        std::cerr << "\nERROR: Given invalid line number [" << target_line_num << "], max # of lines in file is: " << total_num_of_lines << "\n\n";
-        return line_data;
-    }
+	//NOTE: We will need to offest our target by -1 b/c (total line length * our target line number) will always put us at the end of that line
+	//  Given a line length of 9 bytes, if we want to read line 2, then 9*2=18 which will put the pointer at the end of line 2, and when we do a 
+	//  getline, it will read the next line (3). Hence why we offset by -1. So with the offset, it will be 9*1=9 putting us at the end of line 1, 
+	//  and the getline will read line 2, what we want
+	adjustedTargetLine = (targetLineNum - 1);
 
-    //Move the file pointer to the target line
-    file.seekg(TOTAL_FILE_LINE_LENGTH * adjusted_target_line, std::ios_base::beg); 
+	//Return if we are given an invalid line number
+	if (adjustedTargetLine > totalNumOfLines)
+	{
+		std::cerr << "\nERROR: Given invalid line number [" << targetLineNum << "], max # of lines in file is: " << totalNumOfLines << "\n\n";
+		return lineData;
+	}
 
-    //Get the next line
-    std::getline(file, line_data);
+	//Move the file pointer to the target line
+	file.seekg(TOTAL_FILE_LINE_LENGTH * adjustedTargetLine, std::ios_base::beg);
 
-    file.close();
+	//Get the next line
+	std::getline(file, lineData);
 
-    return line_data;
+	file.close();
+
+	return lineData;
 }
 
-uint32_t Sys_Core::get_file_size(const std::string file_path)
+uint32_t SysCore::getFileSize(const std::string filePath)
 {
-    uint32_t total_num_of_lines = 0;
-    
-    //Open the file
-    std::ifstream file(file_path);
+	uint32_t totalNumOfLines = 0;
 
-    //Make sure the file opened
-    if (!file.is_open()) {
-        std::cerr << "\nERROR: Unable to open file: " << file_path << "\n\n";
-        return UINT32_MAX;
-    }
+	//Open the file
+	std::ifstream file(filePath);
 
-    //Move the "get" pointer to the end of the file
-    file.seekg(0, std::ios_base::end);
+	//Make sure the file opened
+	if (!file.is_open()) {
+		std::cerr << "\nERROR: Unable to open file: " << filePath << "\n\n";
+		return UINT32_MAX;
+	}
 
-    //Get the current position of the "get" pointer, which is the size of the file in bytes
-    std::streamsize file_size = file.tellg();
+	//Move the "get" pointer to the end of the file
+	file.seekg(0, std::ios_base::end);
 
-    //Get the total number of lines the file has
-    total_num_of_lines = file_size / TOTAL_FILE_LINE_LENGTH;
+	//Get the current position of the "get" pointer, which is the size of the file in bytes
+	std::streamsize fileSize = file.tellg();
 
-    file.close();
+	//Get the total number of lines the file has
+	totalNumOfLines = fileSize / TOTAL_FILE_LINE_LENGTH;
 
-    return total_num_of_lines;
+	file.close();
+
+	return totalNumOfLines;
 }
 
-uint32_t Sys_Core::addr_to_line(const uint32_t address)
+uint32_t SysCore::addrToLine(const uint32_t address)
 {
-    //Each line is 4 simulated bytes long. We add one b/c we index the lines from 1. 
-    //  Integer division already floors the result, so we dont have to worry about that
-    return (address / 4) + 1; 
+	//Each line is 4 simulated bytes long. We add one b/c we index the lines from 1. 
+	//  Integer division already floors the result, so we dont have to worry about that
+	return (address / 4) + 1;
 }
 
 // Core Constructor: Initialize variables and arrays to 0s
-Sys_Core::Sys_Core(std::string file_path){
-    PC = 0;
-    memset(reg, 0, sizeof(reg));
-    clk = 0;
- 
-    this->file_path = file_path;
+SysCore::SysCore(std::string filePath) {
+	PC = 0;
+	memset(reg, 0, sizeof(reg));
+	clk = 0;
 
-    //Get the total number of lines the file has
-    if ((total_num_of_lines = get_file_size(file_path)) == UINT32_MAX) {
-        std::cerr << "\nERROR: get_file_size returned UINT32_MAX" << "\n\n";
-        exit(1);
-    }
+	this->filePath = filePath;
 
-    //Find the start of the data memory
-    if ((data_mem_start_line = find_data_mem()) == UINT32_MAX){
-        std::cerr << "\nERROR: Unable to find start of data memory" << "\n\n";
-        exit(1);
-    }
-    else{
-        std::cout << "Found start of data memory on line: " << data_mem_start_line << std::endl;
-    }
+	//Get the total number of lines the file has
+	if ((totalNumOfLines = getFileSize(filePath)) == UINT32_MAX) {
+		std::cerr << "\nERROR: get_file_size returned UINT32_MAX" << "\n\n";
+		exit(1);
+	}
 
-    uint32_t test = mem_read(32, true);
+	//Find the start of the data memory
+	if ((dataMemStartLine = findDataMem()) == UINT32_MAX) {
+		std::cerr << "\nERROR: Unable to find start of data memory" << "\n\n";
+		exit(1);
+	}
+	else {
+		std::cout << "Found start of data memory on line: " << dataMemStartLine << std::endl;
+	}
+
+	uint32_t test = memRead(32, true);
 }
 
 // Memory Read method: 
-uint32_t Sys_Core::mem_read(const uint32_t address, const bool is_inst_mem){
-    uint32_t line_number = 0;
-    std::string line_data = "";
+uint32_t SysCore::memRead(const uint32_t address, const bool isInstMem) {
+	uint32_t lineNumber = 0;
+	std::string lineData = "";
 
-    //If its an instruction memory access, we access the whole line
-    if (is_inst_mem)
-    {
-        //Get line number
-        line_number = addr_to_line(address);
+	//If its an instruction memory access, we access the whole line
+	if (isInstMem)
+	{
+		//Get line number
+		lineNumber = addrToLine(address);
 
-        //Get line
-        line_data = get_line_from_line_num(line_number);
+		//Get line
+		lineData = getLineFromLineNum(lineNumber);
 
-        //Report error if we didnt get the full line
-        if (line_data.size() != FILE_LINE_LENGTH) {
-            std::cerr << "\nERROR: Recieved [" << line_data.size() << "] characters from line, "
-                << "expected " << FILE_LINE_LENGTH << "\n\n";
-            return UINT32_MAX;
-        }
-        
-        //Convert the string to uint32_t and return
-        return static_cast<uint32_t>(std::stoll(line_data, nullptr, 16));
-    }
+		//Report error if we didnt get the full line
+		if (lineData.size() != FILE_LINE_LENGTH) {
+			std::cerr << "\nERROR: Recieved [" << lineData.size() << "] characters from line, "
+				<< "expected " << FILE_LINE_LENGTH << "\n\n";
+			return UINT32_MAX;
+		}
+
+		//Convert the string to uint32_t and return
+		return static_cast<uint32_t>(std::stoll(lineData, nullptr, 16));
+	}
 
 
-    return 0;
+	return 0;
 }
 
 // Memory Write method:
-uint32_t Sys_Core::mem_write(){
-    return 0;
+uint32_t SysCore::memWrite() {
+	return 0;
 }

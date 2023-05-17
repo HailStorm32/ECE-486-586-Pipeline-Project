@@ -7,7 +7,7 @@
 
 #define MIN_SLEEP_TIME		200  //In ms
 
-void IDthread(Sys_Core& sysCore)
+void IDthread(SysCore& sysCore)
 {
 	long long pastClkVal = -1;
 	std::chrono::seconds delay(MIN_SLEEP_TIME);
@@ -21,7 +21,7 @@ void IDthread(Sys_Core& sysCore)
 			uint32_t fullInstruction = sysCore.IFtoID.front();
 
 			//Only coninue if the clock has changed and we have the go ahead from the master
-			if (pastClkVal < sysCore.clk && sysCore.stageInfoID.ok_run) 
+			if (pastClkVal < sysCore.clk && sysCore.stageInfoID.okToRun) 
 			{
 				//Record the new clock value
 				pastClkVal = sysCore.clk;

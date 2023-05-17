@@ -8,16 +8,16 @@
 int main(int argc, char *argv[])
 {
     // Initialize system core
-    Sys_Core sys_core("given_sample_memory_image.txt");
+    SysCore sysCore("given_sample_memory_image.txt");
 
-    // Check what Sys_Core vars initialized to
-    std::cout << "Sys_Core.PC = " << sys_core.PC << '\n'; 
+    // Check what SysCore vars initialized to
+    std::cout << "SysCore.PC = " << sysCore.PC << '\n'; 
     
     for (int i = 0; i < 32; i++){
-        std::cout << "Sys_Core.reg = " << sys_core.reg[i] << " i=" << i << '\n';
+        std::cout << "SysCore.reg = " << sysCore.reg[i] << " i=" << i << '\n';
     }
 
-    std::cout << "Sys_Core.clk = " << sys_core.clk << '\n';
+    std::cout << "SysCore.clk = " << sysCore.clk << '\n';
 
     // Start threads (passing each thread a ref to the system core)
 
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
         //  determine which threads should run
         //  notify the threads can run and those that can't
         //  
-        // sys_core.clk++;
+        // sysCore.clk++;
         //
         // sleep for x time
     //}

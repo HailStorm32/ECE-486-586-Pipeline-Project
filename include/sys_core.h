@@ -10,25 +10,25 @@
 #define FILE_LINE_END_LENGTH    1 //In bytes
 #define TOTAL_FILE_LINE_LENGTH  (FILE_LINE_LENGTH + FILE_LINE_END_LENGTH)
 
-class Sys_Core {
+class SysCore {
 private:
 
     // Stage struct to keep track of threads/stages
     typedef struct stage{
         // flags
-        volatile bool use_fwd;
+        volatile bool useFwd;
         volatile bool error;
-        volatile bool ok_run;
+        volatile bool okToRun;
 
         // forwarded vals
         volatile uint32_t Rs;
         volatile uint32_t Rt;
         volatile uint32_t Rd;
         volatile uint16_t immediate;
-    } stage_thread_t;
+    } stageThread_t;
 
-    std::string file_path;
-    uint32_t total_num_of_lines;
+    std::string filePath;
+    uint32_t totalNumOfLines;
 
     /*
     * Description:
@@ -42,33 +42,33 @@ private:
     *	uint32_t -- Line that marks the beginning of data memory
     *	UINT_MAX -- On error
     */
-    uint32_t find_data_mem();
+    uint32_t findDataMem();
 
     /*
     * Description:
     *	Returns given line from file
     *
     * Arguments:
-    *	(INPUT) target_line_num -- line of file (counts from 0)
+    *	(INPUT) targetLineNum -- line of file (counts from 0)
     *
     * Return:
     *	string -- Line at given line number
     *   empty string -- If error
     */
-    std::string get_line_from_line_num(const uint32_t target_line_num);
+    std::string getLineFromLineNum(const uint32_t targetLineNum);
     
     /*
     * Description:
     *	Returns the total number of lines the given file has
     *
     * Arguments:
-    *	(INPUT) file_path -- path to the file
+    *	(INPUT) filePath -- path to the file
     *
     * Return:
     *	uint32_t -- total number of lines
     *   UINT_MAX -- On error
     */
-    uint32_t get_file_size(const std::string file_path);
+    uint32_t getFileSize(const std::string filePath);
 
     /*
     * Description:
@@ -80,7 +80,7 @@ private:
     * Return:
     *	uint32_t -- line that contains given address
     */
-    uint32_t addr_to_line(const uint32_t address);
+    uint32_t addrToLine(const uint32_t address);
     
 
 public:        
@@ -94,11 +94,11 @@ public:
     long long clk;
 
     // 5 stages of pipline
-    stage_thread_t stageInfoIF;
-    stage_thread_t stageInfoID;
-    stage_thread_t stageInfoEX;
-    stage_thread_t stageInfoMEM;
-    stage_thread_t stageInfoWB;
+    stageThread_t stageInfoIF;
+    stageThread_t stageInfoID;
+    stageThread_t stageInfoEX;
+    stageThread_t stageInfoMEM;
+    stageThread_t stageInfoWB;
 
     // Buffers in between the stages
     std::queue<uint32_t> IFtoID;
@@ -107,10 +107,10 @@ public:
     std::queue<instInfoPtr_t> MEMtoWB;
 
     // Contains line of file that starts data memory
-    uint32_t data_mem_start_line;
+    uint32_t dataMemStartLine;
 
     // Core Constructor
-    Sys_Core(std::string file_path);
+    SysCore(std::string filePath);
 
     /*
     * Description:
@@ -127,8 +127,8 @@ public:
     *	uint32_t -- data at give address, or full line (if an instrucion read)
     *   UINT_MAX -- On error
     */
-    uint32_t mem_read(const uint32_t address, const bool is_inst_mem);
+    uint32_t memRead(const uint32_t address, const bool isInstMem);
 
-    uint32_t mem_write();
+    uint32_t memWrite();
 };
 #endif
