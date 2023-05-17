@@ -121,7 +121,7 @@ public:
     *
     * Arguments:
     *	(INPUT) address -- address location in memory file
-    *   (INPUT) is_isnt_mem -- boolean flag to indicate if reading from instruction memory
+    *   (INPUT) is_isnt_mem -- (for future compatibility boolean flag to indicate if reading from instruction memory
     *
     * Return:
     *	uint32_t -- data at give address, or full line (if an instrucion read)

@@ -148,28 +148,21 @@ uint32_t SysCore::memRead(const uint32_t address, const bool isInstMem) {
 	uint32_t lineNumber = 0;
 	std::string lineData = "";
 
-	//If its an instruction memory access, we access the whole line
-	if (isInstMem)
-	{
-		//Get line number
-		lineNumber = addrToLine(address);
+	//Get line number
+	lineNumber = addrToLine(address);
 
-		//Get line
-		lineData = getLineFromLineNum(lineNumber);
+	//Get line
+	lineData = getLineFromLineNum(lineNumber);
 
-		//Report error if we didnt get the full line
-		if (lineData.size() != FILE_LINE_LENGTH) {
-			std::cerr << "\nERROR: Recieved [" << lineData.size() << "] characters from line, "
-				<< "expected " << FILE_LINE_LENGTH << "\n\n";
-			return UINT32_MAX;
-		}
-
-		//Convert the string to uint32_t and return
-		return static_cast<uint32_t>(std::stoll(lineData, nullptr, 16));
+	//Report error if we didnt get the full line
+	if (lineData.size() != FILE_LINE_LENGTH) {
+		std::cerr << "\nERROR: Recieved [" << lineData.size() << "] characters from line, "
+			<< "expected " << FILE_LINE_LENGTH << "\n\n";
+		return UINT32_MAX;
 	}
 
-
-	return 0;
+	//Convert the string to uint32_t and return
+	return static_cast<uint32_t>(std::stoll(lineData, nullptr, 16));
 }
 
 // Memory Write method:
