@@ -1,5 +1,5 @@
 CC = g++
-CPPFLAGS = -std=c++2a -Wall -g
+CPPFLAGS = -std=c++2a -Wall
 
 # Directories
 SRC_DIR = ./src
@@ -13,7 +13,7 @@ OBJ_DIR = .
 all: mips_lite
 
 help:
-	@echo "Targets: all, mips_lite, sys_core.o, decoder.o, clean"
+	@echo "Targets: all, help mips_lite, clean"
 
 mips_lite: $(SRC_DIR)/main.cpp $(OBJ_DIR)/sys_core.o $(OBJ_DIR)/decoder.o $(OBJ_DIR)/ID_thread.o
 	$(CC) $(CPPFLAGS) -I $(INC_DIR) -o $@ $^
