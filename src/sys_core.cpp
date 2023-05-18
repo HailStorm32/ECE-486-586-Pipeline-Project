@@ -141,6 +141,10 @@ SysCore::SysCore(std::string filePath) {
 	}
 
 	uint32_t test = memRead(32, true);
+
+    // Check if value is correct
+    std::cout << "test = " << std::hex << test << '\n';
+
 }
 
 // Memory Read method: 
