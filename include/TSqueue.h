@@ -1,13 +1,8 @@
 //Adapted from https://www.geeksforgeeks.org/implement-thread-safe-queue-in-c/
 
 #pragma once
-<<<<<<< HEAD
 
 #include <condition_variable>
-#include <mutex>
-=======
-#include <condition_variable>
->>>>>>> main
 #include <queue>
 #include <mutex>
 
@@ -30,8 +25,6 @@ public:
     // Pops an element off the queue
     T pop();
 };
-<<<<<<< HEAD
-=======
 
 template<typename T>
 inline void TSQueue<T>::push(T item)
@@ -69,4 +62,3 @@ inline T TSQueue<T>::pop()
     // return item
     return item;
 }
->>>>>>> main
