@@ -1,8 +1,11 @@
 #include <iostream>
+#include <thread>
 #include <chrono>   // researched that chrono header might be the choice 
                     // since it is portable to Windows and Linux
 
 #include "decoder.h"
+#include "IF_thread.h"
+#include "ID_thread.h"
 #include "sys_core.h"
 
 int main(int argc, char *argv[])
@@ -20,7 +23,12 @@ int main(int argc, char *argv[])
     std::cout << "SysCore.clk = " << sysCore.clk << '\n';
 
     // Start threads (passing each thread a ref to the system core)
+    std::thread ifThread(IFthread, std::ref(sysCore));
+    std::thread idThread(IDthread, std::ref(sysCore));
 
+    // Wait for threads to finish
+    ifThread.join();
+    idThread.join();
 
     //while (1){
         // if !stall:
