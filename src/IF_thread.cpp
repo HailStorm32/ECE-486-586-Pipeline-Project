@@ -9,7 +9,7 @@
 
 void IFthread(SysCore& sysCore){
     long long prevClkVal = -1;
-    std::chrono::seconds delay(MIN_SLEEP_TIME);
+    std::chrono::milliseconds delay(MIN_SLEEP_TIME);
     
     uint32_t instruction;
 
