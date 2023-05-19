@@ -10,7 +10,7 @@
 void IDthread(SysCore& sysCore)
 {
 	long long pastClkVal = -1;
-	std::chrono::seconds delay(MIN_SLEEP_TIME);
+	std::chrono::milliseconds delay(MIN_SLEEP_TIME);
 	uint32_t fullInstruction;
 
 	while (true)
