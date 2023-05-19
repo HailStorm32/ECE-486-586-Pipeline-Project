@@ -7,6 +7,37 @@
 
 #define MIN_SLEEP_TIME		200  //In ms
 
+/* 
+* Description: *****WORK IN PROGRESS******** 
+*	Perform ALU functions.
+*
+* Arguments:
+*	(INPUT) operandA -- uint32_t value, source reg RS
+*	(INPUT) operandB -- uint32_t value, source varies by inst type
+*	(INPUT) operation -- enum opcodes value, source from instruction opcode
+* Return:
+*	uint32_t -- value calculated by ALU
+*/
+uint32_t alu (uint32_t operandA, uint32_t operandB, opcodes operation){
+
+	switch (operation){
+		//arithmetic and logical operations
+		case ADD: case ADDI: return operandA + operandB;
+		case SUB: case SUBI: return operandA - operandB;
+		case MUL: case MULI: return operandA * operandB;
+		case OR: case ORI: return operandA | operandB;
+		case AND: case ANDI: return operandA & operandB;
+		case XOR: case XORI: return operandA ^ operandB;
+
+		//Memory Access operations
+		case LDW: case STW: return operandA + operandB;
+
+		//control flow instructions
+		case BZ: case BEQ: case JR: case HALT: case INVALID: break;
+	}
+	return 0;
+}
+
 void EX_thread(SysCore& sysCore)
 {
 	long long pastClkVal = -1;
@@ -24,7 +55,7 @@ void EX_thread(SysCore& sysCore)
 			//If there was nothing for us to get, we missed our opportunity for this clock. Reset
 			if (instructionData == NULL)
 			{
-				std::cout << "DEBUG: [IDthread] Missed opportunity for this clock, will try again next clock" << std::endl;
+				std::cout << "DEBUG: [EXthread] Missed opportunity for this clock, will try again next clock" << std::endl;
 				sysCore.stageInfoID.okToRun = false;
 				continue;
 			}
@@ -32,9 +63,28 @@ void EX_thread(SysCore& sysCore)
 			//Record the new clock value
 			pastClkVal = sysCore.clk;
 
-            
-		//alu logic to be added
-			
+			//temp storage variable for ALU result
+			uint32_t aluResult;
+    
+			switch(instructionData->type)
+			{
+				case Rtype: 
+					aluResult = alu(instructionData->RsVal, instructionData->RtVal, instructionData->opcode);
+					break;
+				case Itype:
+					aluResult = alu(instructionData->RsVal, instructionData->immediate, instructionData->opcode);
+					break;
+				default:
+					std::cerr << "\nERROR: ALU encountered unknown instruction type\n" << std::endl;
+					break;
+			}
+
+			/*TO DO: all work in progress. still trying to determine
+			how to handle ALU results based on instruction type. 
+			-Should arithmetic/logical results be written to Destination register in this thread?
+			-Should calculated load/store address temp be stored in destination register in this thread?
+			-Should branching instructions update PC / set any flags in this thread?
+			*/
 
 			//Pass instruction data to EX stage (will block if it cannot immediately acquire the lock)
 			sysCore.IDtoEX.push(instructionData);
