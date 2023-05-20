@@ -3,6 +3,6 @@
 
 #include "sys_core.h"
 
-void EX_thread(SysCore& core);
+void EXthread(SysCore& core);
 
 #endif

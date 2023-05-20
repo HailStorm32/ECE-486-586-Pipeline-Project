@@ -38,7 +38,7 @@ uint32_t alu (uint32_t operandA, uint32_t operandB, opcodes operation){
 	return 0;
 }
 
-void EX_thread(SysCore& sysCore)
+void EXthread(SysCore& sysCore)
 {
 	long long pastClkVal = -1;
 	std::chrono::seconds delay(MIN_SLEEP_TIME);
@@ -63,16 +63,14 @@ void EX_thread(SysCore& sysCore)
 			//Record the new clock value
 			pastClkVal = sysCore.clk;
 
-			//temp storage variable for ALU result
-			uint32_t aluResult;
-    
+	
 			switch(instructionData->type)
 			{
 				case Rtype: 
-					aluResult = alu(instructionData->RsVal, instructionData->RtVal, instructionData->opcode);
+					instructionData->aluResult = alu(instructionData->RsVal, instructionData->RtVal, instructionData->opcode);
 					break;
 				case Itype:
-					aluResult = alu(instructionData->RsVal, instructionData->immediate, instructionData->opcode);
+					instructionData->aluResult = alu(instructionData->RsVal, instructionData->immediate, instructionData->opcode);
 					break;
 				default:
 					std::cerr << "\nERROR: ALU encountered unknown instruction type\n" << std::endl;
@@ -82,11 +80,12 @@ void EX_thread(SysCore& sysCore)
 			/*TO DO: all work in progress. still trying to determine
 			how to handle ALU results based on instruction type. 
 			-Should arithmetic/logical results be written to Destination register in this thread?
+				--currently writing to a aluResult var in struct to pass value forward.
 			-Should calculated load/store address temp be stored in destination register in this thread?
 			-Should branching instructions update PC / set any flags in this thread?
 			*/
 
-			//Pass instruction data to EX stage (will block if it cannot immediately acquire the lock)
+			//Pass alu data to MEM stage (will block if it cannot immediately acquire the lock)
 			sysCore.IDtoEX.push(instructionData);
 		}
 
