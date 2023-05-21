@@ -129,6 +129,18 @@ public:
     */
     uint32_t memRead(const uint32_t address, const bool isInstMem);
 
-    uint32_t memWrite();
+    /*
+    * Description:
+    *	Writes the data to a given address of the memory file.
+    *
+    * Arguments:
+    *	(INPUT) address -- address location in memory file
+    *   (INPUT) value -- value to be written to the memory file
+    *   (INPUT) isInstMem -- (for future compatibility) boolean flag to indicate if writing to instruction memory
+    *
+    * Return:
+    *	None
+    */
+    uint32_t memWrite(const uint32_t address, const uint32_t value, const bool isInstMem);
 };
 #endif
