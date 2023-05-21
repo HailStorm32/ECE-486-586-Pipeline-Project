@@ -32,6 +32,7 @@ private:
         volatile fowardInfo useFwdFrom;
         volatile bool error;
         volatile bool okToRun;
+        volatile bool updatedPC; //true if EX found branch taken/jump, update PC with value in aluResult
 
         // forwarded vals
         volatile uint32_t Rs;
