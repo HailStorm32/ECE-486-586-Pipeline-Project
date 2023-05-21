@@ -10,13 +10,26 @@
 #define FILE_LINE_END_LENGTH    1 //In bytes
 #define TOTAL_FILE_LINE_LENGTH  (FILE_LINE_LENGTH + FILE_LINE_END_LENGTH)
 
+// Enumerated values for telling a stage if they should read and/or write a forwarded value and to where
+enum fowardInfo {
+    NONE,
+    TRUE,
+    IF,
+    ID,
+    EX,
+    MEM,
+    WB
+};
+
+
 class SysCore {
 private:
 
     // Stage struct to keep track of threads/stages
     typedef struct stage{
         // flags
-        volatile bool useFwd;
+        volatile fowardInfo fwdTo;
+        volatile fowardInfo useFwdFrom;
         volatile bool error;
         volatile bool okToRun;
 
@@ -24,6 +37,7 @@ private:
         volatile uint32_t Rs;
         volatile uint32_t Rt;
         volatile uint32_t Rd;
+        volatile uint32_t aluResult;
         volatile uint16_t immediate;
     } stageThread_t;
 

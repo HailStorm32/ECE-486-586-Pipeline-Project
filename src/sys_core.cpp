@@ -127,6 +127,66 @@ SysCore::SysCore(std::string filePath) {
 
 	this->filePath = filePath;
 
+
+	//Initalize stage structs
+	stageInfoIF = {
+		.fwdTo = fowardInfo::NONE,
+		.useFwdFrom = fowardInfo::NONE,
+		.error = false,
+		.okToRun = false,
+		.Rs = 0,
+		.Rt = 0,
+		.Rd = 0,
+		.aluResult = 0,
+		.immediate = 0,
+	};
+	stageInfoID = {
+		.fwdTo = fowardInfo::NONE,
+		.useFwdFrom = fowardInfo::NONE,
+		.error = false,
+		.okToRun = false,
+		.Rs = 0,
+		.Rt = 0,
+		.Rd = 0,
+		.aluResult = 0,
+		.immediate = 0,
+	};
+	stageInfoEX = {
+		.fwdTo = fowardInfo::NONE,
+		.useFwdFrom = fowardInfo::NONE,
+		.error = false,
+		.okToRun = false,
+		.Rs = 0,
+		.Rt = 0,
+		.Rd = 0,
+		.aluResult = 0,
+		.immediate = 0,
+	};
+	stageInfoMEM = {
+		.fwdTo = fowardInfo::NONE,
+		.useFwdFrom = fowardInfo::NONE,
+		.error = false,
+		.okToRun = false,
+		.Rs = 0,
+		.Rt = 0,
+		.Rd = 0,
+		.aluResult = 0,
+		.immediate = 0,
+	};
+	stageInfoWB = {
+		.fwdTo = fowardInfo::NONE,
+		.useFwdFrom = fowardInfo::NONE,
+		.error = false,
+		.okToRun = false,
+		.Rs = 0,
+		.Rt = 0,
+		.Rd = 0,
+		.aluResult = 0,
+		.immediate = 0,
+	};
+
+
+
 	//Get the total number of lines the file has
 	if ((totalNumOfLines = getFileSize(filePath)) == UINT32_MAX) {
 		std::cerr << "\nERROR: get_file_size returned UINT32_MAX" << "\n\n";
