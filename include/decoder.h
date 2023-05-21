@@ -50,6 +50,7 @@ typedef struct instInfo
 	uint32_t RsVal;
 	uint32_t RtVal;
 	uint32_t RdVal;
+	uint32_t aluResult;
 	uint16_t immediate;
 }instInfo_t, *instInfoPtr_t;
 
