@@ -6,6 +6,8 @@
 #include "decoder.h"
 #include "IF_thread.h"
 #include "ID_thread.h"
+#include "EX_thread.h"
+#include "MEM_thread.h"
 #include "sys_core.h"
 
 int main(int argc, char *argv[])
@@ -13,22 +15,11 @@ int main(int argc, char *argv[])
     // Initialize system core
     SysCore sysCore("given_sample_memory_image.txt");
 
-    // Check what SysCore vars initialized to
-    std::cout << "SysCore.PC = " << sysCore.PC << '\n'; 
-    
-    for (int i = 0; i < 32; i++){
-        std::cout << "SysCore.reg = " << sysCore.reg[i] << " i=" << i << '\n';
-    }
-
-    std::cout << "SysCore.clk = " << sysCore.clk << '\n';
-
     // Start threads (passing each thread a ref to the system core)
     std::thread ifThread(IFthread, std::ref(sysCore));
     std::thread idThread(IDthread, std::ref(sysCore));
-
-    // Wait for threads to finish
-    ifThread.join();
-    idThread.join();
+    std::thread exThread(EXthread, std::ref(sysCore));
+    std::thread memThread(MEMthread, std::ref(sysCore));
 
     //while (1){
         // if !stall:
