@@ -105,7 +105,7 @@ public:
     uint32_t reg[32];
 
     // Clock
-    long long clk;
+    volatile long long clk;
 
     // 5 stages of pipline
     stageThread_t stageInfoIF;
