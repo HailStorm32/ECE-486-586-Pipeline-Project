@@ -170,25 +170,25 @@ uint32_t SysCore::memRead(const uint32_t address, const bool isInstMem) {
 	//Convert the string to uint32_t and return
 	return static_cast<uint32_t>(std::stoll(lineData, nullptr, 16));
 }
-
-// Memory Write method:
-uint32_t SysCore::memWrite(const uint32_t address, uint32_t value, const bool isInstMem) {
-	uint32_t lineNumber = 0;
-	std::string lineData = "";
-
-	//Get line number
-	lineNumber = addrToLine(address);
-
-	// Convert the value into string
-	std::stringstream ss; // Declare a stringstream instance
-	ss << std::hex << value; // Use stream manipulators to write value
-	lineData = ss.str(); // Use the str() member function to get the string results
-	if (lineData.size() != FILE_LINE_LENGTH) {
-		std::cerr << "\nERROR: Converting [" << value << "] to string gives [" << lineData.size() << "] characters, "
-			<< "expected " << FILE_LINE_LENGTH << "\n\n";
-		return;
-	}
-
-	//Write line ??
-	// writeLineToLineNum(lineNumber, lineData);
-}
+//
+//// Memory Write method:
+//uint32_t SysCore::memWrite(const uint32_t address, uint32_t value, const bool isInstMem) {
+//	uint32_t lineNumber = 0;
+//	std::string lineData = "";
+//
+//	//Get line number
+//	lineNumber = addrToLine(address);
+//
+//	// Convert the value into string
+//	std::stringstream ss; // Declare a stringstream instance
+//	ss << std::hex << value; // Use stream manipulators to write value
+//	lineData = ss.str(); // Use the str() member function to get the string results
+//	if (lineData.size() != FILE_LINE_LENGTH) {
+//		std::cerr << "\nERROR: Converting [" << value << "] to string gives [" << lineData.size() << "] characters, "
+//			<< "expected " << FILE_LINE_LENGTH << "\n\n";
+//		return;
+//	}
+//
+//	//Write line ??
+//	// writeLineToLineNum(lineNumber, lineData);
+//}
