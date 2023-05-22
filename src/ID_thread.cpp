@@ -28,7 +28,14 @@ void IDthread(SysCore& sysCore)
 			if (fullInstruction == NULL)
 			{
 				std::cout << "DEBUG: [IDthread] Missed opportunity for this clock, will try again next clock" << std::endl;
-				sysCore.stageInfoID.okToRun = false;
+				continue;
+			}
+
+			//Skip the data if its invalid (aka we are told to flush)
+			if (sysCore.stageInfoID.invalidateData)
+			{
+				std::cout << "DEBUG: [IDthread] Missed opportunity for this clock, will try again next clock" << std::endl;
+				sysCore.stageInfoID.invalidateData = false;
 				continue;
 			}
 

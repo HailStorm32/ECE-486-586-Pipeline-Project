@@ -61,7 +61,14 @@ void EXthread(SysCore& sysCore)
 			if (instructionData == NULL)
 			{
 				std::cout << "DEBUG: [EXthread] Missed opportunity for this clock, will try again next clock" << std::endl;
-				sysCore.stageInfoEX.okToRun = false;
+				continue;
+			}
+
+			//Skip the data if its invalid (aka we are told to flush)
+			if (sysCore.stageInfoEX.invalidateData)
+			{
+				std::cout << "DEBUG: [EXthread] Told to invalidate instuction, will try again next clock" << std::endl;
+				sysCore.stageInfoEX.invalidateData = false;
 				continue;
 			}
 

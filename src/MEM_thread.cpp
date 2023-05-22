@@ -29,7 +29,14 @@ void MEMthread(SysCore& sysCore)
 			if (instructionData == NULL)
 			{
 				std::cout << "DEBUG: [MEMthread] Missed opportunity for this clock, will try again next clock" << std::endl;
-				sysCore.stageInfoMEM.okToRun = false;
+				continue;
+			}
+
+			//Skip the data if its invalid (aka we are told to flush)
+			if (sysCore.stageInfoMEM.invalidateData)
+			{
+				std::cout << "DEBUG: [MEMthread] Missed opportunity for this clock, will try again next clock" << std::endl;
+				sysCore.stageInfoMEM.invalidateData = false;
 				continue;
 			}
 
