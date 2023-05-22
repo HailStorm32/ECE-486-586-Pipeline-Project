@@ -7,36 +7,31 @@
 
 #define MIN_SLEEP_TIME      50 // ms
 
-void IFthread(SysCore& sysCore){
-    long long prevClkVal = -1;
-    std::chrono::milliseconds delay(MIN_SLEEP_TIME);
-    
-    uint32_t instruction;
+void IFthread(SysCore& sysCore) {
+	long long prevClkVal = -1;
+	std::chrono::milliseconds delay(MIN_SLEEP_TIME);
 
-    while (1){
-        // Continue only if CLK has changed and go ahead from master thread
-        if ((prevClkVal < sysCore.clk) && sysCore.stageInfoIF.okToRun) {
-            // read val at given address (PC val) from memory file
-            instruction = sysCore.memRead(sysCore.PC, true);
+	uint32_t instruction;
 
-            // Check if memRead() returns an error and apply flags
-            if (instruction == UINT_MAX){
-                std::cout << "ERROR: [IFthread] SysCore::memRead() return on error" << std::endl;
-                sysCore.stageInfoIF.okToRun = false;
-                continue;
-            }
+	// Continue only if CLK has changed and go ahead from master thread
+	if ((prevClkVal < sysCore.clk) && sysCore.stageInfoIF.okToRun) {
+		// read val at given address (PC val) from memory file
+		instruction = sysCore.memRead(sysCore.PC, true);
 
-            // Increment PC by 4 (bytes) aka 32 bits
-            sysCore.PC = sysCore.PC + 4;
+		// Check if memRead() returns an error and apply flags
+		if (instruction == UINT_MAX) {
+			std::cout << "ERROR: [IFthread] SysCore::memRead() return on error" << std::endl;
+			sysCore.stageInfoIF.okToRun = false;
+			continue;
+		}
 
-            // Record new CLK val 
-            prevClkVal = sysCore.clk;
+		// Increment PC by 4 (bytes) aka 32 bits
+		sysCore.PC = sysCore.PC + 4;
 
-            // Push the returned instruction to buffer
-            sysCore.IFtoID.push(instruction);
-        }
+		// Record new CLK val 
+		prevClkVal = sysCore.clk;
 
-        // Apply delay of 200 ms
-        std::this_thread::sleep_for(delay);
-    }
+		// Push the returned instruction to buffer
+		sysCore.IFtoID.push(instruction);
+	}
 }
