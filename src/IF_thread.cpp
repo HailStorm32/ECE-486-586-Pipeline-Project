@@ -5,7 +5,7 @@
 #include <iostream>
 #include "IF_thread.h"
 
-#define MIN_SLEEP_TIME      200 // ms
+#define MIN_SLEEP_TIME      50 // ms
 
 void IFthread(SysCore& sysCore){
     long long prevClkVal = -1;

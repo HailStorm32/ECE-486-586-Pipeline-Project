@@ -5,7 +5,7 @@
 #include "EX_thread.h"
 
 
-#define MIN_SLEEP_TIME		200  //In ms
+#define MIN_SLEEP_TIME		50  //In ms
 
 /* 
 * Description: *****WORK IN PROGRESS******** 
@@ -50,7 +50,6 @@ void EXthread(SysCore& sysCore)
 		//Only coninue if the clock has changed and we have the go ahead from the master
 		if (pastClkVal < sysCore.clk && sysCore.stageInfoEX.okToRun)
 		{	
-			std::cout <<"In EX thread\n";
 			//Try to get instruction out of the queue (will block if it cannot immediately acquire the lock)
 			instructionData = sysCore.IDtoEX.pop();
 

@@ -11,7 +11,7 @@
 #include "sys_core.h"
 #include "masterHelpers.h"
 
-#define CLOCK_PERIOD    1000 //in ms
+#define CLOCK_PERIOD    100 //in ms
 #define SETTLE_TIME     1   //in ms
 
 int main(int argc, char *argv[])

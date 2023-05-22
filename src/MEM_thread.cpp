@@ -5,7 +5,7 @@
 #include "MEM_thread.h"
 
 
-#define MIN_SLEEP_TIME		200  //In ms
+#define MIN_SLEEP_TIME		50  //In ms
 
 void MEMthread(SysCore& sysCore)
 {

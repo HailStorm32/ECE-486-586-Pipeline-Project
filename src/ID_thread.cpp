@@ -5,7 +5,7 @@
 #include "ID_thread.h"
 #include "decoder.h"
 
-#define MIN_SLEEP_TIME		200  //In ms
+#define MIN_SLEEP_TIME		50  //In ms
 
 void IDthread(SysCore& sysCore)
 {
