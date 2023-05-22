@@ -17,7 +17,7 @@ void MEMthread(SysCore& sysCore)
 	while (true)
 	{		
 		//Only coninue if the clock has changed and we have the go ahead from the master
-		if (pastClkVal < sysCore.clk && sysCore.stageInfoID.okToRun)
+		if (pastClkVal < sysCore.clk && sysCore.stageInfoMEM.okToRun)
 		{
 			//Try to get instruction out of the queue (will block if it cannot immediately acquire the lock)
 			instructionData = sysCore.EXtoMEM.pop();
@@ -26,7 +26,7 @@ void MEMthread(SysCore& sysCore)
 			if (instructionData == NULL)
 			{
 				std::cout << "DEBUG: [MEMthread] Missed opportunity for this clock, will try again next clock" << std::endl;
-				sysCore.stageInfoID.okToRun = false;
+				sysCore.stageInfoMEM.okToRun = false;
 				continue;
 			}
 
