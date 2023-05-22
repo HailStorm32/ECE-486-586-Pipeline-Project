@@ -19,8 +19,18 @@ void IFthread(SysCore& sysCore){
             // Clear our flag
             sysCore.stageInfoIF.okToRun = false;
 
-            // read val at given address (PC val) from memory file
-            instruction = sysCore.memRead(sysCore.PC, true);
+            // Check and see if we have been given a new PC address from EX
+            if (sysCore.stageInfoIF.updatedPC){
+                //Reset the flag
+                sysCore.stageInfoIF.updatedPC = false;
+
+                //Set the new PC value
+                sysCore.PC = sysCore.stageInfoIF.aluResult;
+            }
+            else {
+                // read val at given address (PC val) from memory file
+                instruction = sysCore.memRead(sysCore.PC, true);
+            }
 
             // Check if memRead() returns an error and apply flags
             if (instruction == UINT_MAX){
