@@ -41,7 +41,7 @@ uint32_t alu (uint32_t operandA, uint32_t operandB, opcodes operation){
 void EXthread(SysCore& sysCore)
 {
 	long long pastClkVal = -1;
-	std::chrono::seconds delay(MIN_SLEEP_TIME);
+	std::chrono::milliseconds delay(MIN_SLEEP_TIME);
 	instInfoPtr_t instructionData;
 
 	while (true)
