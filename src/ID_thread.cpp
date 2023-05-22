@@ -54,7 +54,7 @@ void IDthread(SysCore& sysCore)
 			{
 				std::cerr << "\nERROR: Invalid instruction: 0x" << std::hex << fullInstruction << std::dec << ", Skipping...\n\n";
 				//TODO: Report to master thread that we have an invalid instruction
-				sysCore.stageInfoID.error = true;
+				sysCore.stageInfoID.errorType = errorCodes::ERR_INVALID_INST;
 				continue;
 			}
 

@@ -22,13 +22,13 @@ enum fowardInfo {
 };
 
 enum errorCodes {
-    NONE,
-    HALT,
-    NOP,
-    INVALID_INST,
-    RAW_HAZ,
-    ALU_OVERFLOW,
-    ALU_UNDERFLOW
+    ERR_NONE,
+    ERR_HALT,
+    ERR_NOP,
+    ERR_INVALID_INST,
+    ERR_RAW_HAZ,
+    ERR_ALU_OVERFLOW,
+    ERR_ALU_UNDERFLOW
 };
 
 
