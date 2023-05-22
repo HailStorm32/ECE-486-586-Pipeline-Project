@@ -85,8 +85,10 @@ void EXthread(SysCore& sysCore)
 			-Should branching instructions update PC / set any flags in this thread?
 			*/
 
+		//sysCore.stageInfoEX.aluResult update if jump/branch target PC result
+
 			//Pass alu data to MEM stage (will block if it cannot immediately acquire the lock)
-			sysCore.IDtoEX.push(instructionData);
+			sysCore.EXtoMEM.push(instructionData);
 		}
 
 		std::this_thread::sleep_for(delay);
