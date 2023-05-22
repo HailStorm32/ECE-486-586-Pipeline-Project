@@ -14,7 +14,7 @@ void IDthread(SysCore& sysCore)
 	uint32_t fullInstruction;
 
 	//Only coninue if the clock has changed and we have the go ahead from the master
-	if (pastClkVal < sysCore.clk && sysCore.stageInfoID.okToRun)
+	if (sysCore.stageInfoID.okToRun)
 	{
 		//Try to get instruction out of the queue (will block if it cannot immediately acquire the lock)
 		fullInstruction = sysCore.IFtoID.pop();

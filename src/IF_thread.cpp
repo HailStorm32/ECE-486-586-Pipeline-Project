@@ -14,7 +14,7 @@ void IFthread(SysCore& sysCore) {
 	uint32_t instruction;
 
 	// Continue only if CLK has changed and go ahead from master thread
-	if ((prevClkVal < sysCore.clk) && sysCore.stageInfoIF.okToRun) {
+	if (sysCore.stageInfoIF.okToRun) {
 		// read val at given address (PC val) from memory file
 		instruction = sysCore.memRead(sysCore.PC, true);
 
@@ -22,7 +22,7 @@ void IFthread(SysCore& sysCore) {
 		if (instruction == UINT_MAX) {
 			std::cout << "ERROR: [IFthread] SysCore::memRead() return on error" << std::endl;
 			sysCore.stageInfoIF.okToRun = false;
-			continue;
+			return;
 		}
 
 		// Increment PC by 4 (bytes) aka 32 bits
