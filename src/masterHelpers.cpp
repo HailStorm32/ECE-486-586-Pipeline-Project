@@ -1,7 +1,9 @@
 #include "masterHelpers.h"
 
-bool checkForErrors()
+
+std::list<stageThreadPtr_t>* checkForErrors(SysCore& sysCore)
 {
-	//Code TBD, will return false for now (no errors reported)
-	return false;
+	std::list<stageThreadPtr_t>* erroredStages = new std::list<stageThreadPtr_t>;
+
+	return NULL;
 }

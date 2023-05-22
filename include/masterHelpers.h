@@ -1,5 +1,6 @@
 #pragma once
 #include "sys_core.h"
+#include <list>
 
 /*
 * Description:
@@ -11,7 +12,7 @@
 *	 TBD will return info through an argument
 *
 * Return:
-*	true -- errors reported
-*	false -- no errors reported
+*	list<stageThreadPtr_t> -- pointer to list containing stage structs who have error codes to check
+*	NULL -- no errors reported
 */
-bool checkForErrors();
+std::list<stageThreadPtr_t>* checkForErrors(SysCore& sysCore);

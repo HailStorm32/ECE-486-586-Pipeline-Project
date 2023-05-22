@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
         std::cout << "DEBUG: [Masterthread] Clock: " << sysCore.clk << std::endl;
 
         //Check of reported errors
-        if (checkForErrors())
+        if (checkForErrors(sysCore) != NULL)
         {
             //TODO: add code for processing errors
         }
