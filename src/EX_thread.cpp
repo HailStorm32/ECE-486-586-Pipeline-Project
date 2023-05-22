@@ -46,17 +46,20 @@ void EXthread(SysCore& sysCore)
 
 	while (true)
 	{		
+		
 		//Only coninue if the clock has changed and we have the go ahead from the master
-		if (pastClkVal < sysCore.clk && sysCore.stageInfoID.okToRun)
-		{
+		if (pastClkVal < sysCore.clk && sysCore.stageInfoEX.okToRun)
+		{	
+			std::cout <<"In EX thread\n";
 			//Try to get instruction out of the queue (will block if it cannot immediately acquire the lock)
 			instructionData = sysCore.IDtoEX.pop();
+
 
 			//If there was nothing for us to get, we missed our opportunity for this clock. Reset
 			if (instructionData == NULL)
 			{
 				std::cout << "DEBUG: [EXthread] Missed opportunity for this clock, will try again next clock" << std::endl;
-				sysCore.stageInfoID.okToRun = false;
+				sysCore.stageInfoEX.okToRun = false;
 				continue;
 			}
 
