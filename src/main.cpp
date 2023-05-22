@@ -48,6 +48,11 @@ int main(int argc, char *argv[])
             sysCore.stageInfoMEM.okToRun = true;
             sysCore.stageInfoWB.okToRun = true;
 
+            IFthread(sysCore);
+            IDthread(sysCore);
+            EXthread(sysCore);
+            MEMthread(sysCore);
+
             //Increment the clock
             sysCore.clk++;
 
