@@ -10,25 +10,6 @@
 #define FILE_LINE_END_LENGTH    1 //In bytes
 #define TOTAL_FILE_LINE_LENGTH  (FILE_LINE_LENGTH + FILE_LINE_END_LENGTH)
 
-// Stage struct to keep track of threads/stages
-typedef struct stage {
-    // flags
-    volatile fowardInfo fwdTo;
-    volatile fowardInfo useFwdFrom;
-    volatile errorCodes errorType;
-    volatile bool okToRun;
-    volatile bool updatedPC; //true if EX found branch taken/jump, update PC with value in aluResult
-    volatile bool invalidateData;
-    volatile bool die;
-
-    // forwarded vals
-    volatile uint32_t Rs;
-    volatile uint32_t Rt;
-    volatile uint32_t Rd;
-    volatile uint32_t aluResult;
-    volatile uint16_t immediate;
-} stageThread_t, * stageThreadPtr_t;
-
 // Enumerated values for telling a stage if they should read and/or write a forwarded value and to where
 enum fowardInfo {
     NONE,
@@ -49,6 +30,26 @@ enum errorCodes {
     ERR_ALU_OVERFLOW,
     ERR_ALU_UNDERFLOW
 };
+
+// Stage struct to keep track of threads/stages
+typedef struct stage {
+    // flags
+    volatile fowardInfo fwdTo;
+    volatile fowardInfo useFwdFrom;
+    volatile errorCodes errorType;
+    volatile bool okToRun;
+    volatile bool updatedPC; //true if EX found branch taken/jump, update PC with value in aluResult
+    volatile bool invalidateData;
+    volatile bool die;
+
+    // forwarded vals
+    volatile uint32_t Rs;
+    volatile uint32_t Rt;
+    volatile uint32_t Rd;
+    volatile uint32_t aluResult;
+    volatile uint16_t immediate;
+} stageThread_t, * stageThreadPtr_t;
+
 
 
 class SysCore {
