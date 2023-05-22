@@ -40,7 +40,7 @@ void IFthread(SysCore& sysCore){
 
             // Check if memRead() returns an error and apply flags
             if (instruction == UINT_MAX){
-                std::cout << "ERROR: [IFthread] SysCore::memRead() return on error" << std::endl;
+                std::cerr << "ERROR: [IFthread] SysCore::memRead() return on error" << std::endl;
                 sysCore.stageInfoIF.okToRun = false;
                 continue;
             }
