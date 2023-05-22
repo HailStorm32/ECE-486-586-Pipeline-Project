@@ -27,10 +27,10 @@ void IFthread(SysCore& sysCore){
                 //Set the new PC value
                 sysCore.PC = sysCore.stageInfoIF.aluResult;
             }
-            else {
-                // read val at given address (PC val) from memory file
-                instruction = sysCore.memRead(sysCore.PC, true);
-            }
+            
+            // read val at given address (PC val) from memory file
+            instruction = sysCore.memRead(sysCore.PC, true);
+            
 
             // Check if memRead() returns an error and apply flags
             if (instruction == UINT_MAX){
