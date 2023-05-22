@@ -19,6 +19,9 @@ void MEMthread(SysCore& sysCore)
 		//Only coninue if the clock has changed and we have the go ahead from the master
 		if (pastClkVal < sysCore.clk && sysCore.stageInfoMEM.okToRun)
 		{
+			//Clear our flag
+			sysCore.stageInfoMEM.okToRun = false;
+
 			//Try to get instruction out of the queue (will block if it cannot immediately acquire the lock)
 			instructionData = sysCore.EXtoMEM.pop();
 

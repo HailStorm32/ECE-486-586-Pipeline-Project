@@ -50,6 +50,9 @@ void EXthread(SysCore& sysCore)
 		//Only coninue if the clock has changed and we have the go ahead from the master
 		if (pastClkVal < sysCore.clk && sysCore.stageInfoEX.okToRun)
 		{	
+			//Clear our flag
+			sysCore.stageInfoEX.okToRun = false;
+
 			//Try to get instruction out of the queue (will block if it cannot immediately acquire the lock)
 			instructionData = sysCore.IDtoEX.pop();
 

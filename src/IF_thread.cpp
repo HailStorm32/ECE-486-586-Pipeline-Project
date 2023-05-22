@@ -16,6 +16,9 @@ void IFthread(SysCore& sysCore){
     while (1){
         // Continue only if CLK has changed and go ahead from master thread
         if ((prevClkVal < sysCore.clk) && sysCore.stageInfoIF.okToRun) {
+            // Clear our flag
+            sysCore.stageInfoIF.okToRun = false;
+
             // read val at given address (PC val) from memory file
             instruction = sysCore.memRead(sysCore.PC, true);
 
