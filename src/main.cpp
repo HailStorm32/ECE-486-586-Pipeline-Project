@@ -22,12 +22,16 @@ int main(int argc, char *argv[])
     // Start threads (passing each thread a ref to the system core)
     std::thread ifThread(IFthread, std::ref(sysCore));
     std::thread idThread(IDthread, std::ref(sysCore));
-    std::thread exThread(EXthread, std::ref(sysCore));
-    std::thread memThread(MEMthread, std::ref(sysCore));
+    //std::thread exThread(EXthread, std::ref(sysCore));
+    //std::thread memThread(MEMthread, std::ref(sysCore));
+
+    std::chrono::milliseconds delay(CLOCK_PERIOD);
 
     //Start master loop
     while (true)
     {
+        std::cout << "DEBUG: [Masterthread] Clock: " << sysCore.clk << std::endl;
+
         //Check of reported errors
         if (checkForErrors())
         {
@@ -49,7 +53,7 @@ int main(int argc, char *argv[])
 
         }
 
-        std::chrono::milliseconds delay(CLOCK_PERIOD);
+        std::this_thread::sleep_for(delay);
     }
 
     //while (1){
