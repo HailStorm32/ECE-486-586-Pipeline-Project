@@ -21,6 +21,16 @@ enum fowardInfo {
     WB
 };
 
+enum errorCodes {
+    NONE,
+    HALT,
+    NOP,
+    INVALID_INST,
+    RAW_HAZ,
+    ALU_OVERFLOW,
+    ALU_UNDERFLOW
+};
+
 
 class SysCore {
 private:
@@ -30,7 +40,7 @@ private:
         // flags
         volatile fowardInfo fwdTo;
         volatile fowardInfo useFwdFrom;
-        volatile bool error;
+        volatile errorCodes errorType;
         volatile bool okToRun;
         volatile bool updatedPC; //true if EX found branch taken/jump, update PC with value in aluResult
         volatile bool invalidateData;
