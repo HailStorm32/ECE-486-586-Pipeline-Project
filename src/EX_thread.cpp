@@ -47,6 +47,11 @@ void EXthread(SysCore& sysCore)
 	while (true)
 	{		
 		
+		//See if we need to die or not
+		if (sysCore.stageInfoEX.die) {
+			return;
+		}
+
 		//Only coninue if the clock has changed and we have the go ahead from the master
 		if (pastClkVal < sysCore.clk && sysCore.stageInfoEX.okToRun)
 		{	

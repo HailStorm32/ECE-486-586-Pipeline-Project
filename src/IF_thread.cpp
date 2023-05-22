@@ -14,6 +14,12 @@ void IFthread(SysCore& sysCore){
     uint32_t instruction;
 
     while (1){
+
+        //See if we need to die or not
+        if (sysCore.stageInfoIF.die) {
+            return;
+        }
+
         // Continue only if CLK has changed and go ahead from master thread
         if ((prevClkVal < sysCore.clk) && sysCore.stageInfoIF.okToRun) {
             // Clear our flag

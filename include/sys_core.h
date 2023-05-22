@@ -34,6 +34,7 @@ private:
         volatile bool okToRun;
         volatile bool updatedPC; //true if EX found branch taken/jump, update PC with value in aluResult
         volatile bool invalidateData;
+        volatile bool die;
 
         // forwarded vals
         volatile uint32_t Rs;
