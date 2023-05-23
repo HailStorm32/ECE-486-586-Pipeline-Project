@@ -53,9 +53,9 @@ int main(int argc, char *argv[])
 
             //Give the go ahead to all stages
             sysCore.stageInfoIF.okToRun = true;
-            sysCore.stageInfoID.okToRun = true;
-            sysCore.stageInfoEX.okToRun = true;
-            sysCore.stageInfoMEM.okToRun = true;
+            //sysCore.stageInfoID.okToRun = true;
+            //sysCore.stageInfoEX.okToRun = true;
+            //sysCore.stageInfoMEM.okToRun = true;
             sysCore.stageInfoWB.okToRun = true;
 
             //Increment the clock
