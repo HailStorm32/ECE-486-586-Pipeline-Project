@@ -31,7 +31,7 @@ void IFthread(SysCore& sysCore){
                 sysCore.stageInfoIF.updatedPC = false;
 
                 //Set the new PC value
-                sysCore.PC = sysCore.stageInfoIF.aluResult;
+                sysCore.PC = sysCore.stageInfoIF.fwdedAluResult;
             }
             
             // read val at given address (PC val) from memory file

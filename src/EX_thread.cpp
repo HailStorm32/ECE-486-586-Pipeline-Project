@@ -84,10 +84,10 @@ void EXthread(SysCore& sysCore)
 			switch(instructionData->type)
 			{
 				case Rtype: 
-					instructionData->aluResult = alu(instructionData->RsVal, instructionData->RtVal, instructionData->opcode);
+					instructionData->aluResultHolder = alu(instructionData->RsValHolder, instructionData->RtValHolder, instructionData->opcode);
 					break;
 				case Itype:
-					instructionData->aluResult = alu(instructionData->RsVal, instructionData->immediate, instructionData->opcode);
+					instructionData->aluResultHolder = alu(instructionData->RsValHolder, instructionData->immediateValHolder, instructionData->opcode);
 					break;
 				default:
 					std::cerr << "\nERROR: ALU encountered unknown instruction type\n" << std::endl;
@@ -97,12 +97,12 @@ void EXthread(SysCore& sysCore)
 			/*TO DO: all work in progress. still trying to determine
 			how to handle ALU results based on instruction type. 
 			-Should arithmetic/logical results be written to Destination register in this thread?
-				--currently writing to a aluResult var in struct to pass value forward.
+				--currently writing to a fwdedAluResult var in struct to pass value forward.
 			-Should calculated load/store address temp be stored in destination register in this thread?
 			-Should branching instructions update PC / set any flags in this thread?
 			*/
 
-		//sysCore.stageInfoEX.aluResult update if jump/branch target PC result
+		//sysCore.stageInfoEX.fwdedAluResult update if jump/branch target PC result
 
 			//Pass alu data to MEM stage (will block if it cannot immediately acquire the lock)
 			sysCore.EXtoMEM.push(instructionData);

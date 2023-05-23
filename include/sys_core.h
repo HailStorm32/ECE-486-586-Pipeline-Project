@@ -38,16 +38,16 @@ typedef struct stage {
     volatile fowardInfo useFwdFrom;
     volatile errorCodes errorType;
     volatile bool okToRun;
-    volatile bool updatedPC; //true if EX found branch taken/jump, update PC with value in aluResult
+    volatile bool updatedPC; //true if EX found branch taken/jump, update PC with value in fwdedAluResult
     volatile bool invalidateData;
     volatile bool die;
 
     // forwarded vals
-    volatile uint32_t Rs;
-    volatile uint32_t Rt;
-    volatile uint32_t Rd;
-    volatile uint32_t aluResult;
-    volatile uint16_t immediate;
+    volatile uint32_t fwdedRs;
+    volatile uint32_t fwdedRt;
+    volatile uint32_t fwdedRd;
+    volatile uint32_t fwdedAluResult;
+    volatile uint16_t fwdedImmediate;
 } stageThread_t, * stageThreadPtr_t;
 
 

@@ -47,11 +47,11 @@ typedef struct instInfo
 	uint8_t RsAddr;
 	uint8_t RtAddr;
 	uint8_t RdAddr;
-	uint32_t RsVal;
-	uint32_t RtVal;
-	uint32_t RdVal;
-	uint16_t immediate;
-	uint32_t aluResult;
+	uint32_t RsValHolder;
+	uint32_t RtValHolder;
+	uint32_t RdValHolder;
+	uint16_t immediateValHolder;
+	uint32_t aluResultHolder;
 }instInfo_t, *instInfoPtr_t;
 
 /*

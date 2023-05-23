@@ -63,15 +63,15 @@ void IDthread(SysCore& sysCore)
 			switch (instructionData->type)
 			{
 			case instFormat::Itype:
-				instructionData->RsVal = sysCore.reg[instructionData->RsAddr];
-				instructionData->RtVal = sysCore.reg[instructionData->RtAddr];
-				instructionData->RdVal = sysCore.reg[instructionData->RdAddr];
+				instructionData->RsValHolder = sysCore.reg[instructionData->RsAddr];
+				instructionData->RtValHolder = sysCore.reg[instructionData->RtAddr];
+				instructionData->RdValHolder = sysCore.reg[instructionData->RdAddr];
 
 				break;
 
 			case instFormat::Rtype:
-				instructionData->RsVal = sysCore.reg[instructionData->RsAddr];
-				instructionData->RtVal = sysCore.reg[instructionData->RtAddr];
+				instructionData->RsValHolder = sysCore.reg[instructionData->RsAddr];
+				instructionData->RtValHolder = sysCore.reg[instructionData->RtAddr];
 
 				break;
 
