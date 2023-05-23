@@ -5,6 +5,8 @@
 #include <iostream>
 #include "decoder.h"
 #include "TSqueue.h"
+#include <thread>
+#include <future>
 
 #define FILE_LINE_LENGTH        8 //In bytes
 #define FILE_LINE_END_LENGTH    1 //In bytes
@@ -41,6 +43,10 @@ typedef struct stage {
     volatile bool updatedPC; //true if EX found branch taken/jump, update PC with value in fwdedAluResult
     volatile bool invalidateData;
     volatile bool die;
+
+    //Thread stuff
+    std::promise<void> goAheadPromise;
+    std::future<void> goAheadFuture;
 
     // forwarded vals
     volatile uint32_t fwdedRs;

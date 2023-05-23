@@ -58,6 +58,10 @@ void IDthread(SysCore& sysCore)
 				continue;
 			}
 
+			sysCore.stageInfoID.goAheadFuture.wait();
+			sysCore.stageInfoID.goAheadPromise = std::promise<void>();
+			sysCore.stageInfoID.goAheadFuture = sysCore.stageInfoID.goAheadPromise.get_future();
+
 			//Fetch the register values
 			//TODO: Account for dependancy issues and forwarding
 			switch (instructionData->type)
