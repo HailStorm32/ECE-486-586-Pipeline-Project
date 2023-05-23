@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     std::thread exThread(EXthread, std::ref(sysCore));
     std::thread memThread(MEMthread, std::ref(sysCore));
 
-    std::chrono::milliseconds halfCycle(CLOCK_PERIOD/2);
+    std::chrono::milliseconds delay(CLOCK_PERIOD);
 
     //Start master loop
     while (true)
@@ -47,15 +47,7 @@ int main(int argc, char *argv[])
             sysCore.stageInfoEX.okToRun = true;
             sysCore.stageInfoMEM.okToRun = true;
             sysCore.stageInfoWB.okToRun = true;
-         
-            
-            std::this_thread::sleep_for(halfCycle);
 
-            //Only set the value if we are running that stage, otherwise an exception will be thrown
-            if (sysCore.clk >= 1 && sysCore.stageInfoID.okToRun == true)
-            {
-                sysCore.stageInfoID.goAheadPromise.set_value();
-            }
 
             //Increment the clock
             sysCore.clk++;
@@ -63,7 +55,7 @@ int main(int argc, char *argv[])
            
         }
 
-        std::this_thread::sleep_for(halfCycle);
+        std::this_thread::sleep_for(delay);
     }
 
     //while (1){

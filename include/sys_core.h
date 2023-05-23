@@ -44,10 +44,6 @@ typedef struct stage {
     volatile bool invalidateData;
     volatile bool die;
 
-    //Thread stuff
-    std::promise<void> goAheadPromise;
-    std::future<void> goAheadFuture;
-
     // forwarded vals
     volatile uint32_t fwdedRs;
     volatile uint32_t fwdedRt;
