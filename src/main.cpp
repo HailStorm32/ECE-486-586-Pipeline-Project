@@ -11,7 +11,7 @@
 #include "sys_core.h"
 #include "masterHelpers.h"
 
-#define CLOCK_PERIOD    150 //in ms
+#define CLOCK_PERIOD    100 //in ms
 #define SETTLE_TIME     1   //in ms
 
 int main(int argc, char *argv[])
@@ -46,16 +46,6 @@ int main(int argc, char *argv[])
             sysCore.stageInfoID.okToRun = true;
             sysCore.stageInfoEX.okToRun = true;
             sysCore.stageInfoMEM.okToRun = true;
-            sysCore.stageInfoWB.okToRun = true;
-
-            //Let threads finish first half of cycle
-            std::this_thread::sleep_for(halfCycle/2);
-
-            //Give the go ahead to all stages
-            //sysCore.stageInfoIF.okToRun = true;
-            sysCore.stageInfoID.okToRun = true;
-            //sysCore.stageInfoEX.okToRun = true;
-            //sysCore.stageInfoMEM.okToRun = true;
             sysCore.stageInfoWB.okToRun = true;
 
             //Increment the clock

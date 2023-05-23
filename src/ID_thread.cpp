@@ -58,11 +58,6 @@ void IDthread(SysCore& sysCore)
 				continue;
 			}
 
-			//Wait untill the second half of the cycle
-			while (!sysCore.stageInfoID.okToRun){}
-			//Clear our flag
-			sysCore.stageInfoID.okToRun = false;
-
 			//Fetch the register values
 			//TODO: Account for dependancy issues and forwarding
 			switch (instructionData->type)
