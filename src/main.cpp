@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     std::thread exThread(EXthread, std::ref(sysCore));
     std::thread memThread(MEMthread, std::ref(sysCore));
 
-    std::chrono::milliseconds halfCycle(CLOCK_PERIOD/2);
+    std::chrono::milliseconds delay(CLOCK_PERIOD);
 
     //Start master loop
     while (true)
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 
         }
 
-        std::this_thread::sleep_for(halfCycle);
+        std::this_thread::sleep_for(delay);
     }
 
     //while (1){
