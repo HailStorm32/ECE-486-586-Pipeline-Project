@@ -55,7 +55,7 @@ void IFthread(SysCore& sysCore){
             sysCore.IFtoID.push(instruction);
         }
 
-        // Apply delay of 200 ms
+        // Apply delay
         std::this_thread::sleep_for(delay);
     }
 }
