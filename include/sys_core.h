@@ -168,6 +168,6 @@ public:
     * Return:
     *	None
     */
-    // uint32_t memWrite(const uint32_t address, const uint32_t value, const bool isInstMem);
+    uint32_t memWrite(const uint32_t address, const uint32_t value);
 };
 #endif
