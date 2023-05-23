@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     std::thread exThread(EXthread, std::ref(sysCore));
     std::thread memThread(MEMthread, std::ref(sysCore));
 
-    std::chrono::milliseconds delay(CLOCK_PERIOD);
+    std::chrono::milliseconds halfCycle(CLOCK_PERIOD/2);
 
     //Start master loop
     while (true)
@@ -48,12 +48,22 @@ int main(int argc, char *argv[])
             sysCore.stageInfoMEM.okToRun = true;
             sysCore.stageInfoWB.okToRun = true;
 
+            //Let threads finish first half of cycle
+            std::this_thread::sleep_for(halfCycle);
+
+            //Give the go ahead to all stages
+            sysCore.stageInfoIF.okToRun = true;
+            sysCore.stageInfoID.okToRun = true;
+            sysCore.stageInfoEX.okToRun = true;
+            sysCore.stageInfoMEM.okToRun = true;
+            sysCore.stageInfoWB.okToRun = true;
+
             //Increment the clock
             sysCore.clk++;
 
         }
 
-        std::this_thread::sleep_for(delay);
+        std::this_thread::sleep_for(halfCycle);
     }
 
     //while (1){
