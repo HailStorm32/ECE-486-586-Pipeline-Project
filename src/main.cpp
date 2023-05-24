@@ -39,6 +39,8 @@ int main(int argc, char *argv[])
         //Check of reported errors
         if (!errorsList->empty())
         {
+            //actOnError(sysCore, errorsList);
+
             //TODO: add code for processing errors
 
             stageThreadPtr_t stageInfo = errorsList->front();
@@ -54,6 +56,7 @@ int main(int argc, char *argv[])
                 return 0;
             }
 
+            delete errorsList;
         }
         else
         {

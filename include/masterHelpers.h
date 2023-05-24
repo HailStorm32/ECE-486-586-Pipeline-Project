@@ -31,4 +31,4 @@ std::list<stageThreadPtr_t>* checkForErrors(SysCore& sysCore);
 *	0 -- If no other action needs to be taken
 *	1 -- If program needs to be stopped
 */
-int actOnError(SysCore& sysCore, std::list<stageThreadPtr_t>& structList);
+int actOnError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList);
