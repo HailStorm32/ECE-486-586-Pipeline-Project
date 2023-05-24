@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
         if (!errorsList->empty())
         {
             //TODO: add code for processing errors
+
             stageThreadPtr_t stageInfo = errorsList->front();
             
             if (stageInfo->errorType == errorCodes::ERR_HALT)

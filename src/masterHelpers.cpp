@@ -16,3 +16,8 @@ std::list<stageThreadPtr_t>* checkForErrors(SysCore& sysCore)
 
 	return erroredStagesList;
 }
+
+int actOnError(SysCore& sysCore, std::list<stageThreadPtr_t>& structList)
+{
+	return 0;
+}
