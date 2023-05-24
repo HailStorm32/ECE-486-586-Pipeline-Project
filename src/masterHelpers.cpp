@@ -69,7 +69,7 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 			break;
 
 		case errorCodes::ERR_RAW_HAZ:
-
+			//TODO: add code for figuring out what needs a stall and how many
 			break;
 
 		default:
