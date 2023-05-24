@@ -38,6 +38,18 @@ uint32_t alu (uint32_t operandA, uint32_t operandB, opcodes operation){
 	return 0;
 }
 
+/*Perform Sign Extension on 16 bit immediates*/
+uint32_t signExtend(u_int16_t immediate16_t){
+	uint32_t immediate32_t;	
+	if(immediate16_t & 0x8000){
+        immediate32_t = immediate16_t | 0xFFFF0000;
+	} 
+	else{
+		immediate32_t = immediate16_t;
+	}
+	return immediate32_t;
+}
+
 void EXthread(SysCore& sysCore)
 {
 	long long pastClkVal = -1;
