@@ -126,34 +126,28 @@ void EXthread(SysCore& sysCore)
 			exInfo->PC = sysCore.PC;
 			exInfo->Rs = instructionData->RsValHolder;
 			exInfo->Rt = instructionData->RsValHolder;
-			exInfo->updatedPcVal = NULL;
+			exInfo->updatedPcVal = 0;
 			exInfo->updatePC = false;
 			
-			
-
-	
-			switch(instructionData->type)
-			{
-				case Rtype: 
-					instructionData->aluResultHolder = alu(instructionData->RsValHolder, instructionData->RtValHolder, instructionData->opcode);
-					break;
-				case Itype:
-					instructionData->aluResultHolder = alu(instructionData->RsValHolder, instructionData->immediateValHolder, instructionData->opcode);
-					break;
-				default:
-					std::cerr << "\nERROR: ALU encountered unknown instruction type\n" << std::endl;
-					break;
+			//perform alu op or update PC depending on instruction type
+			if(instructionData->type == Itype) {
+				if(exInfo->opcode == BZ || exInfo->opcode == BEQ || exInfo->opcode == JR || exInfo->opcode == HALT) {
+					updatePC(exInfo);
+					instructionData->aluResultHolder =	exInfo->updatedPcVal;
+				}
+				else {
+					instructionData->aluResultHolder = alu(exInfo->Rs, exInfo->immediate, exInfo->opcode);
+				}	
 			}
-
-			/*TO DO: all work in progress. still trying to determine
-			how to handle ALU results based on instruction type. 
-			-Should arithmetic/logical results be written to Destination register in this thread?
-				--currently writing to a fwdedAluResult var in struct to pass value forward.
-			-Should calculated load/store address temp be stored in destination register in this thread?
-			-Should branching instructions update PC / set any flags in this thread?
-			*/
-
+			else if (instructionData->type == Rtype) {
+				instructionData->aluResultHolder = alu(instructionData->RsValHolder, instructionData->RtValHolder, instructionData->opcode);
+			}
+			else
+				std::cerr << "\nERROR: ALU encountered unknown instruction type\n" << std::endl;
+			
 		//sysCore.stageInfoEX.fwdedAluResult update if jump/branch target PC result
+		sysCore.stageInfoEX.fwdedAluResult = instructionData->aluResultHolder;
+		sysCore.stageInfoEX.updatedPC = exInfo->updatePC;
 
 			//Pass alu data to MEM stage (will block if it cannot immediately acquire the lock)
 			sysCore.EXtoMEM.push(instructionData);
