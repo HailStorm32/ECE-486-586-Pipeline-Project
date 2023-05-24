@@ -130,6 +130,7 @@ SysCore::SysCore(std::string filePath) {
 
 	//Initalize stage structs
 	stageInfoIF = {
+		.stageType = fowardInfo::IF,
 		.fwdTo = fowardInfo::NONE,
 		.useFwdFrom = fowardInfo::NONE,
 		.errorType = errorCodes::ERR_NONE,
@@ -144,6 +145,7 @@ SysCore::SysCore(std::string filePath) {
 		.fwdedImmediate = 0,
 	};
 	stageInfoID = {
+		.stageType = fowardInfo::ID,
 		.fwdTo = fowardInfo::NONE,
 		.useFwdFrom = fowardInfo::NONE,
 		.errorType = errorCodes::ERR_NONE,
@@ -158,6 +160,7 @@ SysCore::SysCore(std::string filePath) {
 		.fwdedImmediate = 0,
 	};
 	stageInfoEX = {
+		.stageType = fowardInfo::EX,
 		.fwdTo = fowardInfo::NONE,
 		.useFwdFrom = fowardInfo::NONE,
 		.errorType = errorCodes::ERR_NONE,
@@ -172,6 +175,7 @@ SysCore::SysCore(std::string filePath) {
 		.fwdedImmediate = 0,
 	};
 	stageInfoMEM = {
+		.stageType = fowardInfo::MEM,
 		.fwdTo = fowardInfo::NONE,
 		.useFwdFrom = fowardInfo::NONE,
 		.errorType = errorCodes::ERR_NONE,
@@ -186,6 +190,7 @@ SysCore::SysCore(std::string filePath) {
 		.fwdedImmediate = 0,
 	};
 	stageInfoWB = {
+		.stageType = fowardInfo::WB,
 		.fwdTo = fowardInfo::NONE,
 		.useFwdFrom = fowardInfo::NONE,
 		.errorType = errorCodes::ERR_NONE,

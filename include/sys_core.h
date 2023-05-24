@@ -33,6 +33,8 @@ enum errorCodes {
 
 // Stage struct to keep track of threads/stages
 typedef struct stage {
+    volatile fowardInfo stageType;
+    
     // flags
     volatile fowardInfo fwdTo;
     volatile fowardInfo useFwdFrom;
