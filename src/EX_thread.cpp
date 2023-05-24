@@ -38,6 +38,33 @@ uint32_t alu (uint32_t operandA, uint32_t operandB, opcodes operation){
 	return 0;
 }
 
+void updatePC (exInfoPtr_t instrData){
+	
+	switch(instrData->opcode){
+		case BZ:
+			if (instrData->Rs == 0) {
+				instrData->updatedPcVal = instrData->PC + instrData->immediate; 
+				instrData->updatePC = true;
+			}
+			break;
+		case BEQ:
+			if(instrData->Rs == instrData->Rt){
+				instrData->updatedPcVal = instrData->PC + instrData->immediate; 
+				instrData->updatePC = true;
+			}
+			break;
+		case JR:
+			instrData->updatedPcVal = instrData->Rs;
+			instrData->updatePC = true;
+			break;
+		case HALT: break;
+		default:
+			instrData->updatedPcVal = 0;
+			instrData->updatePC = false;
+			break;
+	}
+}
+
 /*Perform Sign Extension on 16 bit immediates*/
 uint32_t signExtend(u_int16_t immediate16_t){
 	uint32_t immediate32_t;	
@@ -55,6 +82,7 @@ void EXthread(SysCore& sysCore)
 	long long pastClkVal = -1;
 	std::chrono::milliseconds delay(MIN_SLEEP_TIME);
 	instInfoPtr_t instructionData;
+	exInfoPtr_t exInfo = new exInfo_t;
 
 	while (true)
 	{		
@@ -91,6 +119,17 @@ void EXthread(SysCore& sysCore)
 
 			//Record the new clock value
 			pastClkVal = sysCore.clk;
+
+			//Initialize execution stage info struct
+			exInfo->immediate = signExtend(instructionData->immediateValHolder);
+			exInfo->opcode = instructionData->opcode;
+			exInfo->PC = sysCore.PC;
+			exInfo->Rs = instructionData->RsValHolder;
+			exInfo->Rt = instructionData->RsValHolder;
+			exInfo->updatedPcVal = NULL;
+			exInfo->updatePC = false;
+			
+			
 
 	
 			switch(instructionData->type)
