@@ -27,15 +27,32 @@ int main(int argc, char *argv[])
 
     std::chrono::milliseconds delay(CLOCK_PERIOD);
 
+    std::list<stageThreadPtr_t>* errorsList = NULL;
+
     //Start master loop
     while (true)
     {
         std::cout << "DEBUG: [Masterthread] Clock: " << sysCore.clk << std::endl;
 
+        errorsList = checkForErrors(sysCore);
+
         //Check of reported errors
-        if (checkForErrors(sysCore) != NULL)
+        if (!errorsList->empty())
         {
             //TODO: add code for processing errors
+            stageThreadPtr_t stageInfo = errorsList->front();
+            
+            if (stageInfo->errorType == errorCodes::ERR_HALT)
+            {
+                sysCore.stageInfoIF.die = true;
+                sysCore.stageInfoID.die = true;
+                sysCore.stageInfoEX.die = true;
+                sysCore.stageInfoMEM.die = true;
+                sysCore.stageInfoWB.die = true;
+
+                return 0;
+            }
+
         }
         else
         {

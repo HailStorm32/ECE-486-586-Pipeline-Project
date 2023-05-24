@@ -61,7 +61,7 @@ void IDthread(SysCore& sysCore)
 			//Report if we found a HALT
 			if (instructionData->opcode == opcodes::HALT)
 			{
-				sysCore.stageInfoID.errorType == errorCodes::ERR_HALT;
+				sysCore.stageInfoID.errorType = errorCodes::ERR_HALT;
 				delete instructionData;
 				continue;
 			}

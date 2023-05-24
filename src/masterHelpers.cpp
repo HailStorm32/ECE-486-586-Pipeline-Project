@@ -3,7 +3,16 @@
 
 std::list<stageThreadPtr_t>* checkForErrors(SysCore& sysCore)
 {
-	std::list<stageThreadPtr_t>* erroredStages = new std::list<stageThreadPtr_t>;
+	std::list<stageThreadPtr_t>* erroredStagesList = new std::list<stageThreadPtr_t>;
 
-	return NULL;
+	if (sysCore.stageInfoIF.errorType != errorCodes::ERR_NONE)
+	{
+		erroredStagesList->push_back(&sysCore.stageInfoIF);
+	}
+	if (sysCore.stageInfoID.errorType != errorCodes::ERR_NONE)
+	{
+		erroredStagesList->push_back(&sysCore.stageInfoID);
+	}
+
+	return erroredStagesList;
 }
