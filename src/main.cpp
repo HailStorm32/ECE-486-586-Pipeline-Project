@@ -36,27 +36,25 @@ int main(int argc, char *argv[])
 
         errorsList = checkForErrors(sysCore);
 
+        if (errorsList == NULL)
+        {
+            std::cerr << "\n\nERROR: [Masterthread] errorsList is NULL\n\n" << std::endl;
+            continue;
+        }
+
         //Check of reported errors
         if (!errorsList->empty())
         {
-            //actOnError(sysCore, errorsList);
+            //Process the errors
+            int ret = processError(sysCore, errorsList);
 
             //TODO: add code for processing errors
-
-            stageThreadPtr_t stageInfo = errorsList->front();
             
-            if (stageInfo->errorType == errorCodes::ERR_HALT)
+            //We had a HALT, so exit
+            if (ret == 1)
             {
-                sysCore.stageInfoIF.die = true;
-                sysCore.stageInfoID.die = true;
-                sysCore.stageInfoEX.die = true;
-                sysCore.stageInfoMEM.die = true;
-                sysCore.stageInfoWB.die = true;
-
-                return 0;
+                exit(0);
             }
-
-            delete errorsList;
         }
         else
         {
@@ -76,6 +74,7 @@ int main(int argc, char *argv[])
            
         }
 
+        delete errorsList;
         std::this_thread::sleep_for(delay);
     }
 
