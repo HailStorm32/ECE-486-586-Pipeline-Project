@@ -29,8 +29,6 @@ enum errorCodes {
     ERR_NOP,
     ERR_INVALID_INST,
     ERR_RAW_HAZ,
-    ERR_ALU_OVERFLOW,
-    ERR_ALU_UNDERFLOW
 };
 
 // Stage struct to keep track of threads/stages
