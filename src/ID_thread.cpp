@@ -58,6 +58,13 @@ void IDthread(SysCore& sysCore)
 				continue;
 			}
 
+			//Report if we found a HALT
+			if (instructionData->opcode == opcodes::HALT)
+			{
+				sysCore.stageInfoID.errorType == errorCodes::ERR_HALT;
+				continue;
+			}
+
 			//Fetch the register values
 			//TODO: Account for dependancy issues and forwarding
 			switch (instructionData->type)
