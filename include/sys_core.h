@@ -28,6 +28,7 @@ enum errorCodes {
     ERR_HALT,
     ERR_NOP,
     ERR_INVALID_INST,
+    ERR_BRANCH_TAKEN,
     ERR_RAW_HAZ,
 };
 

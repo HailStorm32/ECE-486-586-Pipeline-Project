@@ -45,11 +45,27 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 			return 1;
 
 		case errorCodes::ERR_INVALID_INST:
-			//Tell the EX stage to invalidate the data
+			//Tell the EX stage to invalidate the instruction
+			//	We only will find if its an invalid instruction
+			//	at the end of the ID stage. If we invalidate
+			//	the instruction in the EX stage, EX wont pass instData
+			//	to the further instructions causing them to stall
+			//	which is what we want
 			sysCore.stageInfoEX.invalidateData = true;
 			break;
 
 		case errorCodes::ERR_NOP:
+			//Will most likely not be used, but its here just in case
+			break;
+
+		case errorCodes::ERR_BRANCH_TAKEN:
+			//TODO: figure out what actualy needs to be invalidated
+			
+			//Flush the pipeline
+			sysCore.stageInfoID.invalidateData = true;
+			sysCore.stageInfoEX.invalidateData = true;
+			sysCore.stageInfoMEM.invalidateData = true;
+			sysCore.stageInfoWB.invalidateData = true;
 			break;
 
 		case errorCodes::ERR_RAW_HAZ:
@@ -63,7 +79,7 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 
 	}
 
-	switch (stageStruct->stageType)
+	/*switch (stageStruct->stageType)
 	{
 	case fowardInfo::IF:
 		break;
@@ -83,7 +99,7 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 	default:
 
 		break;
-	}
+	}*/
 
 
 	return 0;
