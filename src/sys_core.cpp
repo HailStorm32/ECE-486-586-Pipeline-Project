@@ -205,6 +205,15 @@ SysCore::SysCore(std::string filePath) {
 		.fwdedImmediate = 0,
 	};
 
+	//Initalize stall tracker
+	stallsRemaining = {
+		.isInStall = false,
+		.stallsRemainIF = 0,
+		.stallsRemainID = 0,
+		.stallsRemainEX = 0,
+		.stallsRemainMEM = 0,
+		.stallsRemainWB = 0,
+	};
 
 
 	//Get the total number of lines the file has

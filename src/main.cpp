@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
             std::cerr << "\n\nERROR: [Masterthread] errorsList is NULL\n\n" << std::endl;
             continue;
         }
-
+        
         //Check of reported errors
         if (!errorsList->empty())
         {
@@ -55,6 +55,66 @@ int main(int argc, char *argv[])
             {
                 exit(0);
             }
+        }
+        else if (sysCore.stallsRemaining.isInStall) 
+        {
+            //Only start stages that are not in a stall
+
+            //IF stage
+            if (sysCore.stallsRemaining.stallsRemainIF == 0)
+            {
+                sysCore.stageInfoIF.okToRun = true;
+            }
+            else
+            {
+                //Decrement the stall count
+                sysCore.stallsRemaining.stallsRemainIF--;
+            }
+            
+            //ID stage
+            if (sysCore.stallsRemaining.stallsRemainID == 0)
+            {
+                sysCore.stageInfoID.okToRun = true;
+            }
+            else
+            {
+                //Decrement the stall count
+                sysCore.stallsRemaining.stallsRemainID--;
+            }
+            
+            //EX stage
+            if (sysCore.stallsRemaining.stallsRemainEX == 0)
+            {
+                sysCore.stageInfoEX.okToRun = true;
+            }
+            else
+            {
+                //Decrement the stall count
+                sysCore.stallsRemaining.stallsRemainEX--;
+            }
+
+            //MEM stage
+            if (sysCore.stallsRemaining.stallsRemainMEM == 0)
+            {
+                sysCore.stageInfoMEM.okToRun = true;
+            }
+            else
+            {
+                //Decrement the stall count
+                sysCore.stallsRemaining.stallsRemainMEM--;
+            }
+
+            //WB stage
+            if (sysCore.stallsRemaining.stallsRemainWB == 0)
+            {
+                sysCore.stageInfoWB.okToRun = true;
+            }
+            else
+            {
+                //Decrement the stall count
+                sysCore.stallsRemaining.stallsRemainWB--;
+            }
+            
         }
         else
         {

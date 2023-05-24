@@ -141,6 +141,15 @@ public:
     // Core Constructor
     SysCore(std::string filePath);
 
+    struct stallTracker {
+        bool isInStall;
+        uint16_t stallsRemainIF;
+        uint16_t stallsRemainID;
+        uint16_t stallsRemainEX;
+        uint16_t stallsRemainMEM;
+        uint16_t stallsRemainWB;
+    }stallsRemaining;
+
     /*
     * Description:
     *	Reads the value at a given address of the the memory file

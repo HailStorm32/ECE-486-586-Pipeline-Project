@@ -53,6 +53,7 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 			break;
 
 		case errorCodes::ERR_RAW_HAZ:
+
 			break;
 
 		default:
