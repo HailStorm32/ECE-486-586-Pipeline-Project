@@ -49,10 +49,9 @@ void MEMthread(SysCore& sysCore)
 			pastClkVal = sysCore.clk;
 
 			/*-------------------MEM Functionality Work in Progress-----------------------
-            When to write R-type ALU result to destination register for non-forwarding?
-            EX stage, Here, or write back? Lecture slides seem to vary between MEM and WB.
             
-            Store to memory here. store instruction complete?
+            Read/write memory. I believe store instructions are 'complete' here.
+			Load/R-type instructions will have actual register updated in WB stage
     
                    
 			*/
