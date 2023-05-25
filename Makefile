@@ -9,7 +9,7 @@ OBJ_DIR = .
 
 OBJS = $(OBJ_DIR)/sys_core.o $(OBJ_DIR)/decoder.o $(OBJ_DIR)/ID_thread.o \
 	  $(OBJ_DIR)/IF_thread.o $(OBJ_DIR)/EX_thread.o $(OBJ_DIR)/MEM_thread.o \
-	  $(OBJ_DIR)/masterHelpers.o
+	  $(OBJ_DIR)/masterHelpers.o $(OBJ_DIR)/WB_thread.o
 
 # If any files are called 'all', 'default', 'test' or 'clean', make will ignore 
 # and use the below targets instead
@@ -42,6 +42,9 @@ $(OBJ_DIR)/EX_thread.o: $(SRC_DIR)/EX_thread.cpp $(INC_DIR)/EX_thread.h
 	$(CC) $(CPPFLAGS) $(LDFLAGS) -I $(INC_DIR) -c $< -o $@
 
 $(OBJ_DIR)/MEM_thread.o: $(SRC_DIR)/MEM_thread.cpp $(INC_DIR)/MEM_thread.h
+	$(CC) $(CPPFLAGS) $(LDFLAGS) -I $(INC_DIR) -c $< -o $@
+
+$(OBJ_DIR)/WB_thread.o: $(SRC_DIR)/WB_thread.cpp $(INC_DIR)/WB_thread.h
 	$(CC) $(CPPFLAGS) $(LDFLAGS) -I $(INC_DIR) -c $< -o $@
 
 test:
