@@ -3,6 +3,9 @@
 
 #include "sys_core.h"
 
+#define BITMASK 0x8000
+#define SIGNEXTEND 0xFFFF0000
+
 typedef struct exInfo
 {
 	uint32_t PC;

@@ -3,10 +3,11 @@
 #include <cstdint>
 #include <iostream>
 #include "EX_thread.h"
+#include <bitset>
 
 
 #define MIN_SLEEP_TIME		50  //In ms
-
+#define _VERBOSE_ 0
 /* 
 * Description: *****WORK IN PROGRESS******** 
 *	Perform ALU functions.
@@ -68,12 +69,16 @@ void updatePC (exInfoPtr_t instrData){
 /*Perform Sign Extension on 16 bit immediates*/
 uint32_t signExtend(u_int16_t immediate16_t){
 	uint32_t immediate32_t;	
-	if(immediate16_t & 0x8000){
-        immediate32_t = immediate16_t | 0xFFFF0000;
+	if(immediate16_t & BITMASK){
+        immediate32_t = immediate16_t | SIGNEXTEND;
 	} 
 	else{
 		immediate32_t = immediate16_t;
 	}
+	#if (_VERBOSE_ == 2)
+		std::cout << "Before sign extend Immediate =  " << std::bitset<16>(immediate16_t) << '\n';
+		std::cout << "In sign extend Immediate =  " << std::bitset<32>(immediate32_t) << '\n';		
+	#endif
 	return immediate32_t;
 }
 
@@ -121,33 +126,51 @@ void EXthread(SysCore& sysCore)
 			pastClkVal = sysCore.clk;
 
 			//Initialize execution stage info struct
-			exInfo->immediate = signExtend(instructionData->immediateValHolder);
 			exInfo->opcode = instructionData->opcode;
 			exInfo->PC = sysCore.PC;
 			exInfo->Rs = instructionData->RsValHolder;
-			exInfo->Rt = instructionData->RsValHolder;
+			exInfo->Rt = instructionData->RtValHolder;
 			exInfo->updatedPcVal = 0;
 			exInfo->updatePC = false;
 			
 			//perform alu op or update PC depending on instruction type
 			if(instructionData->type == Itype) {
-				if(exInfo->opcode == BZ || exInfo->opcode == BEQ || exInfo->opcode == JR || exInfo->opcode == HALT) {
+				
+				exInfo->immediate = signExtend(instructionData->immediateValHolder);
+				
+				//control flow ops: caclulate new PC value is applicable. 
+				if(instructionData->isControlFlow == true) {
 					updatePC(exInfo);
-					instructionData->aluResultHolder =	exInfo->updatedPcVal;
+					instructionData->aluResultHolder =	exInfo->updatedPcVal; //store new PCval in aluResultHolder
 				}
+				//if Immediate type: perform operation and store in RT val holder
 				else {
-					instructionData->aluResultHolder = alu(exInfo->Rs, exInfo->immediate, exInfo->opcode);
+					instructionData->RtValHolder = alu(exInfo->Rs, exInfo->immediate, exInfo->opcode);
 				}	
 			}
+			//R type: perform operation and store in RD val holder
 			else if (instructionData->type == Rtype) {
-				instructionData->aluResultHolder = alu(instructionData->RsValHolder, instructionData->RtValHolder, instructionData->opcode);
+				instructionData->RdValHolder = alu(instructionData->RsValHolder, instructionData->RtValHolder, instructionData->opcode);
 			}
 			else
 				std::cerr << "\nERROR: ALU encountered unknown instruction type\n" << std::endl;
 			
-		//sysCore.stageInfoEX.fwdedAluResult update if jump/branch target PC result
-		sysCore.stageInfoEX.fwdedAluResult = instructionData->aluResultHolder;
-		sysCore.stageInfoEX.updatedPC = exInfo->updatePC;
+			#if (_VERBOSE_ > 0)
+				std::cout << "Opcode =  " << exInfo->opcode << '\n';
+				std::cout << "Rd Result =  " << instructionData->RdValHolder << '\n';
+				std::cout << "Rs =  " << exInfo->Rs << '\n';
+				std::cout << "Rt =  " << instructionData->RtValHolder << '\n';
+				std::cout << "Immediate =  " << std::bitset<32>(exInfo->immediate) << '\n';
+				std::cout << "Updated PC =  " << exInfo->updatedPcVal << '\n';
+			#endif
+		
+			//sysCore.stageInfoEX.fwdedAluResult update if jump/branch target PC result
+			sysCore.stageInfoEX.fwdedAluResult = instructionData->aluResultHolder;
+			sysCore.stageInfoEX.fwdedImmediate = instructionData->immediateValHolder;
+			sysCore.stageInfoEX.fwdedRd = instructionData->RdValHolder;
+			sysCore.stageInfoEX.fwdedRs = instructionData->RsValHolder;
+			sysCore.stageInfoEX.fwdedRt = instructionData->RtValHolder;
+			sysCore.stageInfoEX.updatedPC = exInfo->updatePC;
 
 			//Pass alu data to MEM stage (will block if it cannot immediately acquire the lock)
 			sysCore.EXtoMEM.push(instructionData);
