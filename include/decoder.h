@@ -49,9 +49,11 @@ typedef struct instInfo
 	uint8_t RdAddr;
 	uint32_t RsValHolder;
 	uint32_t RtValHolder;
-	uint32_t RdValHolder;
+	uint32_t RdValHolder;			
 	uint16_t immediateValHolder;
-	uint32_t aluResultHolder;
+	uint32_t aluResultHolder;		//updated PC value from control flow instr
+	bool isControlFlow;				//set true if control flow instruction
+	bool isMemAccess;				//set true if LDW/STW instruction
 }instInfo_t, *instInfoPtr_t;
 
 /*
