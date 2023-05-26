@@ -46,7 +46,13 @@ void WBthread(SysCore& sysCore)
                 //Record the new clock value
                 pastClkVal = sysCore.clk;
 
-                /*-------------------Implement WB Functionality Work in Progress-----------------------*/
+                /*-------------------Implement WB Functionality Work in Progress--------------------
+                
+                update destination register with value from memory or ALU
+                
+                
+                ---*/
+                
                 
             }
 
