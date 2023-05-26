@@ -2,6 +2,7 @@
 #include <chrono>
 #include <cstdint>
 #include <iostream>
+#include <climits>
 #include "MEM_thread.h"
 
 
@@ -12,6 +13,7 @@ void MEMthread(SysCore& sysCore)
 	long long pastClkVal = -1;
 	std::chrono::milliseconds delay(MIN_SLEEP_TIME);
 	instInfoPtr_t instructionData;
+    //uint32_t instruction;
 
 
 	while (true)
@@ -45,6 +47,16 @@ void MEMthread(SysCore& sysCore)
 				continue;
 			}
 
+            // Load (Read from memory using the aluResultHolder)
+            //instruction = sysCore.memRead(instructionData->aluResultHolder, true);
+
+            // Check if memRead() returns an error and apply flags
+            //if (instruction == UINT_MAX){
+            //    std::cout << "ERROR: [MEMthread] SysCore::memRead() return on error" << std::endl;
+            //    sysCore.stageInfoMEM.okToRun = false;
+            //    continue;
+            //}
+
 			//Record the new clock value
 			pastClkVal = sysCore.clk;
 
@@ -55,6 +67,8 @@ void MEMthread(SysCore& sysCore)
     
                    
 			*/
+
+            // LMD = Mem[ALUout]
 			//Pass instruction data to WB stage (will block if it cannot immediately acquire the lock)
 			sysCore.MEMtoWB.push(instructionData);
 		}
