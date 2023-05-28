@@ -5,6 +5,7 @@
 #include "WB_thread.h"
 
 #define MIN_SLEEP_TIME      50 // ms
+#define _VERBOSE_ 0
 
 void WBthread(SysCore& sysCore)
 {
@@ -46,14 +47,33 @@ void WBthread(SysCore& sysCore)
                 //Record the new clock value
                 pastClkVal = sysCore.clk;
 
-                /*-------------------Implement WB Functionality Work in Progress--------------------
-                
-                update destination register with value from memory or ALU
-                
-                
-                ---*/
-                
-                
+                /*-------------------Implement WB Functionality Work in Progress-----------------*/
+            
+                //if Rtype instr update RD register
+                if(instructionData->type == Rtype) {
+                    sysCore.reg[instructionData->RdAddr] = instructionData->RdValHolder;
+                    #if (_VERBOSE_ > 0)
+                    std::cout << "Writing Value: " << instructionData->RdValHolder << " to Reg: " << static_cast<int>(instructionData->RdAddr) << '\n';
+                    std::cout << "syscore.reg Value: " << sysCore.reg[instructionData->RdAddr] << '\n';
+                    #endif  
+                }
+                else if(instructionData->type == Itype) {
+                    
+                    //if its not a control flow or store op, update register Rt
+                    if(!instructionData->isControlFlow && instructionData->opcode != STW){
+                        sysCore.reg[instructionData->RtAddr] = instructionData->RtValHolder;
+                    } 
+                    else {
+                        //do nothing for now
+                    }  
+                    #if (_VERBOSE_ > 0)
+                    std::cout << "Writing Value: " << instructionData->RtValHolder << " to Reg: " << static_cast<int>(instructionData->RtAddr) << '\n';
+                     std::cout << "syscore.reg Value: " << sysCore.reg[instructionData->RtAddr] << '\n';
+                    #endif           
+                }
+                else {
+                     std::cout << "DEBUG: [WBthread] unknown instruction type encountered" << std::endl;
+                }  
             }
 
             std::this_thread::sleep_for(delay);
