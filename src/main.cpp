@@ -8,6 +8,7 @@
 #include "ID_thread.h"
 #include "EX_thread.h"
 #include "MEM_thread.h"
+#include "WB_thread.h"
 #include "sys_core.h"
 #include "masterHelpers.h"
 
@@ -24,6 +25,7 @@ int main(int argc, char* argv[])
 	std::thread idThread(IDthread, std::ref(sysCore));
 	std::thread exThread(EXthread, std::ref(sysCore));
 	std::thread memThread(MEMthread, std::ref(sysCore));
+	std::thread wbThread(WBthread, std::ref(sysCore));
 
 	std::chrono::milliseconds delay(CLOCK_PERIOD);
 
