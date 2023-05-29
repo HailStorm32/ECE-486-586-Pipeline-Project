@@ -39,29 +39,39 @@ uint32_t alu (uint32_t operandA, uint32_t operandB, opcodes operation){
 	return 0;
 }
 
-void updatePC (exInfoPtr_t instrData){
-	
-	switch(instrData->opcode){
-		case BZ:
-			if (instrData->Rs == 0) {
-				instrData->updatedPcVal = instrData->PC + instrData->immediate; 
-				instrData->updatePC = true;
+/* 
+* Description: 
+*	Interpret Control Flow operations and update PC if necessary.
+* 	Updates the members of the instuction data struct.
+* 	newPcValHolder will contain new calculated PC value
+* 	isPCupdated is set to true if pc is updated
+*
+* Arguments:
+*	(INPUT) PC -- uint32_t value, current PC
+*	(INPUT) instructionData -- instInfoPtr_t current instruction info
+*/
+void updatePC (uint32_t PC, instInfoPtr_t instructionData){
+	switch(instructionData->opcode){
+		case BZ:	
+			if (instructionData->RsValHolder == 0) {
+				instructionData->newPCValHolder = PC + instructionData->immediateValHolder; 
+				instructionData->isPCupdated = true;
 			}
 			break;
 		case BEQ:
-			if(instrData->Rs == instrData->Rt){
-				instrData->updatedPcVal = instrData->PC + instrData->immediate; 
-				instrData->updatePC = true;
+			if(instructionData->RsValHolder == instructionData->RtValHolder){
+				instructionData->newPCValHolder = PC + instructionData->immediateValHolder; 
+				instructionData->isPCupdated = true;
 			}
 			break;
 		case JR:
-			instrData->updatedPcVal = instrData->Rs;
-			instrData->updatePC = true;
+			instructionData->newPCValHolder  = instructionData->RsValHolder;
+			instructionData->isPCupdated = true;
 			break;
 		case HALT: break;
 		default:
-			instrData->updatedPcVal = 0;
-			instrData->updatePC = false;
+			instructionData->newPCValHolder = 0;
+			instructionData->isPCupdated = false;
 			break;
 	}
 }
@@ -87,7 +97,7 @@ void EXthread(SysCore& sysCore)
 	long long pastClkVal = -1;
 	std::chrono::milliseconds delay(MIN_SLEEP_TIME);
 	instInfoPtr_t instructionData;
-	exInfoPtr_t exInfo = new exInfo_t;
+	//exInfoPtr_t exInfo = new exInfo_t;
 
 	while (true)
 	{		
@@ -125,27 +135,27 @@ void EXthread(SysCore& sysCore)
 			//Record the new clock value
 			pastClkVal = sysCore.clk;
 
-			//Initialize execution stage info struct
-			exInfo->opcode = instructionData->opcode;
-			exInfo->PC = sysCore.PC;
-			exInfo->Rs = instructionData->RsValHolder;
-			exInfo->Rt = instructionData->RtValHolder;
-			exInfo->updatedPcVal = 0;
-			exInfo->updatePC = false;
-			
-			//perform alu op or update PC depending on instruction type
+			uint32_t currentPC = sysCore.PC;	//current PC for use in control flow ops
+			uint32_t extendedImm;				//sign extended immediate			
+	
+			//execute operation based on instruction type
 			if(instructionData->type == Itype) {
 				
-				exInfo->immediate = signExtend(instructionData->immediateValHolder);
+				//sign extend immediate into 32 bit val
+				extendedImm = signExtend(instructionData->immediateValHolder);
 				
 				//control flow ops: caclulate new PC value is applicable. 
 				if(instructionData->isControlFlow == true) {
-					updatePC(exInfo);
-					instructionData->aluResultHolder =	exInfo->updatedPcVal; //store new PCval in aluResultHolder
+					updatePC(currentPC, instructionData);
+					std::cout <<"\n in ex control flow\n";
 				}
-				//if Immediate type: perform operation and store in RT val holder
+				//calculate effecive mem address if mem access op
+				else if(instructionData->isMemAccess == true){
+					instructionData->memAddressValHolder = alu(instructionData->RsValHolder, extendedImm, instructionData->opcode);
+				}
+				//if arithmetic/logical immediate op perform operation and store in RT val holder
 				else {
-					instructionData->RtValHolder = alu(exInfo->Rs, exInfo->immediate, exInfo->opcode);
+					instructionData->RtValHolder = alu(instructionData->RsValHolder, extendedImm, instructionData->opcode);
 				}	
 			}
 			//R type: perform operation and store in RD val holder
@@ -163,14 +173,15 @@ void EXthread(SysCore& sysCore)
 				std::cout << "Immediate =  " << std::bitset<32>(exInfo->immediate) << '\n';
 				std::cout << "Updated PC =  " << exInfo->updatedPcVal << '\n';
 			#endif
-		
-			//sysCore.stageInfoEX.fwdedAluResult update if jump/branch target PC result
-			sysCore.stageInfoEX.fwdedAluResult = instructionData->aluResultHolder;
+
+	
+			/* Still need to update/work on this logic*/
+			sysCore.stageInfoEX.fwdedAluResult = instructionData->newPCValHolder;
 			sysCore.stageInfoEX.fwdedImmediate = instructionData->immediateValHolder;
 			sysCore.stageInfoEX.fwdedRd = instructionData->RdValHolder;
 			sysCore.stageInfoEX.fwdedRs = instructionData->RsValHolder;
 			sysCore.stageInfoEX.fwdedRt = instructionData->RtValHolder;
-			sysCore.stageInfoEX.updatedPC = exInfo->updatePC;
+			sysCore.stageInfoEX.updatedPC = instructionData->newPCValHolder;
 
 			//Pass alu data to MEM stage (will block if it cannot immediately acquire the lock)
 			sysCore.EXtoMEM.push(instructionData);
