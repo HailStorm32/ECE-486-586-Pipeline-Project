@@ -7,6 +7,7 @@
 
 
 #define MIN_SLEEP_TIME		50  //In ms
+#define _VERBOSE_ 0
 
 void MEMthread(SysCore& sysCore)
 {
@@ -47,8 +48,8 @@ void MEMthread(SysCore& sysCore)
 				continue;
 			}
 
-            // Load (Read from memory using the aluResultHolder)
-            //instruction = sysCore.memRead(instructionData->aluResultHolder, true);
+            // Load (Read from memory using the newPCValHolder)
+            //instruction = sysCore.memRead(instructionData->newPCValHolder, true);
 
             // Check if memRead() returns an error and apply flags
             //if (instruction == UINT_MAX){
@@ -61,14 +62,40 @@ void MEMthread(SysCore& sysCore)
 			pastClkVal = sysCore.clk;
 
 			/*-------------------MEM Functionality Work in Progress-----------------------
-            
-            Read/write memory. I believe store instructions are 'complete' here.
-			Load/R-type instructions will have actual register updated in WB stage
-    
-                   
-			*/
+			LDW Rt Rs Imm (Add the contents of Rs and the immediate value “Imm” to generate
+			the effective address “A”, load the contents (32-bits) of the memory location at address
+			“A” into register Rt).
 
-            // LMD = Mem[ALUout]
+			STW Rt Rs Imm (Add the contents of Rs and the immediate value “Imm” to generate
+			the effective address “A”, store the contents of register Rt (32-bits) at the memory
+			address “A”)
+        */ 
+
+	  
+
+	    //read data from memAddressValHolder calculated by EX stage and store in RtValholder    
+	   	if(instructionData->opcode == LDW) {
+			instructionData->RtValHolder = sysCore.memRead(instructionData->memAddressValHolder, false);
+			#if (_VERBOSE_ > 0)
+			std::cout << "MEM addrss: " << instructionData->memAddressValHolder << " val from mem: " << instructionData->RtValHolder  << '\n';
+			#endif
+		}
+		//write data from rtValHolder to address calculated by EX stage
+		else if(instructionData->opcode == STW) {
+			if(sysCore.memWrite(instructionData->memAddressValHolder, instructionData->RtValHolder) == UINT32_MAX){
+				std::cerr << "[MEM Thread] WRITE ERROR"  << '\n';
+			}
+			#if (_VERBOSE_ > 0)
+			std::cout << "MEM addrss: " << instructionData->memAddressValHolder << " val to mem: " << instructionData->RtValHolder  << '\n';
+			#endif
+		
+		}
+		else { ;
+			//do nothing for now?
+		}
+			
+	
+
 			//Pass instruction data to WB stage (will block if it cannot immediately acquire the lock)
 			sysCore.MEMtoWB.push(instructionData);
 		}
