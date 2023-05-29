@@ -79,13 +79,18 @@ instInfoPtr_t decodeInstruction(const uint32_t fullInstruction)
 		{
 			case opcodes::LDW: case opcodes::STW: 
 				instruction->isMemAccess = true;
+				instruction->isControlFlow = false;
+				instruction->isPCupdated = false;
 				break;
 			case opcodes::BZ: case opcodes::BEQ: case opcodes::JR: case opcodes::HALT:
 				instruction->isControlFlow = true;
+				instruction->isMemAccess = false;
+				instruction->isPCupdated = false;
 				break;
 			default:
 				instruction->isMemAccess = false;
 				instruction->isControlFlow = false;
+				instruction->isPCupdated = false;
 				break;
 
 		}
