@@ -181,7 +181,7 @@ void EXthread(SysCore& sysCore)
 			sysCore.stageInfoEX.fwdedRd = instructionData->RdValHolder;
 			sysCore.stageInfoEX.fwdedRs = instructionData->RsValHolder;
 			sysCore.stageInfoEX.fwdedRt = instructionData->RtValHolder;
-			sysCore.stageInfoEX.updatedPC = instructionData->newPCValHolder;
+			sysCore.stageInfoEX.updatedPC = instructionData->isPCupdated;
 
 			//Pass alu data to MEM stage (will block if it cannot immediately acquire the lock)
 			sysCore.EXtoMEM.push(instructionData);
