@@ -31,7 +31,7 @@ uint32_t alu (uint32_t operandA, uint32_t operandB, opcodes operation){
 		case XOR: case XORI: return operandA ^ operandB;
 
 		//Memory Access operations
-		case LDW: case STW: return operandA + operandB;
+		case LDW: case STW: return (operandA + operandB) / 4;
 
 		//control flow instructions
 		case BZ: case BEQ: case JR: case HALT: case INVALID: break;
