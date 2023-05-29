@@ -68,11 +68,11 @@ void WBthread(SysCore& sysCore)
                     }  
                     #if (_VERBOSE_ > 0)
                     std::cout << "Writing Value: " << instructionData->RtValHolder << " to Reg: " << static_cast<int>(instructionData->RtAddr) << '\n';
-                     std::cout << "syscore.reg Value: " << sysCore.reg[instructionData->RtAddr] << '\n';
+                    std::cout << "syscore.reg Value: " << sysCore.reg[instructionData->RtAddr] << '\n';
                     #endif           
                 }
                 else {
-                     std::cout << "DEBUG: [WBthread] unknown instruction type encountered" << std::endl;
+                     std::cerr << "DEBUG: [WBthread] unknown instruction type encountered" << std::endl;
                 }  
             }
 
