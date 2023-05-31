@@ -32,3 +32,5 @@ std::list<stageThreadPtr_t>* checkForErrors(SysCore& sysCore);
 *	1 -- If program needs to be stopped
 */
 int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList);
+
+void displayResults (SysCore& sysCore);

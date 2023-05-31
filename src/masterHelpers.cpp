@@ -104,3 +104,11 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 
 	return 0;
 }
+
+void displayResults (SysCore& sysCore)
+{
+	std::cout << "Arithmetic Instructions: " << sysCore.instrCountStruct.arithmeticCount << std::endl;
+	std::cout << "Logical Instructions: " << sysCore.instrCountStruct.logicalCount << std::endl;
+	std::cout << "Memory Access Instructions: " << sysCore.instrCountStruct.memAccesCount << std::endl;
+	std::cout << "Control Transfer Instructions: " << sysCore.instrCountStruct.controlTransferCount << std::endl;
+}
