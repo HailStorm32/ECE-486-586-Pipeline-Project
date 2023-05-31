@@ -55,6 +55,7 @@ int main(int argc, char* argv[])
 			//We had a HALT, so exit
 			if (ret == 1)
 			{
+				displayResults(sysCore);
 				exit(0);
 			}
 		}
