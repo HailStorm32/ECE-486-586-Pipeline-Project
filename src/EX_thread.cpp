@@ -31,7 +31,7 @@ uint32_t alu (uint32_t operandA, uint32_t operandB, opcodes operation){
 		case XOR: case XORI: return operandA ^ operandB;
 
 		//Memory Access operations
-		case LDW: case STW: return (operandA + operandB) / 4;
+		case LDW: case STW: return operandA + operandB;
 
 		//control flow instructions
 		case BZ: case BEQ: case JR: case HALT: case INVALID: break;
@@ -166,6 +166,7 @@ void EXthread(SysCore& sysCore)
 				//calculate effecive mem address if mem access op
 				else if (instructionData->opcode == LDW || instructionData->opcode == STW) {
 					instructionData->memAddressValHolder = alu(instructionData->RsValHolder, extendedImm, instructionData->opcode);
+					std::cout << "EX mem addr =  " << instructionData->memAddressValHolder << '\n';
 				}
 				//if arithmetic/logical immediate op perform operation and store in RT val holder
 				else {
