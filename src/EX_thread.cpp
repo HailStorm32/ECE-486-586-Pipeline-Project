@@ -39,43 +39,6 @@ uint32_t alu (uint32_t operandA, uint32_t operandB, opcodes operation){
 	return 0;
 }
 
-/* 
-* Description: 
-*	Interpret Control Flow operations and update PC if necessary.
-* 	Updates the members of the instuction data struct.
-* 	newPcValHolder will contain new calculated PC value
-* 	isPCupdated is set to true if pc is updated
-*
-* Arguments:
-*	(INPUT) PC -- uint32_t value, current PC
-*	(INPUT) instructionData -- instInfoPtr_t current instruction info
-*/
-void updatePC (uint32_t PC, instInfoPtr_t instructionData){
-	switch(instructionData->opcode){
-		case BZ:	
-			if (instructionData->RsValHolder == 0) {
-				instructionData->newPCValHolder = PC + instructionData->immediateValHolder; 
-				instructionData->isPCupdated = true;
-			}
-			break;
-		case BEQ:
-			if(instructionData->RsValHolder == instructionData->RtValHolder){
-				instructionData->newPCValHolder = PC + instructionData->immediateValHolder; 
-				instructionData->isPCupdated = true;
-			}
-			break;
-		case JR:
-			instructionData->newPCValHolder  = instructionData->RsValHolder;
-			instructionData->isPCupdated = true;
-			break;
-		case HALT: break;
-		default:
-			instructionData->newPCValHolder = 0;
-			instructionData->isPCupdated = false;
-			break;
-	}
-}
-
 /*Perform Sign Extension on 16 bit immediates*/
 uint32_t signExtend(uint16_t immediate16_t){
 	uint32_t immediate32_t;	
@@ -90,6 +53,47 @@ uint32_t signExtend(uint16_t immediate16_t){
 		std::cout << "In sign extend Immediate =  " << std::bitset<32>(immediate32_t) << '\n';		
 	#endif
 	return immediate32_t;
+}
+
+/* 
+* Description: 
+*	Interpret Control Flow operations and update PC if necessary.
+*
+* Arguments:
+*	(INPUT) PC -- uint32_t value, current PC
+*	(INPUT) instructionData -- instInfoPtr_t current instruction info
+*
+* Return:
+*	long long -- new PC value or -1 if PC was not updated
+*/
+long long updatePC (uint32_t PC, instInfoPtr_t instructionData){
+	long long newPcVal;
+	switch(instructionData->opcode){
+		case BZ:	
+			if (instructionData->RsValHolder == 0) {
+				newPcVal = PC + signExtend(instructionData->immediateValHolder); 
+			}
+			else {
+				newPcVal = -1;
+			}
+			break;
+		case BEQ:
+			if(instructionData->RsValHolder == instructionData->RtValHolder){
+				newPcVal = PC + signExtend(instructionData->immediateValHolder); 
+			}
+			else {
+				newPcVal = -1;
+			}
+			break;
+		case JR:
+			newPcVal  = instructionData->RsValHolder;
+			break;
+		case HALT: break;
+		default:
+			newPcVal = -1;	//signal PC was not updated
+			break;
+	}
+	return newPcVal;
 }
 
 void EXthread(SysCore& sysCore)
@@ -136,31 +140,37 @@ void EXthread(SysCore& sysCore)
 			pastClkVal = sysCore.clk;
 
 			uint32_t currentPC = sysCore.PC;	//current PC for use in control flow ops
-			uint32_t extendedImm;				//sign extended immediate			
+			uint32_t extendedImm;				//sign extended immediate
+			long long updatedPcVal;				//updated PC value			
 	
-			//execute operation based on instruction type
-			if(instructionData->type == Itype) {
+			//If R type instruction perform operation and store in RD val holder
+			if (instructionData->type == Rtype) {
+				instructionData->RdValHolder = alu(instructionData->RsValHolder, instructionData->RtValHolder, instructionData->opcode);
+			}
+			//Perform I type operations 
+			else if (instructionData->type == Itype) {
 				
 				//sign extend immediate into 32 bit val
 				extendedImm = signExtend(instructionData->immediateValHolder);
 				
-				//control flow ops: caclulate new PC value is applicable. 
-				if(instructionData->isControlFlow == true) {
-					updatePC(currentPC, instructionData);
-					std::cout <<"\n in ex control flow\n";
+				//control flow ops: caclulate new PC value if applicable. 
+				if (instructionData->isControlFlow == true) {
+					if ((updatedPcVal = updatePC(currentPC, instructionData)) != -1) {
+						sysCore.stageInfoEX.fwdedAluResult = static_cast<uint32_t>(updatedPcVal);
+						sysCore.stageInfoEX.updatedPC = true;
+					} 
+					else {
+						sysCore.stageInfoEX.updatedPC = false;
+					}	
 				}
 				//calculate effecive mem address if mem access op
-				else if(instructionData->isMemAccess == true){
+				else if (instructionData->opcode == LDW || instructionData->opcode == STW) {
 					instructionData->memAddressValHolder = alu(instructionData->RsValHolder, extendedImm, instructionData->opcode);
 				}
 				//if arithmetic/logical immediate op perform operation and store in RT val holder
 				else {
 					instructionData->RtValHolder = alu(instructionData->RsValHolder, extendedImm, instructionData->opcode);
 				}	
-			}
-			//R type: perform operation and store in RD val holder
-			else if (instructionData->type == Rtype) {
-				instructionData->RdValHolder = alu(instructionData->RsValHolder, instructionData->RtValHolder, instructionData->opcode);
 			}
 			else
 				std::cerr << "\nERROR: ALU encountered unknown instruction type\n" << std::endl;
@@ -176,12 +186,11 @@ void EXthread(SysCore& sysCore)
 
 	
 			/* Still need to update/work on this logic*/
-			sysCore.stageInfoEX.fwdedAluResult = instructionData->newPCValHolder;
-			sysCore.stageInfoEX.fwdedImmediate = instructionData->immediateValHolder;
-			sysCore.stageInfoEX.fwdedRd = instructionData->RdValHolder;
-			sysCore.stageInfoEX.fwdedRs = instructionData->RsValHolder;
-			sysCore.stageInfoEX.fwdedRt = instructionData->RtValHolder;
-			sysCore.stageInfoEX.updatedPC = instructionData->isPCupdated;
+			// sysCore.stageInfoEX.fwdedImmediate = instructionData->immediateValHolder;
+			// sysCore.stageInfoEX.fwdedRd = instructionData->RdValHolder;
+			// sysCore.stageInfoEX.fwdedRs = instructionData->RsValHolder;
+			// sysCore.stageInfoEX.fwdedRt = instructionData->RtValHolder;
+			
 
 			//Pass alu data to MEM stage (will block if it cannot immediately acquire the lock)
 			sysCore.EXtoMEM.push(instructionData);

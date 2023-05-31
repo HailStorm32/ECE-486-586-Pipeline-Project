@@ -55,8 +55,7 @@ instInfoPtr_t decodeInstruction(const uint32_t fullInstruction)
 		//Get the Rd bits
 		instruction->RdAddr = (fullInstruction >> 11) & 0x1F;
 
-		//not a control flow or mem access instruction
-		instruction->isMemAccess = false;
+		//not a control flow instruction
 		instruction->isControlFlow = false;
 
 		return instruction;
@@ -74,25 +73,14 @@ instInfoPtr_t decodeInstruction(const uint32_t fullInstruction)
 		//Get immediate bits
 		instruction->immediateValHolder = fullInstruction & 0xFFFF;
 
-		//check if control flow or Memory instruction
-		switch (instruction->opcode)
+		//check if control flow instruction
+		if (instruction->opcode == BZ || instruction->opcode == BEQ || instruction->opcode == JR || instruction->opcode == HALT)
 		{
-			case opcodes::LDW: case opcodes::STW: 
-				instruction->isMemAccess = true;
-				instruction->isControlFlow = false;
-				instruction->isPCupdated = false;
-				break;
-			case opcodes::BZ: case opcodes::BEQ: case opcodes::JR: case opcodes::HALT:
-				instruction->isControlFlow = true;
-				instruction->isMemAccess = false;
-				instruction->isPCupdated = false;
-				break;
-			default:
-				instruction->isMemAccess = false;
-				instruction->isControlFlow = false;
-				instruction->isPCupdated = false;
-				break;
-
+			instruction->isControlFlow = true;
+		}
+		else 
+		{
+			instruction->isControlFlow = false;
 		}
 
 		return instruction;
