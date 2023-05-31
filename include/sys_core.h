@@ -53,7 +53,12 @@ typedef struct stage {
     volatile uint16_t fwdedImmediate;
 } stageThread_t, * stageThreadPtr_t;
 
-
+typedef struct count {
+    int arithmeticCount;
+    int logicalCount;
+    int memAccesCount;
+    int controlTransferCount;
+} instrCount_t, * instrCountPtr_t;
 
 class SysCore {
 private:
@@ -120,6 +125,8 @@ public:
     // Array of registers 0-31
     uint32_t reg[32];
 
+   // instrCount_t instrCount;
+
     // Clock
     volatile long long clk;
 
@@ -138,6 +145,8 @@ public:
 
     // Contains line of file that starts data memory
     uint32_t dataMemStartLine;
+
+    instrCount_t instrCountStruct;
 
     // Core Constructor
     SysCore(std::string filePath);

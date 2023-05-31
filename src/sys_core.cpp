@@ -128,6 +128,13 @@ SysCore::SysCore(std::string filePath) {
 	this->filePath = filePath;
 
 
+	instrCountStruct = {
+		.arithmeticCount = 0,
+		.logicalCount = 0,
+		.memAccesCount = 0,
+		.controlTransferCount = 0,
+	};
+	
 	//Initalize stage structs
 	stageInfoIF = {
 		.stageType = fowardInfo::IF,
