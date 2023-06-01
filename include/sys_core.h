@@ -186,6 +186,9 @@ public:
     // Array of registers 0-31
     uint32_t reg[32];
 
+    //simple array to track if a register has been modified for final output results
+    uint8_t modifiedReg[32];
+
    // instrCount_t instrCount;
 
     // Clock
