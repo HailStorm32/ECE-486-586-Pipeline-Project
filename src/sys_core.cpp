@@ -174,6 +174,9 @@ void SysCore::writeDataMem(const uint32_t lineNum, const uint32_t data)
 {
 	memWordCellPtr_t memCell;
 	
+	//Lock hash table (gets unlocked as soon writeDataMem returns)
+	std::unique_lock<std::mutex> lock(m_dataMemLock);
+
 	//Get the memory cell
 	memCell = dataMemoryHT[lineNum];
 
@@ -182,6 +185,19 @@ void SysCore::writeDataMem(const uint32_t lineNum, const uint32_t data)
 
 	//Log that the cell has been accessed
 	memCell->hasBeenAccessed = true;
+}
+
+uint32_t SysCore::readDataMem(const uint32_t lineNum)
+{
+	memWordCellPtr_t memCell;
+
+	//Lock hash table (gets unlocked as soon readDataMem returns)
+	std::unique_lock<std::mutex> lock(m_dataMemLock);
+
+	//Get the memory cell
+	memCell = dataMemoryHT[lineNum];
+
+	return memCell->value;
 }
 
 // Core Constructor: Initialize variables and arrays to 0s
