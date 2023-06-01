@@ -107,7 +107,7 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 
 void displayResults (SysCore& sysCore)
 {
-	std::cout << "\nInstruction Counts: " << sysCore.instrCountStruct.arithmeticCount << std::endl;
+	std::cout << "\nInstruction Counts: " << std::endl;
 	std::cout << "Arithmetic Instructions: " << sysCore.instrCountStruct.arithmeticCount << std::endl;
 	std::cout << "Logical Instructions: " << sysCore.instrCountStruct.logicalCount << std::endl;
 	std::cout << "Memory Access Instructions: " << sysCore.instrCountStruct.memAccesCount << std::endl;
