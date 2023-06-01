@@ -367,16 +367,21 @@ uint32_t SysCore::memWrite(const uint32_t address, uint32_t value) {
 	//Get line number
 	lineNumber = addrToLine(address);
 
+
 	// Convert the value into string
 	std::stringstream ss; // Declare a stringstream instance
 	ss << std::hex << value; // Use stream manipulators to write value
 	lineData = ss.str(); // Use the str() member function to get the string results
+
+	while (lineData.size() < FILE_LINE_LENGTH) { // Pad with 0s
+		lineData = '0' + lineData;
+	}
+
 	if (lineData.size() != FILE_LINE_LENGTH) {
 		std::cerr << "\nERROR: Converting [" << std::dec << value << "] to string gives [" << lineData.size() << "] characters, "
 			<< "expected " << FILE_LINE_LENGTH << "\n\n";
 		return UINT32_MAX;
 	}
 
-	//Write line ??
-	// writeLineToLineNum(lineNumber, lineData);
+	//return writeDataMem(lineNumber, lineData);
 }
