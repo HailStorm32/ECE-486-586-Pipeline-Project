@@ -72,6 +72,9 @@ private:
     std::string filePath;
     uint32_t totalNumOfLines;
 
+    //Hash table that will contain all of data memory
+    std::unordered_map<uint32_t, memWordCellPtr_t> dataMemoryHT;
+
     /*
     * Description:
     *	Finds and returns the line number of the file
@@ -180,8 +183,6 @@ public:
         uint16_t stallsRemainWB;
     }stallsRemaining;
 
-    //Hash table that will contain all of data memory
-    std::unordered_map<uint32_t, memWordCellPtr_t> dataMemoryHT;
 
     /*
     * Description:
