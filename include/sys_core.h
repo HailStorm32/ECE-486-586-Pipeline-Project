@@ -7,6 +7,7 @@
 #include "TSqueue.h"
 #include <thread>
 #include <future>
+#include <unordered_map>
 
 #define FILE_LINE_LENGTH        8 //In bytes
 #define FILE_LINE_END_LENGTH    1 //In bytes
@@ -53,10 +54,11 @@ typedef struct stage {
     volatile uint16_t fwdedImmediate;
 } stageThread_t, * stageThreadPtr_t;
 
+// Struct that defines memory cell 
 typedef struct memWordCell {
     uint32_t value;
     bool hasBeenAccessed;
-}memWordCell_t, *memWordCell_t;
+}memWordCell_t, *memWordCellPtr_t;
 
 typedef struct count {
     int arithmeticCount;
@@ -164,6 +166,9 @@ public:
         uint16_t stallsRemainMEM;
         uint16_t stallsRemainWB;
     }stallsRemaining;
+
+    //Hash table that will contain all of data memory
+    std::unordered_map<uint32_t, memWordCellPtr_t> dataMemory;
 
     /*
     * Description:
