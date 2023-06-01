@@ -332,6 +332,11 @@ uint32_t SysCore::memRead(const uint32_t address, const bool isInstMem) {
 	lineNumber = addrToLine(address);
 
 	if (isInstMem){
+		//Warn if we are accessing outside of instuction memory space
+		if (lineNumber >= dataMemStartLine) {
+			std::cerr << "\nWARNING: Told to fetch instruction from data memory, proceeding... \n\n";
+		}
+		
 		//Get line
 		lineData = getLineFromLineNum(lineNumber);
 
