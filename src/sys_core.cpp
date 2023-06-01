@@ -319,6 +319,7 @@ SysCore::SysCore(std::string filePath) {
 		std::cout << "Found start of data memory on line: " << dataMemStartLine << std::endl;
 	}
 
+	//Initalize data memory hash table
 	initDataMemTable();
 }
 
@@ -330,18 +331,32 @@ uint32_t SysCore::memRead(const uint32_t address, const bool isInstMem) {
 	//Get line number
 	lineNumber = addrToLine(address);
 
-	//Get line
-	lineData = getLineFromLineNum(lineNumber);
+	if (isInstMem){
+		//Get line
+		lineData = getLineFromLineNum(lineNumber);
 
-	//Report error if we didnt get the full line
-	if (lineData.size() != FILE_LINE_LENGTH) {
-		std::cerr << "\nERROR: Recieved [" << lineData.size() << "] characters from line, "
-			<< "expected " << FILE_LINE_LENGTH << "\n\n";
-		return UINT32_MAX;
+		//Report error if we didnt get the full line
+		if (lineData.size() != FILE_LINE_LENGTH) {
+			std::cerr << "\nERROR: Recieved [" << lineData.size() << "] characters from line, "
+				<< "expected " << FILE_LINE_LENGTH << "\n\n";
+			return UINT32_MAX;
+		}
+		
+		//Convert the string to uint32_t and return
+		return static_cast<uint32_t>(std::stoll(lineData, nullptr, 16));
 	}
+	else{
+		//If the line we are given is NOT in data memory
+		if (lineNumber < dataMemStartLine)
+		{
+			std::cerr << "\nERROR: Address [0x" << std::hex << address << std::dec << "] converts to line ["
+				<< lineNumber << "] and is outside of data memory\n\n";
+			return UINT32_MAX;
+		}
 
-	//Convert the string to uint32_t and return
-	return static_cast<uint32_t>(std::stoll(lineData, nullptr, 16));
+		//Get and return data
+		return readDataMem(lineNumber);
+	}
 }
 
 // Memory Write method:
