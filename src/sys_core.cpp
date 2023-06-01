@@ -119,6 +119,57 @@ uint32_t SysCore::addrToLine(const uint32_t address)
 	return (address / 4) + 1;
 }
 
+void SysCore::initDataMemTable()
+{
+	std::string lineData = "";
+	uint32_t adjustedTargetLine = UINT32_MAX;
+	const uint32_t TARGET_LINE = dataMemStartLine;
+	uint32_t currentLineNum = dataMemStartLine;
+
+	//Open the file
+	std::ifstream file(filePath);
+
+	//Make sure the file opened
+	if (!file.is_open()) {
+		std::cerr << "\nERROR: Unable to open file: " << filePath << "\n\n";
+		exit(1);
+	}
+
+	//NOTE: We will need to offest our target by -1 b/c (total line length * our target line number) will always put us at the end of that line
+	//  Given a line length of 9 bytes, if we want to read line 2, then 9*2=18 which will put the pointer at the end of line 2, and when we do a 
+	//  getline, it will read the next line (3). Hence why we offset by -1. So with the offset, it will be 9*1=9 putting us at the end of line 1, 
+	//  and the getline will read line 2, what we want
+	adjustedTargetLine = (TARGET_LINE - 1);
+
+	//Return if we are given an invalid line number
+	if (adjustedTargetLine > totalNumOfLines)
+	{
+		std::cerr << "\nERROR: Given invalid line number [" << TARGET_LINE << "], max # of lines in file is: " << totalNumOfLines << "\n\n";
+		exit(1);
+	}
+
+	//Move the file pointer to the target line
+	file.seekg(TOTAL_FILE_LINE_LENGTH * adjustedTargetLine, std::ios_base::beg);
+
+	//Cycle through all the lines and write to the memory hash table
+	while (std::getline(file, lineData))
+	{
+		//Create new memory cell
+		memWordCellPtr_t memCell = new memWordCell_t;
+
+		//Initalize cell
+		memCell->value = static_cast<uint32_t>(std::stoll(lineData, nullptr, 16));
+		memCell->hasBeenAccessed = false;
+		
+		//Match cell with line number and put into hash table
+		dataMemoryHT.insert(std::make_pair(currentLineNum, memCell));
+
+		currentLineNum++;
+	}
+
+	file.close();
+}
+
 // Core Constructor: Initialize variables and arrays to 0s
 SysCore::SysCore(std::string filePath) {
 	PC = 0;
@@ -237,6 +288,8 @@ SysCore::SysCore(std::string filePath) {
 	else {
 		std::cout << "Found start of data memory on line: " << dataMemStartLine << std::endl;
 	}
+
+	initDataMemTable();
 
 	uint32_t test = memRead(32, true);
 

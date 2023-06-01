@@ -123,6 +123,19 @@ private:
     *	uint32_t -- line that contains given address
     */
     uint32_t addrToLine(const uint32_t address);
+
+    /*
+    * Description:
+    *	Copies all all of data memory from the image file,
+    *   and puts it in the dataMemoryHT
+    *
+    * Arguments:
+    *	None
+    *
+    * Return:
+    *	None
+    */
+    void initDataMemTable();
     
 
 public:        
@@ -168,7 +181,7 @@ public:
     }stallsRemaining;
 
     //Hash table that will contain all of data memory
-    std::unordered_map<uint32_t, memWordCellPtr_t> dataMemory;
+    std::unordered_map<uint32_t, memWordCellPtr_t> dataMemoryHT;
 
     /*
     * Description:
