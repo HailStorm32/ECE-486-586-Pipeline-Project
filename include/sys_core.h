@@ -53,6 +53,11 @@ typedef struct stage {
     volatile uint16_t fwdedImmediate;
 } stageThread_t, * stageThreadPtr_t;
 
+typedef struct memWordCell {
+    uint32_t value;
+    bool dirtyBit;
+}memWordCell_t, *memWordCell_t;
+
 typedef struct count {
     int arithmeticCount;
     int logicalCount;
