@@ -55,7 +55,7 @@ typedef struct stage {
 
 typedef struct memWordCell {
     uint32_t value;
-    bool dirtyBit;
+    bool hasBeenAccessed;
 }memWordCell_t, *memWordCell_t;
 
 typedef struct count {
