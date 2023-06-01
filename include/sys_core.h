@@ -142,6 +142,41 @@ private:
     *	None
     */
     void initDataMemTable();
+
+    /*
+    * Description:
+    *	Write data to the data memory hash table.
+    *   Will update the memWordCell associated with the given
+    *   line number and update hasBeenAccessed to true
+    * 
+    *   NOTE: This preforms no data validation, it is the   
+    *       user's responsibility to preform this validation 
+    *
+    * Arguments:
+    *	(INPUT) lineNum -- line number you want to write to
+    *   (INPUT) data -- uint32_t data you want to write
+    *
+    * Return:
+    *	None
+    */
+    void writeDataMem(const uint32_t lineNum, const uint32_t data);
+
+
+    /*
+    * Description:
+    *	Will take the given line number and return the 
+    *   data from the corresponding entry in the hash table
+    *
+    *   NOTE: This preforms no data validation, it is the
+    *       user's responsibility to preform this validation
+    *
+    * Arguments:
+    *	(INPUT) lineNum -- line number you want to write to
+    *
+    * Return:
+    *	uint32_t -- data from the given line
+    */
+    uint32_t readDataMem(const uint32_t lineNum);
     
 
 public:        

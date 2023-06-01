@@ -170,6 +170,20 @@ void SysCore::initDataMemTable()
 	file.close();
 }
 
+void SysCore::writeDataMem(const uint32_t lineNum, const uint32_t data)
+{
+	memWordCellPtr_t memCell;
+	
+	//Get the memory cell
+	memCell = dataMemoryHT[lineNum];
+
+	//Write the new value
+	memCell->value = data;
+
+	//Log that the cell has been accessed
+	memCell->hasBeenAccessed = true;
+}
+
 // Core Constructor: Initialize variables and arrays to 0s
 SysCore::SysCore(std::string filePath) {
 	PC = 0;
