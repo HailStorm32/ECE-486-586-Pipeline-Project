@@ -290,12 +290,6 @@ SysCore::SysCore(std::string filePath) {
 	}
 
 	initDataMemTable();
-
-	uint32_t test = memRead(32, true);
-
-    // Check if value is correct
-    std::cout << "test = " << std::hex << test << std::dec << '\n';
-
 }
 
 // Memory Read method: 
