@@ -54,12 +54,6 @@ typedef struct stage {
     volatile uint16_t fwdedImmediate;
 } stageThread_t, * stageThreadPtr_t;
 
-// Struct that defines memory cell 
-typedef struct memWordCell {
-    uint32_t value;
-    bool hasBeenAccessed;
-}memWordCell_t, *memWordCellPtr_t;
-
 typedef struct count {
     int arithmeticCount;
     int logicalCount;
@@ -72,8 +66,17 @@ private:
     std::string filePath;
     uint32_t totalNumOfLines;
 
+    // Struct that defines memory cell 
+    typedef struct memWordCell {
+        uint32_t value;
+        bool hasBeenAccessed;
+    }memWordCell_t, * memWordCellPtr_t;
+
     //Hash table that will contain all of data memory
     std::unordered_map<uint32_t, memWordCellPtr_t> dataMemoryHT;
+
+    //Mutex for data memory
+    std::mutex m_dataMemLock;
 
     /*
     * Description:
