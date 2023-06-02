@@ -1,0 +1,27 @@
+Parsed Instructions from the noHazardTest. Please feel free to 
+double check that this is actually hazard free. Note, this doesn't
+have any branching/jump instructions yet. 
+
+
+Line 1: 040504D2
+ADDI Rs: 0 Rt: 5 Imm: 1234		R5 = 0 + 1234
+Line 2: 300B03E8
+LDW Rs: 0 Rt: 11 Imm: 1000		R11 = MEM[1000+0] (1000/4 = line 250)
+Line 3: 04640258						
+ADDI Rs: 3 Rt: 4 Imm: 600		R4 = R3 + 600
+Line 4: 0C06FFCE
+SUBI Rs: 0 Rt: 6 Imm: 65486		R6 = 0 - -50
+Line 5: 2C01003F
+XORI Rs: 0 Rt: 1 Imm: 63		R1 = 0 ^ 63
+Line 6: 00A53800
+ADD RS: 5 Rt: 5 Rd: 7			R7 = R5 + R5
+Line 7: 34040578
+STW Rs: 0 Rt: 4 Imm: 1400		MEM[1400+0] = R4 (1400/4 = line 350)
+Line 8: 0568FFFB
+ADDI Rs: 11 Rt: 8 Imm: 65531	R8 = r11 + -5
+Line 9: 04090190
+ADDI Rs: 0 Rt: 9 Imm: 400		R9 = 0 + 400
+Line 10: 040A000D
+ADDI Rs: 0 Rt: 10 Imm: 13		r10 = 0 + 13
+Line 11: 44000000
+HALT Rs: 0 Rt: 0 Imm: 0			Halt
