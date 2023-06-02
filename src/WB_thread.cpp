@@ -52,6 +52,8 @@ void WBthread(SysCore& sysCore)
                 //if Rtype instr update RD register
                 if(instructionData->type == Rtype) {
                     sysCore.reg[instructionData->RdAddr] = instructionData->RdValHolder;
+                    //mark this register as modified
+                    sysCore.modifiedReg[instructionData->RdAddr] = 1;
                     #if (_VERBOSE_ > 0)
                     std::cout << "Writing Value: " << instructionData->RdValHolder << " to Reg: " << static_cast<int>(instructionData->RdAddr) << '\n';
                     std::cout << "syscore.reg Value: " << sysCore.reg[instructionData->RdAddr] << '\n';
@@ -62,6 +64,8 @@ void WBthread(SysCore& sysCore)
                     //if its not a control flow or store op, update register Rt
                     if(!instructionData->isControlFlow && instructionData->opcode != STW){
                         sysCore.reg[instructionData->RtAddr] = instructionData->RtValHolder;
+                        //mark this register as modified
+                        sysCore.modifiedReg[instructionData->RtAddr] = 1;
                     } 
                     else {
                         //do nothing for now

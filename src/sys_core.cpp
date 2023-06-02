@@ -205,6 +205,7 @@ SysCore::SysCore(std::string filePath) {
 	PC = 0;
 	memset(reg, 0, sizeof(reg));
 	clk = 0;
+	memset(modifiedReg, 0, sizeof(modifiedReg));
 
 	this->filePath = filePath;
 
