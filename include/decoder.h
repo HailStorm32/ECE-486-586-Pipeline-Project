@@ -42,6 +42,7 @@ enum instFormat
  
 typedef struct instInfo
 {
+	uint32_t tag;
 	opcodes opcode;
 	instFormat type;
 	uint8_t RsAddr;
