@@ -202,7 +202,7 @@ public:
     stageThread_t stageInfoWB;
 
     // Buffers in between the stages
-    TSQueue<uint32_t> IFtoID;
+    TSQueue<instPreInfoPtr_t> IFtoID;
     TSQueue<instInfoPtr_t> IDtoEX;
     TSQueue<instInfoPtr_t> EXtoMEM;
     TSQueue<instInfoPtr_t> MEMtoWB;
@@ -223,6 +223,8 @@ public:
         uint16_t stallsRemainMEM;
         uint16_t stallsRemainWB;
     }stallsRemaining;
+
+
 
 
     /*

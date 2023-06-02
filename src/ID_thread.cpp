@@ -11,7 +11,7 @@ void IDthread(SysCore& sysCore)
 {
 	long long pastClkVal = -1;
 	std::chrono::milliseconds delay(MIN_SLEEP_TIME);
-	uint32_t fullInstruction;
+	instPreInfoPtr_t instPreInfoPkg;
 
 	while (true)
 	{		
@@ -27,10 +27,10 @@ void IDthread(SysCore& sysCore)
 			sysCore.stageInfoID.okToRun = false;
 
 			//Try to get instruction out of the queue (will block if it cannot immediately acquire the lock)
-			fullInstruction = sysCore.IFtoID.pop();
+			instPreInfoPkg = sysCore.IFtoID.pop();
 
 			//If there was nothing for us to get, we missed our opportunity for this clock. Reset
-			if (fullInstruction == NULL)
+			if (instPreInfoPkg == NULL)
 			{
 				std::cout << "DEBUG: [IDthread] Missed opportunity for this clock, will try again next clock" << std::endl;
 				continue;
@@ -48,11 +48,11 @@ void IDthread(SysCore& sysCore)
 			pastClkVal = sysCore.clk;
 
 			//Decode the instruction
-			instInfoPtr_t instructionData = decodeInstruction(fullInstruction);
+			instInfoPtr_t instructionData = decodeInstruction(instPreInfoPkg->rawInstruction);
 
 			if (instructionData == NULL)
 			{
-				std::cerr << "\nERROR: Invalid instruction: 0x" << std::hex << fullInstruction << std::dec << ", Skipping...\n\n";
+				std::cerr << "\nERROR: Invalid instruction: 0x" << std::hex << instPreInfoPkg->rawInstruction << std::dec << ", Skipping...\n\n";
 				//TODO: Report to master thread that we have an invalid instruction
 				sysCore.stageInfoID.errorType = errorCodes::ERR_INVALID_INST;
 				continue;
@@ -82,8 +82,14 @@ void IDthread(SysCore& sysCore)
 			{
 				sysCore.stageInfoID.errorType = errorCodes::ERR_HALT;
 				delete instructionData;
+				delete instPreInfoPkg;
 				continue;
 			}
+
+			//Write the ID
+			instructionData->randID = instPreInfoPkg->randID;
+			
+			delete instPreInfoPkg;
 
 			//Fetch the register values
 			//TODO: Account for dependancy issues and forwarding

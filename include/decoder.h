@@ -42,7 +42,7 @@ enum instFormat
  
 typedef struct instInfo
 {
-	uint32_t tag;
+	uint32_t randID;
 	opcodes opcode;
 	instFormat type;
 	uint8_t RsAddr;
@@ -55,6 +55,12 @@ typedef struct instInfo
 	uint32_t memAddressValHolder;	//calculated mem address for mem access instructions
 	bool isControlFlow;				//set true if control flow instruction
 }instInfo_t, *instInfoPtr_t;
+
+typedef struct instPreInfo
+{
+	uint32_t randID;
+	uint32_t rawInstruction;
+}instPreInfo_t, *instPreInfoPtr_t;
 
 /*
 * Description:

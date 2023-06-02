@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <climits>
 #include <iostream>
+#include <stdlib.h>
 #include "IF_thread.h"
 
 #define MIN_SLEEP_TIME      50 // ms
@@ -12,6 +13,9 @@ void IFthread(SysCore& sysCore){
     std::chrono::milliseconds delay(MIN_SLEEP_TIME);
     
     uint32_t instruction;
+
+    //Initalize random number gen
+    srand(time(NULL));
 
     while (1){
 
@@ -51,8 +55,17 @@ void IFthread(SysCore& sysCore){
             // Record new CLK val 
             prevClkVal = sysCore.clk;
 
+            //TODO: Run hazared checker
+
+            instPreInfoPtr_t instPrePkg = new instPreInfo;
+
+            //Generate a ID for the given instruction range form 0 - 0xFFFFFFFF
+            instPrePkg->randID = rand() % 0xFFFFFFFF;
+            //Write the instruction 
+            instPrePkg->rawInstruction = instruction;
+
             // Push the returned instruction to buffer
-            sysCore.IFtoID.push(instruction);
+            sysCore.IFtoID.push(instPrePkg);
         }
 
         // Apply delay
