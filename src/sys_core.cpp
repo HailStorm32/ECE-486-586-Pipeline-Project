@@ -367,11 +367,18 @@ uint32_t SysCore::memRead(const uint32_t address, const bool isInstMem) {
 // Memory Write method:
 uint32_t SysCore::memWrite(const uint32_t address, uint32_t value) {
 	uint32_t lineNumber = 0;
+	uint32_t data = 0;
 	std::string lineData = "";
 
 	//Get line number
 	lineNumber = addrToLine(address);
 
+	if (lineNumber < dataMemStartLine)
+	{
+		std::cerr << "\nERROR: Address [0x" << std::hex << address << std::dec << "] converts to line ["
+			<< lineNumber << "] and is outside of data memory\n\n";
+		return UINT32_MAX;
+	}
 
 	// Convert the value into string
 	std::stringstream ss; // Declare a stringstream instance
@@ -387,6 +394,7 @@ uint32_t SysCore::memWrite(const uint32_t address, uint32_t value) {
 			<< "expected " << FILE_LINE_LENGTH << "\n\n";
 		return UINT32_MAX;
 	}
-
-	//return writeDataMem(lineNumber, lineData);
+	//Convert the string to uint32_t and return
+	data = static_cast<uint32_t>(std::stoll(lineData, nullptr, 16));
+	writeDataMem(lineNumber, data);
 }
