@@ -221,7 +221,6 @@ SysCore::SysCore(std::string filePath) {
 	stageInfoIF = {
 		.stageType = fowardInfo::IF,
 		.fwdTo = fowardInfo::NONE,
-		.useFwdFrom = fowardInfo::NONE,
 		.errorType = errorCodes::ERR_NONE,
 		.okToRun = false,
 		.updatedPC =false,
@@ -236,7 +235,6 @@ SysCore::SysCore(std::string filePath) {
 	stageInfoID = {
 		.stageType = fowardInfo::ID,
 		.fwdTo = fowardInfo::NONE,
-		.useFwdFrom = fowardInfo::NONE,
 		.errorType = errorCodes::ERR_NONE,
 		.okToRun = false,
 		.updatedPC =false,
@@ -251,7 +249,6 @@ SysCore::SysCore(std::string filePath) {
 	stageInfoEX = {
 		.stageType = fowardInfo::EX,
 		.fwdTo = fowardInfo::NONE,
-		.useFwdFrom = fowardInfo::NONE,
 		.errorType = errorCodes::ERR_NONE,
 		.okToRun = false,
 		.updatedPC =false,
@@ -266,7 +263,6 @@ SysCore::SysCore(std::string filePath) {
 	stageInfoMEM = {
 		.stageType = fowardInfo::MEM,
 		.fwdTo = fowardInfo::NONE,
-		.useFwdFrom = fowardInfo::NONE,
 		.errorType = errorCodes::ERR_NONE,
 		.okToRun = false,
 		.updatedPC =false,
@@ -281,7 +277,6 @@ SysCore::SysCore(std::string filePath) {
 	stageInfoWB = {
 		.stageType = fowardInfo::WB,
 		.fwdTo = fowardInfo::NONE,
-		.useFwdFrom = fowardInfo::NONE,
 		.errorType = errorCodes::ERR_NONE,
 		.okToRun = false,
 		.updatedPC =false,

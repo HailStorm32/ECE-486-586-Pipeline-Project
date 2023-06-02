@@ -33,13 +33,16 @@ enum errorCodes {
     ERR_RAW_HAZ,
 };
 
+
 // Stage struct to keep track of threads/stages
 typedef struct stage {
     volatile fowardInfo stageType;
+
+    // Hash table to hold instructions that a stage will need to use forworded values for
+    std::unordered_map<uint32_t, fowardInfo> useFwdHashTable;
     
     // flags
     volatile fowardInfo fwdTo;
-    volatile fowardInfo useFwdFrom;
     volatile errorCodes errorType;
     volatile bool okToRun;
     volatile bool updatedPC; //true if EX found branch taken/jump, update PC with value in fwdedAluResult
