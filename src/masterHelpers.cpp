@@ -78,7 +78,7 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 		case errorCodes::ERR_RAW_HAZ:
 			
 			//Get the info on the hazard
-			hazardErrInfoPtr_t hazardInfo = static_cast<hazardErrInfoPtr_t>(stageStruct->errorInfo);
+			//hazardErrInfoPtr_t hazardInfo = static_cast<hazardErrInfoPtr_t>(stageStruct->errorInfo);
 
 			break;
 

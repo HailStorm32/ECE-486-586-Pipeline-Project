@@ -220,7 +220,6 @@ SysCore::SysCore(std::string filePath) {
 	//Initalize stage structs
 	stageInfoIF = {
 		.stageType = fowardInfo::IF,
-		.fwdTo = fowardInfo::NONE,
 		.errorType = errorCodes::ERR_NONE,
 		.okToRun = false,
 		.updatedPC =false,
