@@ -80,8 +80,6 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 			//Get the info on the hazard
 			hazardErrInfoPtr_t hazardInfo = static_cast<hazardErrInfoPtr_t>(stageStruct->errorInfo);
 
-
-
 			break;
 
 		default:

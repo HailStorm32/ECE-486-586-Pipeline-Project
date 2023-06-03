@@ -40,24 +40,29 @@ typedef struct hazardErrInfo {
     uint8_t numOfRequiredStalls;
 }hazardErrInfo_t, *hazardErrInfoPtr_t;
 
-// Goes into stallsList
+// Goes into stallTargetList
 typedef struct stallTarget {
     uint32_t targetPC;
     uint8_t requiredStalls;
 }stallTarget_t, *stallTargetPtr_t;
+
+// Goes into useFwdHashTable
+typedef struct forwardDests {
+    volatile fowardInfo fwdTo;
+    volatile fowardInfo fwdFrom;
+}forwardDests_t, * forwardDests_t;
 
 // Stage struct to keep track of threads/stages
 typedef struct stage {
     volatile fowardInfo stageType;
 
     // Hash table to hold instructions that a stage will need to use forworded values for
-    std::unordered_map<uint32_t, fowardInfo> useFwdHashTable;
+    std::unordered_map<uint32_t, forwardDests_t> useFwdHashTable;
 
     //Holds pointer to a struct that contains details regarding the reported error
     void* errorInfo;
     
     // flags
-    volatile fowardInfo fwdTo;
     volatile errorCodes errorType;
     volatile bool okToRun;
     volatile bool updatedPC; //true if EX found branch taken/jump, update PC with value in fwdedAluResult
@@ -242,7 +247,7 @@ public:
         uint8_t stallsRemainWB;
     }stallsRemaining;
 
-    std::list<stageThreadPtr_t> stallsList;
+    std::list<stallTargetPtr_t> stallTargetList;
 
 
     /*
