@@ -233,11 +233,11 @@ public:
 
     struct stallTracker {
         bool isInStall;
-        uint16_t stallsRemainIF;
-        uint16_t stallsRemainID;
-        uint16_t stallsRemainEX;
-        uint16_t stallsRemainMEM;
-        uint16_t stallsRemainWB;
+        uint8_t stallsRemainIF;
+        uint8_t stallsRemainID;
+        uint8_t stallsRemainEX;
+        uint8_t stallsRemainMEM;
+        uint8_t stallsRemainWB;
     }stallsRemaining;
 
     //std::list<stageThreadPtr_t> errorsToMonitor;
