@@ -33,6 +33,16 @@ enum errorCodes {
     ERR_RAW_HAZ,
 };
 
+typedef struct hazardErrInfo {
+    uint32_t instructionID;
+    uint32_t expectedPC;
+    uint8_t numOfStalls;
+}hazardErrInfo_t, *hazardErrInfoPtr_t;
+
+//TODO: add payload struct that will hold the PC the effected instruction should be running on
+//          AND the number of stalls it should be
+//
+// Maybe have a hash table that keeps track of what PC values need stalls
 
 // Stage struct to keep track of threads/stages
 typedef struct stage {
@@ -40,6 +50,9 @@ typedef struct stage {
 
     // Hash table to hold instructions that a stage will need to use forworded values for
     std::unordered_map<uint32_t, fowardInfo> useFwdHashTable;
+
+    //Holds pointer to a struct that contains details regarding the reported error
+    void* errorInfo;
     
     // flags
     volatile fowardInfo fwdTo;
