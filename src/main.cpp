@@ -18,7 +18,7 @@
 int main(int argc, char* argv[])
 {
 	// Initialize system core
-	SysCore sysCore("given_sample_memory_image.txt");
+	SysCore sysCore("noHazardTest.txt");
 
 	// Start threads (passing each thread a ref to the system core)
 	std::thread ifThread(IFthread, std::ref(sysCore));

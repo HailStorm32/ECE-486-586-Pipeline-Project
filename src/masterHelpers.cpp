@@ -20,6 +20,7 @@ std::list<stageThreadPtr_t>* checkForErrors(SysCore& sysCore)
 int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 {
 	stageThreadPtr_t stageStruct = NULL;
+	hazardErrInfoPtr_t hazardInfo = NULL;
 
 	//Cycle through each stage struct and get the error
 	for (std::list<stageThreadPtr_t>::iterator it = structList->begin(); it != structList->end(); ++it)
@@ -76,14 +77,58 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 			break;
 
 		case errorCodes::ERR_RAW_HAZ:
-			
 			//Get the info on the hazard
-			//hazardErrInfoPtr_t hazardInfo = static_cast<hazardErrInfoPtr_t>(stageStruct->errorInfo);
+			hazardInfo = static_cast<hazardErrInfoPtr_t>(stageStruct->errorInfo);
+
+			//Create a tracker for stalls if we need it
+			if (hazardInfo->numOfRequiredStalls > 0)
+			{
+				stallTargetPtr_t stallTarget = new stallTarget_t;
+
+				if (stallTarget == NULL)
+				{
+					std::cerr << "\n\nERROR: [processError] faileed to create stallTarget\n\n" << std::endl;
+					continue;
+				}
+
+				stallTarget->requiredStalls = hazardInfo->numOfRequiredStalls;
+				stallTarget->targetPC = hazardInfo->consumerExpectedPC;
+
+				//Add target to stallTargetList
+				sysCore.stallTargetList.push_back(stallTarget);
+			}
+
+			//Figure out what stage we need to forward from
+			if (hazardInfo->producerInstOpCode < opcodes::LDW) { //if an arithmetic or logical instruction
+				//We forward from the EX stage
+
+				//Create an entry into the EX stage struct to tell it that it will need to forward
+				sysCore.stageInfoEX.useFwdHashTable[hazardInfo->producerInstID].fwdTo = fowardInfo::ID;
+				sysCore.stageInfoEX.useFwdHashTable[hazardInfo->producerInstID].fwdFrom = fowardInfo::NONE;
+
+				//Create an entry into the ID stage struct to tell it that it will need to look for forwarded values
+				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdTo = fowardInfo::NONE;
+				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdFrom = fowardInfo::EX;
+			}
+			else if (hazardInfo->producerInstOpCode > opcodes::XORI && hazardInfo->producerInstOpCode < opcodes::BZ) { //if memory instruction
+				//We forward from the MEM stage
+
+				//Create an entry into the EX stage struct to tell it that it will need to forward
+				sysCore.stageInfoMEM.useFwdHashTable[hazardInfo->producerInstID].fwdTo = fowardInfo::ID;
+				sysCore.stageInfoMEM.useFwdHashTable[hazardInfo->producerInstID].fwdFrom = fowardInfo::NONE;
+
+				//Create an entry into the ID stage struct to tell it that it will need to look for forwarded values
+				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdTo = fowardInfo::NONE;
+				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdFrom = fowardInfo::MEM;
+			}
+
+			//Freeup hazardInfo as we no longer need it
+			delete hazardInfo;
 
 			break;
 
 		default:
-			std::cerr << "\n\nWARNING: [processError] received invalid error\n\n" << std::endl;
+			std::cerr << "\n\nWARNING: [processError] Control instruction is a producer, ignoring..\n\n" << std::endl;
 			break;
 		}
 
@@ -110,6 +155,8 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 
 		break;
 	}*/
+
+	//Clear the 
 	
 	//Remove the list b/c we are done with it
 	delete structList;

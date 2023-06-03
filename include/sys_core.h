@@ -35,8 +35,12 @@ enum errorCodes {
 
 // Struct to hold the details of a hazard error
 typedef struct hazardErrInfo {
-    uint32_t instructionID;
-    uint32_t expectedPC;
+    uint32_t producerInstID;
+    opcodes producerInstOpCode;
+    
+    uint32_t consumerInstID;
+    opcodes consumerInstOpCode;
+    uint32_t consumerExpectedPC;
     uint8_t numOfRequiredStalls;
 }hazardErrInfo_t, *hazardErrInfoPtr_t;
 
