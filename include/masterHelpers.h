@@ -13,7 +13,7 @@
 *
 * Return:
 *	list<stageThreadPtr_t> -- pointer to list containing stage structs who have error codes to check
-*	NULL -- no errors reported
+*	empty list -- no errors reported
 */
 std::list<stageThreadPtr_t>* checkForErrors(SysCore& sysCore);
 

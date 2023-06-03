@@ -42,6 +42,10 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 			sysCore.stageInfoEX.die = true;
 			sysCore.stageInfoMEM.die = true;
 			sysCore.stageInfoWB.die = true;
+
+			//Remove the list b/c we are done with it
+			delete structList;
+
 			return 1;
 
 		case errorCodes::ERR_INVALID_INST:
@@ -100,7 +104,9 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 
 		break;
 	}*/
-
+	
+	//Remove the list b/c we are done with it
+	delete structList;
 
 	return 0;
 }
