@@ -24,7 +24,7 @@ mips_lite: $(OBJS)
 	$(CC) $(CPPFLAGS) $(LDFLAGS) -I $(INC_DIR) -o $@ $(SRC_DIR)/main.cpp $^
 
 $(OBJ_DIR)/masterHelpers.o: $(SRC_DIR)/masterHelpers.cpp $(INC_DIR)/masterHelpers.h
-	$(CC) $(CPPFLAGS) -I $(INC_DIR) -c $< -o $@
+	$(CC) $(CPPFLAGS) $(LDFLAGS) -I $(INC_DIR) -c $< -o $@
 
 $(OBJ_DIR)/sys_core.o: $(SRC_DIR)/sys_core.cpp $(INC_DIR)/sys_core.h
 	$(CC) $(CPPFLAGS) -I $(INC_DIR) -c $< -o $@

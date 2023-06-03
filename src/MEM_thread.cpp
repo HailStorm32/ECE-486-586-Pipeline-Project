@@ -14,7 +14,6 @@ void MEMthread(SysCore& sysCore)
 	long long pastClkVal = -1;
 	std::chrono::milliseconds delay(MIN_SLEEP_TIME);
 	instInfoPtr_t instructionData;
-    //uint32_t instruction;
 
 
 	while (true)
@@ -36,27 +35,17 @@ void MEMthread(SysCore& sysCore)
 			//If there was nothing for us to get, we missed our opportunity for this clock. Reset
 			if (instructionData == NULL)
 			{
-				std::cout << "DEBUG: [MEMthread] Missed opportunity for this clock, will try again next clock" << std::endl;
+				std::cout << "DEBUG: [MEMthread] No instruction recieved this clock, will try again next clock" << std::endl;
 				continue;
 			}
 
 			//Skip the data if its invalid (aka we are told to flush)
 			if (sysCore.stageInfoMEM.invalidateData)
 			{
-				std::cout << "DEBUG: [MEMthread] Missed opportunity for this clock, will try again next clock" << std::endl;
+				std::cout << "DEBUG: [MEMthread] Skipped data due to invalid data this clock, will try again next clock" << std::endl;
 				sysCore.stageInfoMEM.invalidateData = false;
 				continue;
 			}
-
-            // Load (Read from memory using the newPCValHolder)
-            //instruction = sysCore.memRead(instructionData->newPCValHolder, true);
-
-            // Check if memRead() returns an error and apply flags
-            //if (instruction == UINT_MAX){
-            //    std::cout << "ERROR: [MEMthread] SysCore::memRead() return on error" << std::endl;
-            //    sysCore.stageInfoMEM.okToRun = false;
-            //    continue;
-            //}
 
 			//Record the new clock value
 			pastClkVal = sysCore.clk;
@@ -76,21 +65,29 @@ void MEMthread(SysCore& sysCore)
 	    //read data from memAddressValHolder calculated by EX stage and store in RtValholder    
 	   	if(instructionData->opcode == LDW) {
 			instructionData->RtValHolder = sysCore.memRead(instructionData->memAddressValHolder, false);
+            
+            // Check if memRead() returns an error and apply flags
+            if (instructionData->RtValHolder == UINT_MAX){
+                std::cout << "ERROR: [MEMthread] SysCore::memRead() return on error" << std::endl;
+                sysCore.stageInfoMEM.okToRun = false;
+                continue;
+            }
+
 			#if (_VERBOSE_ > 0)
-			std::cout << "MEM addrss: " << instructionData->memAddressValHolder << " val from mem: " << instructionData->RtValHolder  << '\n';
+			std::cout << "VERBOSE: [MEMthread] mem. addrss: " << instructionData->memAddressValHolder << " value from mem. address: " << instructionData->RtValHolder  << '\n';
 			#endif
 		}
 		//write data from rtValHolder to address calculated by EX stage
 		else if(instructionData->opcode == STW) {
 			if(sysCore.memWrite(instructionData->memAddressValHolder, instructionData->RtValHolder) == UINT32_MAX){
-				std::cerr << "[MEM Thread] WRITE ERROR"  << '\n';
+				std::cerr << "ERROR: [MEMthread] memWrite() returns UINT32_MAX"  << '\n';
 			}
 			#if (_VERBOSE_ > 0)
-			std::cout << "MEM addrss: " << instructionData->memAddressValHolder << " val to mem: " << instructionData->RtValHolder  << '\n';
+			std::cout << "VERBOSE: [MEMthread] mem. addrss: " << instructionData->memAddressValHolder << " value from mem. address: " << instructionData->RtValHolder  << '\n';
 			#endif
 		
 		}
-		else { ;
+		else {
 			//do nothing for now?
 		}
 			

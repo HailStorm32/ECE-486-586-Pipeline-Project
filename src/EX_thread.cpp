@@ -166,7 +166,7 @@ void EXthread(SysCore& sysCore)
 				//calculate effecive mem address if mem access op
 				else if (instructionData->opcode == LDW || instructionData->opcode == STW) {
 					instructionData->memAddressValHolder = alu(instructionData->RsValHolder, extendedImm, instructionData->opcode);
-					std::cout << "EX mem addr =  " << instructionData->memAddressValHolder << '\n';
+					//std::cout << "EX mem addr =  " << instructionData->memAddressValHolder << '\n';
 				}
 				//if arithmetic/logical immediate op perform operation and store in RT val holder
 				else {
