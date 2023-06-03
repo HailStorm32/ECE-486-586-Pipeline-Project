@@ -70,10 +70,18 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 			sysCore.stageInfoEX.invalidateData = true;
 			sysCore.stageInfoMEM.invalidateData = true;
 			sysCore.stageInfoWB.invalidateData = true;
+
+			//TODO: clear all the error structs, stall counts, forward requests
+
 			break;
 
 		case errorCodes::ERR_RAW_HAZ:
-			//TODO: add code for figuring out what needs a stall and how many
+			
+			//Get the info on the hazard
+			hazardErrInfoPtr_t hazardInfo = static_cast<hazardErrInfoPtr_t>(stageStruct->errorInfo);
+
+
+
 			break;
 
 		default:

@@ -36,7 +36,7 @@ enum errorCodes {
 typedef struct hazardErrInfo {
     uint32_t instructionID;
     uint32_t expectedPC;
-    uint8_t numOfStalls;
+    uint8_t numOfRequiredStalls;
 }hazardErrInfo_t, *hazardErrInfoPtr_t;
 
 //TODO: add payload struct that will hold the PC the effected instruction should be running on
@@ -240,7 +240,7 @@ public:
         uint16_t stallsRemainWB;
     }stallsRemaining;
 
-
+    //std::list<stageThreadPtr_t> errorsToMonitor;
 
 
     /*
