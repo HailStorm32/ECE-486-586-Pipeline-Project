@@ -33,16 +33,18 @@ enum errorCodes {
     ERR_RAW_HAZ,
 };
 
+// Struct to hold the details of a hazard error
 typedef struct hazardErrInfo {
     uint32_t instructionID;
     uint32_t expectedPC;
     uint8_t numOfRequiredStalls;
 }hazardErrInfo_t, *hazardErrInfoPtr_t;
 
-//TODO: add payload struct that will hold the PC the effected instruction should be running on
-//          AND the number of stalls it should be
-//
-// Maybe have a hash table that keeps track of what PC values need stalls
+// Goes into stallsList
+typedef struct stallTarget {
+    uint32_t targetPC;
+    uint8_t requiredStalls;
+}stallTarget_t, *stallTargetPtr_t;
 
 // Stage struct to keep track of threads/stages
 typedef struct stage {
@@ -240,7 +242,7 @@ public:
         uint8_t stallsRemainWB;
     }stallsRemaining;
 
-    //std::list<stageThreadPtr_t> errorsToMonitor;
+    std::list<stageThreadPtr_t> stallsList;
 
 
     /*
