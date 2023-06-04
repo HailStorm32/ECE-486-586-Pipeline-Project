@@ -127,22 +127,22 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 
 				//Create an entry into the EX stage struct to tell it that it will need to forward
 				sysCore.stageInfoEX.useFwdHashTable[hazardInfo->producerInstID].fwdTo = fowardInfo::ID;
-				sysCore.stageInfoEX.useFwdHashTable[hazardInfo->producerInstID].fwdFrom = fowardInfo::NONE;
+				sysCore.stageInfoEX.useFwdHashTable[hazardInfo->producerInstID].fwdedFrom = fowardInfo::NONE;
 
 				//Create an entry into the ID stage struct to tell it that it will need to look for forwarded values
 				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdTo = fowardInfo::NONE;
-				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdFrom = fowardInfo::EX;
+				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedFrom = fowardInfo::EX;
 			}
 			else if (hazardInfo->producerInstOpCode > opcodes::XORI && hazardInfo->producerInstOpCode < opcodes::BZ) { //if memory instruction
 				//We forward from the MEM stage
 
 				//Create an entry into the MEM stage struct to tell it that it will need to forward
 				sysCore.stageInfoMEM.useFwdHashTable[hazardInfo->producerInstID].fwdTo = fowardInfo::ID;
-				sysCore.stageInfoMEM.useFwdHashTable[hazardInfo->producerInstID].fwdFrom = fowardInfo::NONE;
+				sysCore.stageInfoMEM.useFwdHashTable[hazardInfo->producerInstID].fwdedFrom = fowardInfo::NONE;
 
 				//Create an entry into the ID stage struct to tell it that it will need to look for forwarded values
 				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdTo = fowardInfo::NONE;
-				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdFrom = fowardInfo::MEM;
+				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedFrom = fowardInfo::MEM;
 			}
 
 			//Freeup hazardInfo as we no longer need it

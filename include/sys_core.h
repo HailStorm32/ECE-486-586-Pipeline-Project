@@ -24,6 +24,13 @@ enum fowardInfo {
     WB
 };
 
+enum fwdVal2Read {
+    NONE,
+    Rs,
+    Rt,
+    Rd
+};
+
 enum errorCodes {
     ERR_NONE,
     ERR_HALT,
@@ -53,7 +60,8 @@ typedef struct stallTarget {
 // Goes into useFwdHashTable
 typedef struct forwardDests {
     volatile fowardInfo fwdTo;
-    volatile fowardInfo fwdFrom;
+    volatile fowardInfo fwdedFrom;
+    
 }forwardDests_t, * forwardDestsPtr_t;
 
 // Stage struct to keep track of threads/stages
