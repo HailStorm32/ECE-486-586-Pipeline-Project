@@ -1,5 +1,6 @@
 #include <iostream>
 #include <thread>
+#include <cstring>
 #include <chrono>   // researched that chrono header might be the choice 
 // since it is portable to Windows and Linux
 
@@ -17,8 +18,25 @@
 
 int main(int argc, char* argv[])
 {
+    // Check if there were no arguements given
+    if (argc < 2)
+    {
+        std::cerr << "Usage: ./mips_lite <path/to/file>" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    // Check if too many arguments given
+    if (argc > 2)
+    {
+        std::cerr << "ERROR: Too many arguments specified" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    // store the filepath given to var
+    const std::string filePath = argv[argc - 1];
+
 	// Initialize system core
-	SysCore sysCore("given_sample_memory_image.txt");
+	SysCore sysCore(filePath);
 
 	// Start threads (passing each thread a ref to the system core)
 	std::thread ifThread(IFthread, std::ref(sysCore));
