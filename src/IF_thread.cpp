@@ -87,6 +87,7 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
     uint8_t producerDestReg = 0;
     uint8_t depthFound = 0;
     bool foundHazard = false;
+    fwdVal2Read dependentRegister = fwdVal2Read::READ_NONE;
 
     //Get the PC for the producer instruction
     tempPC = sysCore.PC;
@@ -153,9 +154,22 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
             //Instruction uses the Rs and Rt registers for operands
             
             //Check to see if the producerDestReg matches any of the consumer operand registers
-            if (consumerInstData->RsAddr == producerDestReg || consumerInstData->RtAddr == producerDestReg){
+            if (consumerInstData->RsAddr == producerDestReg || ){
                 foundHazard = true;
                 depthFound = index + 1;
+                
+                //Log what register needs the value
+                dependentRegister = fwdVal2Read::Rs;
+
+                //Break b/c by design only one stall set is needed. By the time the other dependant instructions get to run, the data will be available already
+                break;
+            }
+            else if (consumerInstData->RtAddr == producerDestReg){
+                foundHazard = true;
+                depthFound = index + 1;
+
+                //Log what register needs the value
+                dependentRegister = fwdVal2Read::Rt;
 
                 //Break b/c by design only one stall set is needed. By the time the other dependant instructions get to run, the data will be available already
                 break;
@@ -168,6 +182,8 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
             if (consumerInstData->RsAddr == producerDestReg) {
                 foundHazard = true;
                 depthFound = index + 1;
+
+                dependentRegister = fwdVal2Read::Rs;
 
                 //Break b/c by design only one stall set is needed. By the time the other dependant instructions get to run, the data will be available already
                 break;
@@ -205,6 +221,7 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
         hazardInfo->consumerExpectedPC = tempPC;
         hazardInfo->consumerInstID = tempPC + rawConsumerInstruction;
         hazardInfo->consumerInstOpCode = consumerInstData->opcode;
+        hazardInfo->consumerDependentReg = dependentRegister;
         
         //Write producer instrucion info
         hazardInfo->producerInstID = (sysCore.PC) + rawProducerInstruction;

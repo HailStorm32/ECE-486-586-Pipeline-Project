@@ -48,6 +48,7 @@ typedef struct hazardErrInfo {
     uint32_t consumerInstID;
     opcodes consumerInstOpCode;
     uint32_t consumerExpectedPC;
+    fwdVal2Read consumerDependentReg;
     uint8_t numOfRequiredStalls;
 }hazardErrInfo_t, *hazardErrInfoPtr_t;
 
