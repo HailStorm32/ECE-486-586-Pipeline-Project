@@ -33,11 +33,13 @@ int main(int argc, char* argv[])
     }
 
     // store the filepath given to var
-    const std::string filePath = argv[argc - 1];
+    //const std::string filePath = argv[argc - 1];
+	
+	//DELTE THIS LINE AND UNCOMMENT ABOVE, FOR DEBUG ONLY
+	std::string filePath = "noHazardTest.txt";
 
 	// Initialize system core
 	SysCore sysCore(filePath);
-	SysCore sysCore("noHazardTest.txt");
 
 	// Start threads (passing each thread a ref to the system core)
 	std::thread ifThread(IFthread, std::ref(sysCore));
