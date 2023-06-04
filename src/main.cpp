@@ -16,27 +16,39 @@
 #define CLOCK_PERIOD    100 //in ms
 #define SETTLE_TIME     1   //in ms
 
+#define USE_TERMINAL	false //Set to false to be able to run program via a IDE and not terminal
+
 int main(int argc, char* argv[])
 {
-    // Check if there were no arguements given
-    if (argc < 2)
-    {
-        std::cerr << "Usage: ./mips_lite <path/to/file>" << std::endl;
-        exit(EXIT_FAILURE);
-    }
+	std::string filePath;
 
-    // Check if too many arguments given
-    if (argc > 2)
-    {
-        std::cerr << "ERROR: Too many arguments specified" << std::endl;
-        exit(EXIT_FAILURE);
-    }
+	if (USE_TERMINAL)
+	{
+		// Check if there were no arguements given
+		if (argc < 2)
+		{
+			std::cerr << "Usage: ./mips_lite <path/to/file>" << std::endl;
+			exit(EXIT_FAILURE);
+		}
 
-    // store the filepath given to var
-    //const std::string filePath = argv[argc - 1];
+		// Check if too many arguments given
+		if (argc > 2)
+		{
+			std::cerr << "ERROR: Too many arguments specified" << std::endl;
+			exit(EXIT_FAILURE);
+		}
+
+		// store the filepath given to var
+		filePath = argv[argc - 1];
+	}
+	else
+	{
+		std::cout << "\n\nUsing internal file path\n\n";
+
+		//FOR DEBUG ONLY
+		filePath = "noHazardTest.txt";
+	}
 	
-	//DELTE THIS LINE AND UNCOMMENT ABOVE, FOR DEBUG ONLY
-	std::string filePath = "noHazardTest.txt";
 
 	// Initialize system core
 	SysCore sysCore(filePath);
