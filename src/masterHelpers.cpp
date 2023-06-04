@@ -132,6 +132,8 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 			break;
 		}
 
+		//Clear the error state
+		stageStruct->errorType = errorCodes::ERR_NONE;
 	}
 	
 	//Remove the list b/c we are done with it
