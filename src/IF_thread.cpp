@@ -7,7 +7,8 @@
 #include "IF_thread.h"
 #include "decoder.h"
 
-#define MIN_SLEEP_TIME      50 // ms
+#define HAZARD_SEARCH_DEPTH     3
+#define MIN_SLEEP_TIME          50 // ms
 
 bool findHazards(SysCore& sysCore, uint32_t rawInstruction);
 
@@ -78,24 +79,95 @@ void IFthread(SysCore& sysCore){
 
 bool findHazards(SysCore& sysCore, uint32_t rawInstruction)
 {
-    uint32_t producerPC = 0;
+    uint32_t tempPC = 0;
     instInfoPtr_t producerInstData = NULL;
+    instInfoPtr_t consumerInstData = NULL;
+    uint8_t producerDestReg = 0;
+    uint8_t depthFound = 0;
+    bool foundHazard = false;
 
     //Get the PC for the producer instruction
-    producerPC = sysCore.PC - 4;
+    tempPC = sysCore.PC - 4;
 
     //Decode the producer instruction
     producerInstData = decodeInstruction(rawInstruction);
 
-    //Get the destination register the producer instruction uses
-    switch (producerInstData->opcode)
+    if (producerInstData == NULL)
     {
-    case opcodes::ADD: case opcodes::SUB: case opcodes::MUL: case opcodes::OR: case opcodes::XOR:
-    default:
-        break;
+        //If we got an invalid instruction, let ID take care of it
+        return false;
     }
 
+    //Get the destination register the producer instruction uses
+    if (producerInstData->RdAddr >= opcodes::BZ)
+    {
+        //If a control instruction is the producer, it will never cause a hazard
+        return false;
+    }
+    if (producerInstData->RdAddr != UINT8_MAX) {
+        //Instruction uses the Rd register for the destination
+        producerDestReg = producerInstData->RdAddr;
+    }
+    else if (producerInstData->RdAddr == UINT8_MAX) {
+        //Instruction uses the Rt register for the destination
+        producerDestReg = producerInstData->RtAddr;
+    }
     
+    //Search the instructions further down to see if there is a data dependency 
+    for (uint8_t index = 0; index < HAZARD_SEARCH_DEPTH; index++)
+    {
+        //Increment PC to the next instruction
+        tempPC += 4;
+
+        //Decode the instruction
+        consumerInstData = decodeInstruction(tempPC);
+
+        if (producerInstData == NULL)
+        {
+            delete producerInstData;
+
+            //If we got an invalid instruction, let ID take care of it
+            return false;
+        }
+
+        //Find dependency issues
+        if (producerInstData->RdAddr != UINT8_MAX) {
+            //Instruction uses the Rs and Rt registers for operands
+            
+            //Check to see if the producerDestReg matches any of the consumer operand registers
+            if (producerInstData->RsAddr == producerDestReg || producerInstData->RtAddr == producerDestReg){
+                foundHazard = true;
+                depthFound = index + 1;
+
+                //Break b/c by design only one stall set is needed. By the time the other dependant instructions get to run, the data will be available already
+                break;
+            }
+        }
+        else if (producerInstData->RdAddr == UINT8_MAX) {
+            //Instruction uses the Rs register for operands
+            
+            //Check to see if the producerDestReg matches any of the consumer operand registers
+            if (producerInstData->RsAddr == producerDestReg) {
+                foundHazard = true;
+                depthFound = index + 1;
+
+                //Break b/c by design only one stall set is needed. By the time the other dependant instructions get to run, the data will be available already
+                break;
+            }
+        }
+
+        //Free up the space allocated for the decoded consumer instruction
+        delete consumerInstData;
+    }
+
+    //Prepare an error report if we found a hazard
+    if (foundHazard){
+        //Create hazardErrInfo struct
+        hazardErrInfoPtr_t hazardInfo = new hazardErrInfo_t;
+
+
+
+    }
 
     return false;
 }
