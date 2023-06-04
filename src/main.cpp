@@ -60,6 +60,9 @@ int main(int argc, char* argv[])
 			}
 		}
 
+		//Check and see if we need to apply any stalls
+		applyStalls(sysCore);
+
 		/*//Give the go ahead to all stages
 		sysCore.stageInfoIF.okToRun = true;
 		sysCore.stageInfoID.okToRun = true;

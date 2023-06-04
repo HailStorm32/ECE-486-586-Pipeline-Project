@@ -34,3 +34,18 @@ std::list<stageThreadPtr_t>* checkForErrors(SysCore& sysCore);
 int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList);
 
 void displayResults (SysCore& sysCore);
+
+/*
+* Description:
+*	Checks the stallTargetList for stall targets and will apply
+*	stalls to the IF stage if the target meets the criteria to run
+*
+*
+* Arguments:
+*	 sysCore -- Reference to system Core class
+* 
+*
+* Return:
+*	None
+*/
+void applyStalls(SysCore& sysCore);

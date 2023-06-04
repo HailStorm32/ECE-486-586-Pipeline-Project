@@ -155,3 +155,28 @@ void displayResults (SysCore& sysCore)
 		}
 	}
 }
+
+void applyStalls(SysCore& sysCore)
+{
+	stallTargetPtr_t target = NULL;
+
+	//Cycle through the targets in the list
+	for (std::list<stallTargetPtr_t>::iterator it = sysCore.stallTargetList.begin(); it != sysCore.stallTargetList.end(); ++it)
+	{
+		target = *it;
+
+		//See if the target is for the current PC value
+		if (target->targetPC == sysCore.PC)
+		{
+			//Update the stall counter
+			sysCore.stallsRemaining.stallsRemainIF = target->requiredStalls;
+
+			//Free up the space used by the target
+			delete target;
+
+			//Remove the list item from the list 
+			//Also assign the returned interator back to the loop iterator so that we can continue to loop
+			it = sysCore.stallTargetList.erase(it);
+		}
+	}
+}
