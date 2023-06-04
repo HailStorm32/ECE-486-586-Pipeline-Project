@@ -56,7 +56,8 @@ void IFthread(SysCore& sysCore){
             // Record new CLK val 
             prevClkVal = sysCore.clk;
 
-            //TODO: Run hazared checker
+            //Run hazared checker
+            findHazards(sysCore, instruction);
 
             instPreInfoPtr_t instPrePkg = new instPreInfo;
 
@@ -203,7 +204,8 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
 
     //Free up resources
     delete producerInstData;
-    delete consumerInstData;
+    if (foundHazard)
+        delete consumerInstData;
 
     return false;
 }
