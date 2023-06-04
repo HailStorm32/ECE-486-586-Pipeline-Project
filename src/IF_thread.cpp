@@ -5,8 +5,11 @@
 #include <iostream>
 #include <stdlib.h>
 #include "IF_thread.h"
+#include "decoder.h"
 
 #define MIN_SLEEP_TIME      50 // ms
+
+bool findHazards(SysCore& sysCore, uint32_t rawInstruction);
 
 void IFthread(SysCore& sysCore){
     long long prevClkVal = -1;
@@ -71,4 +74,28 @@ void IFthread(SysCore& sysCore){
         // Apply delay
         std::this_thread::sleep_for(delay);
     }
+}
+
+bool findHazards(SysCore& sysCore, uint32_t rawInstruction)
+{
+    uint32_t producerPC = 0;
+    instInfoPtr_t producerInstData = NULL;
+
+    //Get the PC for the producer instruction
+    producerPC = sysCore.PC - 4;
+
+    //Decode the producer instruction
+    producerInstData = decodeInstruction(rawInstruction);
+
+    //Get the destination register the producer instruction uses
+    switch (producerInstData->opcode)
+    {
+    case opcodes::ADD: case opcodes::SUB: case opcodes::MUL: case opcodes::OR: case opcodes::XOR:
+    default:
+        break;
+    }
+
+    
+
+    return false;
 }
