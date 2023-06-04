@@ -25,7 +25,7 @@ enum fowardInfo {
 };
 
 enum fwdVal2Read {
-    NONE,
+    READ_NONE,
     Rs,
     Rt,
     Rd
