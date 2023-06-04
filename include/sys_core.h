@@ -147,18 +147,6 @@ private:
 
     /*
     * Description:
-    *	Finds the line containing the specific address
-    *
-    * Arguments:
-    *	(INPUT) address -- address location in memory file
-    *
-    * Return:
-    *	uint32_t -- line that contains given address
-    */
-    uint32_t addrToLine(const uint32_t address);
-
-    /*
-    * Description:
     *	Copies all all of data memory from the image file,
     *   and puts it in the dataMemoryHT
     *
@@ -253,6 +241,17 @@ public:
 
     std::list<stallTargetPtr_t> stallTargetList;
 
+    /*
+    * Description:
+    *	Finds the line containing the specific address
+    *
+    * Arguments:
+    *	(INPUT) address -- address location in memory file
+    *
+    * Return:
+    *	uint32_t -- line that contains given address
+    */
+    uint32_t addrToLine(const uint32_t address);
 
     /*
     * Description:
