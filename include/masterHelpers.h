@@ -19,6 +19,20 @@ std::list<stageThreadPtr_t>* checkForErrors(SysCore& sysCore);
 
 /*
 * Description:
+*	If it exists, remove older target from stallTargetList
+*
+*
+* Arguments:
+*	 consumerPC -- PC of instruction we are looking to remove
+*	 targetList -- reference to list of targets
+*
+* Return:
+*	NONE
+*/
+void removeOlderTarget(uint32_t consumerPC, std::list<stallTargetPtr_t>& targetList);
+
+/*
+* Description:
 *	Will interpret the errors reported and act accordingly 
 *
 *

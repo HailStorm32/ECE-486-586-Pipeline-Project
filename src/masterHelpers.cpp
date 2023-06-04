@@ -17,6 +17,26 @@ std::list<stageThreadPtr_t>* checkForErrors(SysCore& sysCore)
 	return erroredStagesList;
 }
 
+void removeOlderTarget(uint32_t consumerPC, std::list<stallTargetPtr_t>& targetList)
+{
+	stallTargetPtr_t target = NULL;
+
+	//Cycle through the list (do the increament of the iterator in the else, b/c we delete an item from the list)
+	for (std::list<stallTargetPtr_t>::iterator it = targetList.begin(); it != targetList.end();)
+	{
+		target = *it;
+
+		if (target->targetPC == consumerPC)
+		{
+			it = targetList.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+}
+
 int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 {
 	stageThreadPtr_t stageStruct = NULL;
@@ -91,6 +111,9 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 					continue;
 				}
 
+				//If a stall target exists already for consumer instruction, remove it for the new one
+				removeOlderTarget(hazardInfo->consumerExpectedPC, sysCore.stallTargetList);
+
 				stallTarget->requiredStalls = hazardInfo->numOfRequiredStalls;
 				stallTarget->targetPC = hazardInfo->consumerExpectedPC;
 
@@ -162,12 +185,12 @@ void applyStalls(SysCore& sysCore)
 {
 	stallTargetPtr_t target = NULL;
 
-	//Cycle through the targets in the list
-	for (std::list<stallTargetPtr_t>::iterator it = sysCore.stallTargetList.begin(); it != sysCore.stallTargetList.end(); ++it)
+	//Cycle through the targets in the list (do the increament of the iterator in the else, b/c we delete an item from the list)
+	for (std::list<stallTargetPtr_t>::iterator it = sysCore.stallTargetList.begin(); it != sysCore.stallTargetList.end();)
 	{
 		target = *it;
 
-		//See if the target is for the current PC value
+		//See if the target is for the current PC value 
 		if (target->targetPC == sysCore.PC)
 		{
 			//Update the stall counter
@@ -179,6 +202,10 @@ void applyStalls(SysCore& sysCore)
 			//Remove the list item from the list 
 			//Also assign the returned interator back to the loop iterator so that we can continue to loop
 			it = sysCore.stallTargetList.erase(it);
+		}
+		else
+		{
+			++it;
 		}
 	}
 }
