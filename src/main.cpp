@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 		std::cout << "\n\nUsing internal file path\n\n";
 
 		//FOR DEBUG ONLY
-		filePath = "noHazardTest.txt";
+		filePath = "hazardTest.txt";
 	}
 	
 
@@ -163,7 +163,7 @@ int main(int argc, char* argv[])
 		//Increment the clock
 		sysCore.clk++;
 
-		delete errorsList;
+		//delete errorsList;
 		std::this_thread::sleep_for(delay);
 	}
 
