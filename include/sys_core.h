@@ -24,8 +24,8 @@ enum fowardInfo {
     WB
 };
 
-enum fwdVal2Read {
-    READ_NONE,
+enum instRegTypes {
+    REG_NONE,
     Rs,
     Rt,
     Rd
@@ -48,7 +48,7 @@ typedef struct hazardErrInfo {
     uint32_t consumerInstID;
     opcodes consumerInstOpCode;
     uint32_t consumerExpectedPC;
-    fwdVal2Read consumerDependentReg;
+    instRegTypes consumerDependentReg;
     uint8_t numOfRequiredStalls;
 }hazardErrInfo_t, *hazardErrInfoPtr_t;
 
@@ -62,7 +62,7 @@ typedef struct stallTarget {
 typedef struct forwardDests {
     volatile fowardInfo fwdTo;
     volatile fowardInfo fwdedFrom;
-    volatile fwdVal2Read valToRead;
+    volatile instRegTypes fwdVal2Read;
 }forwardDests_t, * forwardDestsPtr_t;
 
 // Stage struct to keep track of threads/stages
