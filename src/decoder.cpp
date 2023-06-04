@@ -70,6 +70,9 @@ instInfoPtr_t decodeInstruction(const uint32_t fullInstruction)
 		//Get the Rt bits
 		instruction->RtAddr = (fullInstruction >> 16) & 0x1F;
 
+		//Initalize to unused value
+		instruction->RdAddr = UINT8_MAX;
+
 		//Get immediate bits
 		instruction->immediateValHolder = fullInstruction & 0xFFFF;
 
