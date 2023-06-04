@@ -113,7 +113,7 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 			else if (hazardInfo->producerInstOpCode > opcodes::XORI && hazardInfo->producerInstOpCode < opcodes::BZ) { //if memory instruction
 				//We forward from the MEM stage
 
-				//Create an entry into the EX stage struct to tell it that it will need to forward
+				//Create an entry into the MEM stage struct to tell it that it will need to forward
 				sysCore.stageInfoMEM.useFwdHashTable[hazardInfo->producerInstID].fwdTo = fowardInfo::ID;
 				sysCore.stageInfoMEM.useFwdHashTable[hazardInfo->producerInstID].fwdFrom = fowardInfo::NONE;
 
@@ -133,30 +133,6 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 		}
 
 	}
-
-	/*switch (stageStruct->stageType)
-	{
-	case fowardInfo::IF:
-		break;
-
-	case fowardInfo::ID:
-		break;
-
-	case fowardInfo::EX:
-		break;
-
-	case fowardInfo::MEM:
-		break;
-
-	case fowardInfo::WB:
-		break;
-
-	default:
-
-		break;
-	}*/
-
-	//Clear the 
 	
 	//Remove the list b/c we are done with it
 	delete structList;
