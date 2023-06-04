@@ -91,6 +91,12 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
     //Get the PC for the producer instruction
     tempPC = sysCore.PC;
 
+    //Return if we have wondered into data memory
+    if (sysCore.addrToLine(tempPC) >= sysCore.dataMemStartLine)
+    {
+        return false;
+    }
+
     //Decode the producer instruction
     producerInstData = decodeInstruction(rawProducerInstruction);
 
@@ -120,6 +126,13 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
     {
         //Increment PC to the next instruction
         tempPC += 4;
+
+        //Return if we have wondered into data memory
+        if (sysCore.addrToLine(tempPC) >= sysCore.dataMemStartLine)
+        {
+            delete producerInstData;
+            return false;
+        }
 
         //fetch the instruction
         rawConsumerInstruction = sysCore.memRead(tempPC, true);
