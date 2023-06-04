@@ -63,8 +63,8 @@ void IFthread(SysCore& sysCore){
 
             instPreInfoPtr_t instPrePkg = new instPreInfo;
 
-            //Generate a ID for the given instruction range form 0 - 0xFFFFFFFF
-            instPrePkg->randID = rand() % 0xFFFFFFFF;
+            //Generate a ID for the given instruction
+            instPrePkg->generatedID = sysCore.PC + instruction;
             //Write the instruction 
             instPrePkg->rawInstruction = instruction;
 
@@ -77,11 +77,12 @@ void IFthread(SysCore& sysCore){
     }
 }
 
-bool findHazards(SysCore& sysCore, uint32_t rawInstruction)
+bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
 {
     uint32_t tempPC = 0;
     instInfoPtr_t producerInstData = NULL;
     instInfoPtr_t consumerInstData = NULL;
+    uint32_t rawConsumerInstruction = 0;
     uint8_t producerDestReg = 0;
     uint8_t depthFound = 0;
     bool foundHazard = false;
@@ -90,7 +91,7 @@ bool findHazards(SysCore& sysCore, uint32_t rawInstruction)
     tempPC = sysCore.PC - 4;
 
     //Decode the producer instruction
-    producerInstData = decodeInstruction(rawInstruction);
+    producerInstData = decodeInstruction(rawProducerInstruction);
 
     if (producerInstData == NULL)
     {
@@ -119,8 +120,11 @@ bool findHazards(SysCore& sysCore, uint32_t rawInstruction)
         //Increment PC to the next instruction
         tempPC += 4;
 
+        //fetch the instruction
+        rawConsumerInstruction = sysCore.memRead(tempPC, true);
+
         //Decode the instruction
-        consumerInstData = decodeInstruction(tempPC);
+        consumerInstData = decodeInstruction(rawConsumerInstruction);
 
         if (producerInstData == NULL)
         {
@@ -135,7 +139,7 @@ bool findHazards(SysCore& sysCore, uint32_t rawInstruction)
             //Instruction uses the Rs and Rt registers for operands
             
             //Check to see if the producerDestReg matches any of the consumer operand registers
-            if (producerInstData->RsAddr == producerDestReg || producerInstData->RtAddr == producerDestReg){
+            if (consumerInstData->RsAddr == producerDestReg || consumerInstData->RtAddr == producerDestReg){
                 foundHazard = true;
                 depthFound = index + 1;
 
@@ -147,7 +151,7 @@ bool findHazards(SysCore& sysCore, uint32_t rawInstruction)
             //Instruction uses the Rs register for operands
             
             //Check to see if the producerDestReg matches any of the consumer operand registers
-            if (producerInstData->RsAddr == producerDestReg) {
+            if (consumerInstData->RsAddr == producerDestReg) {
                 foundHazard = true;
                 depthFound = index + 1;
 
@@ -165,9 +169,41 @@ bool findHazards(SysCore& sysCore, uint32_t rawInstruction)
         //Create hazardErrInfo struct
         hazardErrInfoPtr_t hazardInfo = new hazardErrInfo_t;
 
+        //Set the number of stalls based on when the consumer falls after the producer
+        switch (depthFound)
+        {
+        case 1:
+            hazardInfo->numOfRequiredStalls = 2;
+            break;
+        case 2:
+            hazardInfo->numOfRequiredStalls = 1;
+            break;
+        case 3:
+            hazardInfo->numOfRequiredStalls = 0;
+            break;
+        default:
+            std::cerr << "\n\nERROR: [findHazards] invalid depth given \n";
+            hazardInfo->numOfRequiredStalls = 0;
+            break;
+        }
 
+        //Write the consumer instruction info
+        hazardInfo->consumerExpectedPC = tempPC;
+        hazardInfo->consumerInstID = tempPC + rawConsumerInstruction;
+        hazardInfo->consumerInstOpCode = consumerInstData->opcode;
+        
+        //Write producer instrucion info
+        hazardInfo->producerInstID = (sysCore.PC - 4) + rawProducerInstruction;
+        hazardInfo->producerInstOpCode = producerInstData->opcode;
 
+        //Log the error
+        sysCore.stageInfoIF.errorType = errorCodes::ERR_RAW_HAZ;
+        sysCore.stageInfoIF.errorInfo = hazardInfo;
     }
+
+    //Free up resources
+    delete producerInstData;
+    delete consumerInstData;
 
     return false;
 }

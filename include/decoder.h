@@ -42,7 +42,7 @@ enum instFormat
  
 typedef struct instInfo
 {
-	uint32_t randID;
+	uint32_t generatedID;
 	opcodes opcode;
 	instFormat type;
 	uint8_t RsAddr;
@@ -58,7 +58,7 @@ typedef struct instInfo
 
 typedef struct instPreInfo
 {
-	uint32_t randID;
+	uint32_t generatedID;
 	uint32_t rawInstruction;
 }instPreInfo_t, *instPreInfoPtr_t;
 

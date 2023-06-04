@@ -87,7 +87,7 @@ void IDthread(SysCore& sysCore)
 			}
 
 			//Write the ID
-			instructionData->randID = instPreInfoPkg->randID;
+			instructionData->generatedID = instPreInfoPkg->generatedID;
 			
 			delete instPreInfoPkg;
 
