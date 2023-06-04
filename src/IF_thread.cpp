@@ -53,9 +53,6 @@ void IFthread(SysCore& sysCore){
                 continue;
             }
 
-            // Increment PC by 4 (bytes) aka 32 bits
-            sysCore.PC = sysCore.PC + 4;
-
             // Record new CLK val 
             prevClkVal = sysCore.clk;
 
@@ -67,6 +64,9 @@ void IFthread(SysCore& sysCore){
             instPrePkg->generatedID = sysCore.PC + instruction;
             //Write the instruction 
             instPrePkg->rawInstruction = instruction;
+
+            // Increment PC by 4 (bytes) aka 32 bits
+            sysCore.PC = sysCore.PC + 4;
 
             // Push the returned instruction to buffer
             sysCore.IFtoID.push(instPrePkg);
@@ -88,7 +88,7 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
     bool foundHazard = false;
 
     //Get the PC for the producer instruction
-    tempPC = sysCore.PC - 4;
+    tempPC = sysCore.PC;
 
     //Decode the producer instruction
     producerInstData = decodeInstruction(rawProducerInstruction);
@@ -193,7 +193,7 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
         hazardInfo->consumerInstOpCode = consumerInstData->opcode;
         
         //Write producer instrucion info
-        hazardInfo->producerInstID = (sysCore.PC - 4) + rawProducerInstruction;
+        hazardInfo->producerInstID = (sysCore.PC) + rawProducerInstruction;
         hazardInfo->producerInstOpCode = producerInstData->opcode;
 
         //Log the error
