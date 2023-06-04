@@ -158,6 +158,10 @@ void EXthread(SysCore& sysCore)
 					if ((updatedPcVal = updatePC(currentPC, instructionData)) != -1) {
 						sysCore.stageInfoEX.fwdedAluResult = static_cast<uint32_t>(updatedPcVal);
 						sysCore.stageInfoEX.updatedPC = true;
+
+                        // Report to master thread that we have a branch taken
+                        std::cout <<"DEBUG: [EXthread] Branch Taken\n";
+                        sysCore.stageInfoEX.errorType = errorCodes::ERR_BRANCH_TAKEN;
 					} 
 					else {
 						sysCore.stageInfoEX.updatedPC = false;
@@ -177,12 +181,12 @@ void EXthread(SysCore& sysCore)
 				std::cerr << "\nERROR: ALU encountered unknown instruction type\n" << std::endl;
 			
 			#if (_VERBOSE_ > 0)
-				std::cout << "Opcode =  " << exInfo->opcode << '\n';
+				std::cout << "Opcode =  " << instructionData->opcode << '\n';
 				std::cout << "Rd Result =  " << instructionData->RdValHolder << '\n';
-				std::cout << "Rs =  " << exInfo->Rs << '\n';
+				std::cout << "Rs =  " << instructionData->RsValHolder << '\n';
 				std::cout << "Rt =  " << instructionData->RtValHolder << '\n';
-				std::cout << "Immediate =  " << std::bitset<32>(exInfo->immediate) << '\n';
-				std::cout << "Updated PC =  " << exInfo->updatedPcVal << '\n';
+				std::cout << "Immediate =  " << std::bitset<32>(instructionData->immediateValHolder) << '\n';
+				std::cout << "Updated PC =  " << updatedPcVal << '\n';
 			#endif
 
 	
