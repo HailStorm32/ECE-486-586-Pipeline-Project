@@ -68,10 +68,13 @@ uint32_t signExtend(uint16_t immediate16_t){
 */
 long long updatePC (uint32_t PC, instInfoPtr_t instructionData){
 	long long newPcVal;
+	uint32_t instruction;
+	instruction = (PC - 8) / 4;
 	switch(instructionData->opcode){
 		case BZ:	
 			if (instructionData->RsValHolder == 0) {
-				newPcVal = PC + signExtend(instructionData->immediateValHolder); 
+				newPcVal = ((instruction + signExtend(instructionData->immediateValHolder)) * 4); 
+				std::cout << "New CALC PC in EX: " << newPcVal << "\n";
 			}
 			else {
 				newPcVal = -1;
@@ -79,7 +82,8 @@ long long updatePC (uint32_t PC, instInfoPtr_t instructionData){
 			break;
 		case BEQ:
 			if(instructionData->RsValHolder == instructionData->RtValHolder){
-				newPcVal = PC + signExtend(instructionData->immediateValHolder); 
+				newPcVal = ((instruction + signExtend(instructionData->immediateValHolder)) * 4); 
+				std::cout << "New CALC PC in EX: " << newPcVal << "\n";
 			}
 			else {
 				newPcVal = -1;
@@ -87,6 +91,7 @@ long long updatePC (uint32_t PC, instInfoPtr_t instructionData){
 			break;
 		case JR:
 			newPcVal  = instructionData->RsValHolder;
+			std::cout << "New CALC PC in EX: " << newPcVal << "\n";
 			break;
 		case HALT: break;
 		default:
@@ -140,6 +145,7 @@ void EXthread(SysCore& sysCore)
 			pastClkVal = sysCore.clk;
 
 			uint32_t currentPC = sysCore.PC;	//current PC for use in control flow ops
+			std::cout << "Current PC in EX: " << currentPC << "\n";
 			uint32_t extendedImm;				//sign extended immediate
 			long long updatedPcVal;				//updated PC value			
 	

@@ -5,6 +5,7 @@ std::list<stageThreadPtr_t>* checkForErrors(SysCore& sysCore)
 {
 	std::list<stageThreadPtr_t>* erroredStagesList = new std::list<stageThreadPtr_t>;
 
+
 	if (sysCore.stageInfoIF.errorType != errorCodes::ERR_NONE)
 	{
 		erroredStagesList->push_back(&sysCore.stageInfoIF);
@@ -12,6 +13,10 @@ std::list<stageThreadPtr_t>* checkForErrors(SysCore& sysCore)
 	if (sysCore.stageInfoID.errorType != errorCodes::ERR_NONE)
 	{
 		erroredStagesList->push_back(&sysCore.stageInfoID);
+	}
+	if (sysCore.stageInfoEX.errorType != errorCodes::ERR_NONE)
+	{
+		erroredStagesList->push_back(&sysCore.stageInfoEX);
 	}
 
 	return erroredStagesList;
@@ -90,7 +95,7 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 			sysCore.stageInfoID.invalidateData = true;
 			sysCore.stageInfoEX.invalidateData = true;
 			sysCore.stageInfoMEM.invalidateData = true;
-			sysCore.stageInfoWB.invalidateData = true;
+			//sysCore.stageInfoWB.invalidateData = true;
 
 			//TODO: clear all the error structs, stall counts, forward requests
 
