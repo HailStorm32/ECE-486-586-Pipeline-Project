@@ -74,7 +74,7 @@ long long updatePC (uint32_t PC, instInfoPtr_t instructionData){
 		case BZ:	
 			if (instructionData->RsValHolder == 0) {
 				newPcVal = ((instruction + signExtend(instructionData->immediateValHolder)) * 4); 
-				std::cout << "New CALC PC in EX: " << newPcVal << "\n";
+				std::cout << "New CALC PC in BZ: " << newPcVal << "\n";
 			}
 			else {
 				newPcVal = -1;
@@ -83,7 +83,7 @@ long long updatePC (uint32_t PC, instInfoPtr_t instructionData){
 		case BEQ:
 			if(instructionData->RsValHolder == instructionData->RtValHolder){
 				newPcVal = ((instruction + signExtend(instructionData->immediateValHolder)) * 4); 
-				std::cout << "New CALC PC in EX: " << newPcVal << "\n";
+				std::cout << "New CALC PC in BEQ: " << newPcVal << "\n";
 			}
 			else {
 				newPcVal = -1;
@@ -91,7 +91,7 @@ long long updatePC (uint32_t PC, instInfoPtr_t instructionData){
 			break;
 		case JR:
 			newPcVal  = instructionData->RsValHolder;
-			std::cout << "New CALC PC in EX: " << newPcVal << "\n";
+			std::cout << "New CALC PC in JR: " << newPcVal << "\n";
 			break;
 		case HALT: break;
 		default:
@@ -174,8 +174,8 @@ void EXthread(SysCore& sysCore)
 				//control flow ops: caclulate new PC value if applicable. 
 				if (instructionData->isControlFlow == true) {
 					if ((updatedPcVal = updatePC(currentPC, instructionData)) != -1) {
-						sysCore.stageInfoEX.fwdedAluResult = static_cast<uint32_t>(updatedPcVal);
-						sysCore.stageInfoEX.updatedPC = true;
+						sysCore.stageInfoIF.fwdedAluResult = static_cast<uint32_t>(updatedPcVal);
+						sysCore.stageInfoIF.updatedPC = true;
 
                         // Report to master thread that we have a branch taken
                         std::cout <<"DEBUG: [EXthread] Branch Taken\n";
