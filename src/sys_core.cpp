@@ -380,4 +380,6 @@ uint32_t SysCore::memWrite(const uint32_t address, uint32_t value) {
 	}
 
 	writeDataMem(lineNumber, value);
+
+    return 0;
 }
