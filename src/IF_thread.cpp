@@ -150,11 +150,11 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
         }
 
         //Find dependency issues
-        if (producerInstData->RdAddr != UINT8_MAX) {
+        if (producerInstData->type == instFormat::Rtype) {
             //Instruction uses the Rs and Rt registers for operands
             
             //Check to see if the producerDestReg matches any of the consumer operand registers
-            if (consumerInstData->type == instFormat::Rtype){
+            if (consumerInstData->RsAddr == producerDestReg){
                 foundHazard = true;
                 depthFound = index + 1;
                 
