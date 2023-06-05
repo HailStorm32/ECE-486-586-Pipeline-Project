@@ -1,5 +1,5 @@
 CC = g++
-CPPFLAGS = -std=c++2a -Wall -g
+CPPFLAGS = -std=c++2a -Wall
 LDFLAGS = -pthread
 
 # Directories
@@ -13,12 +13,12 @@ OBJS = $(OBJ_DIR)/sys_core.o $(OBJ_DIR)/decoder.o $(OBJ_DIR)/ID_thread.o \
 
 # If any files are called 'all', 'default', 'test' or 'clean', make will ignore 
 # and use the below targets instead
-.PHONY = all default test clean
+.PHONY = all default test test1 clean
 
 all: mips_lite
 
 help:
-	@echo "Targets: all, help mips_lite, clean"
+	@echo "Targets: all, help, mips_lite, test, test1, and clean"
 
 mips_lite: $(OBJS) 
 	$(CC) $(CPPFLAGS) $(LDFLAGS) -I $(INC_DIR) -o $@ $(SRC_DIR)/main.cpp $^
@@ -48,7 +48,12 @@ $(OBJ_DIR)/WB_thread.o: $(SRC_DIR)/WB_thread.cpp $(INC_DIR)/WB_thread.h
 	$(CC) $(CPPFLAGS) $(LDFLAGS) -I $(INC_DIR) -c $< -o $@
 
 test:
-	./mips_lite
+	@echo -e "\nTesting with given_sample_memory_image.txt ...\n"
+	./mips_lite ./given_sample_memory_image.txt
+
+test1:
+	@echo -e "\nTesting with noHazardTest.txt ...\n"
+	./mips_lite ./noHazardTest.txt
 
 clean:
 	rm ./mips_lite $(OBJ_DIR)/*.o
