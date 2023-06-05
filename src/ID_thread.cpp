@@ -102,19 +102,12 @@ void IDthread(SysCore& sysCore)
 					{
 					case instRegTypes::Rs:
 						//Get the forwarded value
-						instructionData->RsValHolder = sysCore.stageInfoID.fwdedRs;
+						instructionData->RsValHolder = sysCore.stageInfoID.fwdedRt;
 
 						//Get remaining values the normal way
 						instructionData->RtValHolder = sysCore.reg[instructionData->RtAddr];
 						instructionData->RdValHolder = sysCore.reg[instructionData->RdAddr];
-
-					case instRegTypes::Rt:
-						//Get the forwarded value
-						instructionData->RtValHolder = sysCore.stageInfoID.fwdedRt;
-
-						//Get remaining values the normal way
-						instructionData->RsValHolder = sysCore.reg[instructionData->RsAddr];
-						instructionData->RdValHolder = sysCore.reg[instructionData->RdAddr];
+						break;
 
 					default:
 						std::cerr << "\nERROR: [IDthread] given invalid forward register to read from\n\n";
@@ -129,7 +122,7 @@ void IDthread(SysCore& sysCore)
 					{
 					case instRegTypes::Rs:
 						//Get the forwarded value
-						instructionData->RsValHolder = sysCore.stageInfoID.fwdedRs;
+						instructionData->RsValHolder = sysCore.stageInfoID.fwdedRd;
 
 						//Get remaining values the normal way
 						instructionData->RtValHolder = sysCore.reg[instructionData->RtAddr];
@@ -137,7 +130,7 @@ void IDthread(SysCore& sysCore)
 
 					case instRegTypes::Rt:
 						//Get the forwarded value
-						instructionData->RtValHolder = sysCore.stageInfoID.fwdedRt;
+						instructionData->RtValHolder = sysCore.stageInfoID.fwdedRd;
 
 						//Get remaining values the normal way
 						instructionData->RsValHolder = sysCore.reg[instructionData->RsAddr];

@@ -150,13 +150,13 @@ void EXthread(SysCore& sysCore)
 			long long updatedPcVal;				//updated PC value			
 
 			//See if there is a forward request for the current instruction
-			if (sysCore.stageInfoID.useFwdHashTable.count(instructionData->generatedID)) {
+			if (sysCore.stageInfoEX.useFwdHashTable.count(instructionData->generatedID)) {
 
-				if (sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].fwdedFrom != fowardInfo::NONE) {
+				if (sysCore.stageInfoEX.useFwdHashTable[instructionData->generatedID].fwdedFrom != fowardInfo::NONE) {
 					//TODO: add code to revieve forwarded values here
 				}
 
-				if (sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].fwdTo != fowardInfo::NONE) {
+				if (sysCore.stageInfoEX.useFwdHashTable[instructionData->generatedID].fwdTo != fowardInfo::NONE) {
 					forwardData = true;
 				}
 			}
@@ -254,6 +254,9 @@ void EXthread(SysCore& sysCore)
 
 				//Removed the forward request from the hash table
 				sysCore.stageInfoEX.useFwdHashTable.erase(instructionData->generatedID);
+
+				//Reset the forward flag
+				forwardData = false;
 			}
 			
 			//Pass alu data to MEM stage (will block if it cannot immediately acquire the lock)
