@@ -33,6 +33,21 @@ void removeOlderTarget(uint32_t consumerPC, std::list<stallTargetPtr_t>& targetL
 
 /*
 * Description:
+*	Figures out if a given opcode uses Rd or Rt as the desitnation register
+*
+*
+* Arguments:
+*	 opCode -- opCode of instruction
+*
+*
+* Return:
+*	true -- if Rd is used
+*	false -- if Rt is used
+*/
+bool isRdUsed(uint32_t opCode)
+
+/*
+* Description:
 *	Will interpret the errors reported and act accordingly 
 *
 *

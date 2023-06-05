@@ -12,6 +12,7 @@ void IDthread(SysCore& sysCore)
 	long long pastClkVal = -1;
 	std::chrono::milliseconds delay(MIN_SLEEP_TIME);
 	instPreInfoPtr_t instPreInfoPkg;
+	uint32_t forwardedValue = 0;
 
 	while (true)
 	{		
@@ -94,7 +95,21 @@ void IDthread(SysCore& sysCore)
 			//See if there is a forward request for the current instruction
 			if (sysCore.stageInfoID.useFwdHashTable.count(instructionData->generatedID))
 			{
-				//Figure out the type of instruction
+				//Get the forwarded value
+				switch (sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].fwdedRegister)
+				{
+				case instRegTypes::Rd:
+					forwardedValue = sysCore.stageInfoID.fwdedRd;
+					break;
+				case instRegTypes::Rt:
+					forwardedValue = sysCore.stageInfoID.fwdedRt;
+					break;
+				default:
+					std::cerr << "\nERROR: [IDthread] given invalid forward register to read from\n\n";
+					break;
+				}
+
+				//Figure out the type of instruction we are getting values for
 				switch (instructionData->type)
 				{
 				case instFormat::Itype:
@@ -104,7 +119,7 @@ void IDthread(SysCore& sysCore)
 					{
 					case instRegTypes::Rs:  //TODO: double check that these are the correct registers to read from
 						//Get the forwarded value
-						instructionData->RsValHolder = sysCore.stageInfoID.fwdedRt;
+						instructionData->RsValHolder = forwardedValue;
 
 						//Get remaining values the normal way
 						instructionData->RtValHolder = sysCore.reg[instructionData->RtAddr];
@@ -125,7 +140,7 @@ void IDthread(SysCore& sysCore)
 					{ //TODO: we might need a varible like regValNeeded to tell us what register to read from Rt or Rd
 					case instRegTypes::Rs:
 						//Get the forwarded value
-						instructionData->RsValHolder = sysCore.stageInfoID.fwdedRd;
+						instructionData->RsValHolder = forwardedValue;
 
 						//Get remaining values the normal way
 						instructionData->RtValHolder = sysCore.reg[instructionData->RtAddr];
@@ -133,7 +148,7 @@ void IDthread(SysCore& sysCore)
 
 					case instRegTypes::Rt:
 						//Get the forwarded value
-						instructionData->RtValHolder = sysCore.stageInfoID.fwdedRd;
+						instructionData->RtValHolder = forwardedValue;
 
 						//Get remaining values the normal way
 						instructionData->RsValHolder = sysCore.reg[instructionData->RsAddr];

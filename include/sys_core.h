@@ -63,6 +63,7 @@ typedef struct forwardDests {
     volatile fowardInfo fwdTo;
     volatile fowardInfo fwdedFrom;
     volatile instRegTypes regValNeeded;
+    volatile instRegTypes fwdedRegister;
 }forwardDests_t, * forwardDestsPtr_t;
 
 // Stage struct to keep track of threads/stages

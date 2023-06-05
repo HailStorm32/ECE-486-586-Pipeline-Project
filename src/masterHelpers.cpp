@@ -139,6 +139,15 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedFrom = fowardInfo::EX;
 				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].regValNeeded = hazardInfo->consumerDependentReg;
 
+				if (isRdUsed(hazardInfo->producerInstID))
+				{
+					sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedRegister = instRegTypes::Rd;
+				}
+				else
+				{
+					sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedRegister = instRegTypes::Rt;
+				}
+
 			}
 			else if (hazardInfo->producerInstOpCode > opcodes::XORI && hazardInfo->producerInstOpCode < opcodes::BZ) { //if memory instruction
 				//We forward from the MEM stage
@@ -151,6 +160,15 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdTo = fowardInfo::NONE;
 				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedFrom = fowardInfo::MEM;
 				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].regValNeeded = hazardInfo->consumerDependentReg;
+
+				if (isRdUsed(hazardInfo->producerInstID))
+				{
+					sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedRegister = instRegTypes::Rd;
+				}
+				else
+				{
+					sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedRegister = instRegTypes::Rt;
+				}
 			}
 
 			//Freeup hazardInfo as we no longer need it
@@ -215,5 +233,18 @@ void applyStalls(SysCore& sysCore)
 		{
 			++it;
 		}
+	}
+}
+
+bool isRdUsed(uint32_t opCode)
+{
+	if (opCode == opcodes::ADD || opCode == opcodes::SUB || opCode == opcodes::AND || opCode == opcodes::OR || opCode == opcodes::XOR
+		|| opCode == opcodes::MUL)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
