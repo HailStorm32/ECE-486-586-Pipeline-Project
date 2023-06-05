@@ -154,7 +154,7 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
             //Instruction uses the Rs and Rt registers for operands
             
             //Check to see if the producerDestReg matches any of the consumer operand registers
-            if (consumerInstData->RsAddr == producerDestReg){
+            if (consumerInstData->type == instFormat::Rtype){
                 foundHazard = true;
                 depthFound = index + 1;
                 
@@ -175,7 +175,7 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
                 break;
             }
         }
-        else if (producerInstData->RdAddr == UINT8_MAX) {
+        else if (producerInstData->type == instFormat::Itype) {
             //Instruction uses the Rs register for operands
             
             //Check to see if the producerDestReg matches any of the consumer operand registers
