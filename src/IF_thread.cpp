@@ -107,12 +107,14 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
         return false;
     }
 
-    //Get the destination register the producer instruction uses
-    if (producerInstData->RdAddr >= opcodes::BZ)
+    //Check to see if the producer instruction is a control instruction
+    if (producerInstData->opcode >= opcodes::BZ)
     {
         //If a control instruction is the producer, it will never cause a hazard
         return false;
     }
+
+    //Determine what register the producer instruction uses for the destination
     if (producerInstData->RdAddr != UINT8_MAX) {
         //Instruction uses the Rd register for the destination
         producerDestReg = producerInstData->RdAddr;
@@ -150,7 +152,7 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
         }
 
         //Find dependency issues
-        if (producerInstData->type == instFormat::Rtype) {
+        if (consumerInstData->type == instFormat::Rtype) {
             //Instruction uses the Rs and Rt registers for operands
             
             //Check to see if the producerDestReg matches any of the consumer operand registers
@@ -175,7 +177,7 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
                 break;
             }
         }
-        else if (producerInstData->type == instFormat::Itype) {
+        else if (consumerInstData->type == instFormat::Itype) {
             //Instruction uses the Rs register for operands
             
             //Check to see if the producerDestReg matches any of the consumer operand registers
