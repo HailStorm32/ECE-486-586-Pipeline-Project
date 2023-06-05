@@ -133,6 +133,7 @@ void IDthread(SysCore& sysCore)
 
 						//Get remaining values the normal way
 						instructionData->RtValHolder = sysCore.reg[instructionData->RtAddr];
+						break;
 
 					case instRegTypes::Rt:
 						//Get the forwarded value
@@ -140,6 +141,7 @@ void IDthread(SysCore& sysCore)
 
 						//Get remaining values the normal way
 						instructionData->RsValHolder = sysCore.reg[instructionData->RsAddr];
+						break;
 
 					default:
 						std::cerr << "\nERROR: [IDthread] given invalid forward register to read from\n\n";
