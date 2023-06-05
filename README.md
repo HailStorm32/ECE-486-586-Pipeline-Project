@@ -6,5 +6,5 @@ $ make
 ```
 ## Running MIPS Lite
 ```console
-$ ./mips_lite
+$ ./mips_lite <path/to/file>
 ```
