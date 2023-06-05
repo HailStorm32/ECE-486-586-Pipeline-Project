@@ -94,13 +94,15 @@ void IDthread(SysCore& sysCore)
 			//See if there is a forward request for the current instruction
 			if (sysCore.stageInfoID.useFwdHashTable.count(instructionData->generatedID))
 			{
+				//Figure out the type of instruction
 				switch (instructionData->type)
 				{
 				case instFormat::Itype:
-
-					switch (sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].fwdedVal2Read)
+					
+					//Figure out what register the forwarded value gets written to
+					switch (sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].regValNeeded)
 					{
-					case instRegTypes::Rs:
+					case instRegTypes::Rs:  //TODO: double check that these are the correct registers to read from
 						//Get the forwarded value
 						instructionData->RsValHolder = sysCore.stageInfoID.fwdedRt;
 
@@ -117,9 +119,10 @@ void IDthread(SysCore& sysCore)
 					break;
 
 				case instFormat::Rtype:
-
-					switch (sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].fwdedVal2Read)
-					{
+					
+					//Figure out what register the forwarded value gets written to
+					switch (sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].regValNeeded)
+					{ //TODO: we might need a varible like regValNeeded to tell us what register to read from Rt or Rd
 					case instRegTypes::Rs:
 						//Get the forwarded value
 						instructionData->RsValHolder = sysCore.stageInfoID.fwdedRd;

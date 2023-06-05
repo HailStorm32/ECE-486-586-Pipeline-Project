@@ -137,7 +137,7 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 				//Create an entry into the ID stage struct to tell it that it will need to look for forwarded values
 				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdTo = fowardInfo::NONE;
 				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedFrom = fowardInfo::EX;
-				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedVal2Read = hazardInfo->consumerDependentReg;
+				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].regValNeeded = hazardInfo->consumerDependentReg;
 
 			}
 			else if (hazardInfo->producerInstOpCode > opcodes::XORI && hazardInfo->producerInstOpCode < opcodes::BZ) { //if memory instruction
@@ -150,7 +150,7 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 				//Create an entry into the ID stage struct to tell it that it will need to look for forwarded values
 				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdTo = fowardInfo::NONE;
 				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedFrom = fowardInfo::MEM;
-				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedVal2Read = hazardInfo->consumerDependentReg;
+				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].regValNeeded = hazardInfo->consumerDependentReg;
 			}
 
 			//Freeup hazardInfo as we no longer need it

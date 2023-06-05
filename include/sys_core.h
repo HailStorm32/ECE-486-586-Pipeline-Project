@@ -62,7 +62,7 @@ typedef struct stallTarget {
 typedef struct forwardDests {
     volatile fowardInfo fwdTo;
     volatile fowardInfo fwdedFrom;
-    volatile instRegTypes fwdedVal2Read;
+    volatile instRegTypes regValNeeded;
 }forwardDests_t, * forwardDestsPtr_t;
 
 // Stage struct to keep track of threads/stages
