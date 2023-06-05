@@ -44,7 +44,7 @@ void removeOlderTarget(uint32_t consumerPC, std::list<stallTargetPtr_t>& targetL
 *	true -- if Rd is used
 *	false -- if Rt is used
 */
-bool isRdUsed(uint32_t opCode)
+bool isRdUsed(uint32_t opCode);
 
 /*
 * Description:

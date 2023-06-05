@@ -139,6 +139,7 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedFrom = fowardInfo::EX;
 				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].regValNeeded = hazardInfo->consumerDependentReg;
 
+				//Log what register we are forwarding
 				if (isRdUsed(hazardInfo->producerInstID))
 				{
 					sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedRegister = instRegTypes::Rd;
@@ -161,6 +162,7 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedFrom = fowardInfo::MEM;
 				sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].regValNeeded = hazardInfo->consumerDependentReg;
 
+				//Log what register we are forwarding
 				if (isRdUsed(hazardInfo->producerInstID))
 				{
 					sysCore.stageInfoID.useFwdHashTable[hazardInfo->consumerInstID].fwdedRegister = instRegTypes::Rd;
