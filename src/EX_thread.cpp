@@ -106,6 +106,7 @@ void EXthread(SysCore& sysCore)
 	long long pastClkVal = -1;
 	std::chrono::milliseconds delay(MIN_SLEEP_TIME);
 	instInfoPtr_t instructionData;
+	bool forwardData = false;
 	//exInfoPtr_t exInfo = new exInfo_t;
 
 	while (true)
@@ -145,9 +146,20 @@ void EXthread(SysCore& sysCore)
 			pastClkVal = sysCore.clk;
 
 			uint32_t currentPC = sysCore.PC;	//current PC for use in control flow ops
-			std::cout << "Current PC in EX: " << currentPC << "\n";
 			uint32_t extendedImm;				//sign extended immediate
 			long long updatedPcVal;				//updated PC value			
+
+			//See if there is a forward request for the current instruction
+			if (sysCore.stageInfoID.useFwdHashTable.count(instructionData->generatedID)) {
+
+				if (sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].fwdedFrom != fowardInfo::NONE) {
+					//TODO: add code to revieve forwarded values here
+				}
+
+				if (sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].fwdTo != fowardInfo::NONE) {
+					forwardData = true;
+				}
+			}
 	
 			//If R type instruction perform operation and store in RD val holder
 			if (instructionData->type == Rtype) {
@@ -184,7 +196,7 @@ void EXthread(SysCore& sysCore)
 				}	
 			}
 			else
-				std::cerr << "\nERROR: ALU encountered unknown instruction type\n" << std::endl;
+				std::cerr << "\nERROR: [EXthread] ALU encountered unknown instruction type\n" << std::endl;
 			
 			#if (_VERBOSE_ > 0)
 				std::cout << "Opcode =  " << instructionData->opcode << '\n';
@@ -195,14 +207,55 @@ void EXthread(SysCore& sysCore)
 				std::cout << "Updated PC =  " << updatedPcVal << '\n';
 			#endif
 
-	
-			/* Still need to update/work on this logic*/
-			// sysCore.stageInfoEX.fwdedImmediate = instructionData->immediateValHolder;
-			// sysCore.stageInfoEX.fwdedRd = instructionData->RdValHolder;
-			// sysCore.stageInfoEX.fwdedRs = instructionData->RsValHolder;
-			// sysCore.stageInfoEX.fwdedRt = instructionData->RtValHolder;
-			
+			//Forward data if we are supposed to
+			if (forwardData) {
+				switch (sysCore.stageInfoEX.useFwdHashTable[instructionData->generatedID].fwdTo){
 
+				case fowardInfo::IF:
+					std::cerr << "\nWARNING: [EXthread] Told to forward to IF when code doesnt exist, skipping..\n";
+					break;
+
+				case fowardInfo::ID:
+					//Determine if the isntruction is R or I type
+					switch (instructionData->type)
+					{
+					case instFormat::Rtype:
+						//Forward the data to the ID stage
+						sysCore.stageInfoID.fwdedRd = instructionData->RdValHolder;
+						break;
+
+					case instFormat::Itype:
+						//Forward the data to the ID stage
+						sysCore.stageInfoID.fwdedRt = instructionData->RtValHolder;
+						break;
+
+					default:
+						std::cerr << "\nERROR: [EXthread] Told to forward to ID but instruction type is unknown\n";
+						break;
+					}
+					break;
+
+				case fowardInfo::EX:
+					std::cerr << "\nWARNING: [EXthread] Told to forward to EX when code doesnt exist, skipping..\n";
+					break;
+
+				case fowardInfo::MEM:
+					std::cerr << "\nWARNING: [EXthread] Told to forward to MEM when code doesnt exist, skipping..\n";
+					break;
+
+				case fowardInfo::WB:
+					std::cerr << "\nWARNING: [EXthread] Told to forward to WB when code doesnt exist, skipping..\n";
+					break;
+
+				default:
+					std::cerr << "\nWARNING: [EXthread] Given invalid destination to forward to, skipping..\n";
+					break;
+				}
+
+				//Removed the forward request from the hash table
+				sysCore.stageInfoEX.useFwdHashTable.erase(instructionData->generatedID);
+			}
+			
 			//Pass alu data to MEM stage (will block if it cannot immediately acquire the lock)
 			sysCore.EXtoMEM.push(instructionData);
 		}
