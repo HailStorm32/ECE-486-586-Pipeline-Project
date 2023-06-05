@@ -154,7 +154,7 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
             //Instruction uses the Rs and Rt registers for operands
             
             //Check to see if the producerDestReg matches any of the consumer operand registers
-            if (consumerInstData->RsAddr == producerDestReg || ){
+            if (consumerInstData->RsAddr == producerDestReg){
                 foundHazard = true;
                 depthFound = index + 1;
                 

@@ -90,27 +90,94 @@ void IDthread(SysCore& sysCore)
 			instructionData->generatedID = instPreInfoPkg->generatedID;
 			
 			delete instPreInfoPkg;
-
-			//Fetch the register values
-			//TODO: Account for dependancy issues and forwarding
-			switch (instructionData->type)
+			
+			//See if there is a forward request for the current instruction
+			if (sysCore.stageInfoID.useFwdHashTable.count(instructionData->generatedID))
 			{
-			case instFormat::Itype:
-				instructionData->RsValHolder = sysCore.reg[instructionData->RsAddr];
-				instructionData->RtValHolder = sysCore.reg[instructionData->RtAddr];
-				instructionData->RdValHolder = sysCore.reg[instructionData->RdAddr];
+				switch (instructionData->type)
+				{
+				case instFormat::Itype:
 
-				break;
+					switch (sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].fwdedVal2Read)
+					{
+					case instRegTypes::Rs:
+						//Get the forwarded value
+						instructionData->RsValHolder = sysCore.stageInfoID.fwdedRs;
 
-			case instFormat::Rtype:
-				instructionData->RsValHolder = sysCore.reg[instructionData->RsAddr];
-				instructionData->RtValHolder = sysCore.reg[instructionData->RtAddr];
+						//Get remaining values the normal way
+						instructionData->RtValHolder = sysCore.reg[instructionData->RtAddr];
+						instructionData->RdValHolder = sysCore.reg[instructionData->RdAddr];
 
-				break;
+					case instRegTypes::Rt:
+						//Get the forwarded value
+						instructionData->RtValHolder = sysCore.stageInfoID.fwdedRt;
 
-			default:
-				std::cerr << "\nERROR: Format check bypassed [IDthread], Skipping instruction..\n" << std::endl;
-				continue;
+						//Get remaining values the normal way
+						instructionData->RsValHolder = sysCore.reg[instructionData->RsAddr];
+						instructionData->RdValHolder = sysCore.reg[instructionData->RdAddr];
+
+					default:
+						std::cerr << "\nERROR: [IDthread] given invalid forward register to read from\n\n";
+						break;
+					}
+
+					break;
+
+				case instFormat::Rtype:
+
+					switch (sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].fwdedVal2Read)
+					{
+					case instRegTypes::Rs:
+						//Get the forwarded value
+						instructionData->RsValHolder = sysCore.stageInfoID.fwdedRs;
+
+						//Get remaining values the normal way
+						instructionData->RtValHolder = sysCore.reg[instructionData->RtAddr];
+
+					case instRegTypes::Rt:
+						//Get the forwarded value
+						instructionData->RtValHolder = sysCore.stageInfoID.fwdedRt;
+
+						//Get remaining values the normal way
+						instructionData->RsValHolder = sysCore.reg[instructionData->RsAddr];
+
+					default:
+						std::cerr << "\nERROR: [IDthread] given invalid forward register to read from\n\n";
+						break;
+					}
+
+					break;
+
+				default:
+					std::cerr << "\nERROR: Format check bypassed [IDthread], Skipping instruction..\n" << std::endl;
+					continue;
+				}
+
+				//Remove the item from the list
+				sysCore.stageInfoID.useFwdHashTable.erase(instructionData->generatedID);
+			}
+			else
+			{
+				//Fetch the register values the normal way
+				switch (instructionData->type)
+				{
+				case instFormat::Itype:
+					instructionData->RsValHolder = sysCore.reg[instructionData->RsAddr];
+					instructionData->RtValHolder = sysCore.reg[instructionData->RtAddr];
+					instructionData->RdValHolder = sysCore.reg[instructionData->RdAddr];
+
+					break;
+
+				case instFormat::Rtype:
+					instructionData->RsValHolder = sysCore.reg[instructionData->RsAddr];
+					instructionData->RtValHolder = sysCore.reg[instructionData->RtAddr];
+
+					break;
+
+				default:
+					std::cerr << "\nERROR: Format check bypassed [IDthread], Skipping instruction..\n" << std::endl;
+					continue;
+				}
 			}
 
 			//Pass instruction data to EX stage (will block if it cannot immediately acquire the lock)
