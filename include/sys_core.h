@@ -62,7 +62,7 @@ typedef struct stallTarget {
 typedef struct forwardDests {
     volatile fowardInfo fwdTo;
     volatile fowardInfo fwdedFrom;
-    uint32_t consumerInstID;
+    volatile uint32_t consumerInstID;
     volatile instRegTypes regValNeeded;
     volatile instRegTypes fwdedRegister;
 
