@@ -17,7 +17,7 @@ void MEMthread(SysCore& sysCore)
 
 
 	while (true)
-	{		
+	{
 		//See if we need to die or not
 		if (sysCore.stageInfoMEM.die) {
 			return;
@@ -58,40 +58,40 @@ void MEMthread(SysCore& sysCore)
 			STW Rt Rs Imm (Add the contents of Rs and the immediate value “Imm” to generate
 			the effective address “A”, store the contents of register Rt (32-bits) at the memory
 			address “A”)
-        */ 
+			*/
 
-	  
 
-	    //read data from memAddressValHolder calculated by EX stage and store in RtValholder    
-	   	if(instructionData->opcode == LDW) {
-			instructionData->RtValHolder = sysCore.memRead(instructionData->memAddressValHolder, false);
-            
-            // Check if memRead() returns an error and apply flags
-            if (instructionData->RtValHolder == UINT_MAX){
-                std::cout << "ERROR: [MEMthread] SysCore::memRead() return on error" << std::endl;
-                sysCore.stageInfoMEM.okToRun = false;
-                continue;
-            }
 
-			#if (_VERBOSE_ > 0)
-			std::cout << "VERBOSE: [MEMthread] mem. addrss: " << instructionData->memAddressValHolder << " value from mem. address: " << instructionData->RtValHolder  << '\n';
-			#endif
-		}
-		//write data from rtValHolder to address calculated by EX stage
-		else if(instructionData->opcode == STW) {
-			if(sysCore.memWrite(instructionData->memAddressValHolder, instructionData->RtValHolder) == UINT32_MAX){
-				std::cerr << "ERROR: [MEMthread] memWrite() returns UINT32_MAX"  << '\n';
+			//read data from memAddressValHolder calculated by EX stage and store in RtValholder    
+			if (instructionData->opcode == LDW) {
+				instructionData->RtValHolder = sysCore.memRead(instructionData->memAddressValHolder, false);
+
+				// Check if memRead() returns an error and apply flags
+				if (instructionData->RtValHolder == UINT_MAX) {
+					std::cout << "ERROR: [MEMthread] SysCore::memRead() return on error" << std::endl;
+					sysCore.stageInfoMEM.okToRun = false;
+					continue;
+				}
+
+				#if (_VERBOSE_ > 0)
+				std::cout << "VERBOSE: [MEMthread] mem. addrss: " << instructionData->memAddressValHolder << " value from mem. address: " << instructionData->RtValHolder << '\n';
+				#endif
 			}
-			#if (_VERBOSE_ > 0)
-			std::cout << "VERBOSE: [MEMthread] mem. addrss: " << instructionData->memAddressValHolder << " value from mem. address: " << instructionData->RtValHolder  << '\n';
-			#endif
-		
-		}
-		else {
-			//do nothing for now?
-		}
-			
-	
+			//write data from rtValHolder to address calculated by EX stage
+			else if (instructionData->opcode == STW) {
+				if (sysCore.memWrite(instructionData->memAddressValHolder, instructionData->RtValHolder) == UINT32_MAX) {
+					std::cerr << "ERROR: [MEMthread] memWrite() returns UINT32_MAX" << '\n';
+				}
+				#if (_VERBOSE_ > 0)
+				std::cout << "VERBOSE: [MEMthread] mem. addrss: " << instructionData->memAddressValHolder << " value from mem. address: " << instructionData->RtValHolder << '\n';
+				#endif
+
+			}
+			else {
+				//do nothing for now?
+			}
+
+
 
 			//Pass instruction data to WB stage (will block if it cannot immediately acquire the lock)
 			sysCore.MEMtoWB.push(instructionData);
