@@ -108,6 +108,9 @@ void MEMthread(SysCore& sysCore)
 
 			//Forward data if needed
 			if (forwardData) {
+				//Get the consumer instruction ID (ie the instruction that needs the data)
+				uint32_t consumerInstID = sysCore.stageInfoMEM.useFwdHashTable[instructionData->generatedID].consumerInstID;
+
 				switch (sysCore.stageInfoMEM.useFwdHashTable[instructionData->generatedID].fwdTo) {
 
 				case fowardInfo::IF:
@@ -115,8 +118,8 @@ void MEMthread(SysCore& sysCore)
 					break;
 
 				case fowardInfo::ID:
-					//Forward the data to the ID stage
-					sysCore.stageInfoID.fwdedRt = instructionData->RtValHolder;
+					//Forward the Rt data to the ID stage
+					sysCore.stageInfoID.useFwdHashTable[consumerInstID].fwdedRt = instructionData->RtValHolder;
 					break;
 
 				case fowardInfo::EX:

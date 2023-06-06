@@ -99,10 +99,10 @@ void IDthread(SysCore& sysCore)
 				switch (sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].fwdedRegister)
 				{
 				case instRegTypes::Rd:
-					forwardedValue = sysCore.stageInfoID.fwdedRd;
+					forwardedValue = sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].fwdedRd;
 					break;
 				case instRegTypes::Rt:
-					forwardedValue = sysCore.stageInfoID.fwdedRt;
+					forwardedValue = sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].fwdedRt;
 					break;
 				default:
 					std::cerr << "\nERROR: [IDthread] given invalid forward register to read from\n\n";

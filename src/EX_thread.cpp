@@ -209,6 +209,9 @@ void EXthread(SysCore& sysCore)
 
 			//Forward data if we are supposed to
 			if (forwardData) {
+				//Get the consumer instruction ID (ie the instruction that needs the data)
+				uint32_t consumerInstID = sysCore.stageInfoEX.useFwdHashTable[instructionData->generatedID].consumerInstID;
+
 				switch (sysCore.stageInfoEX.useFwdHashTable[instructionData->generatedID].fwdTo){
 
 				case fowardInfo::IF:
@@ -216,17 +219,17 @@ void EXthread(SysCore& sysCore)
 					break;
 
 				case fowardInfo::ID:
-					//Determine if the isntruction is R or I type
+					//Determine if the current isntruction is R or I type, as that will determine what we forward
 					switch (instructionData->type)
 					{
 					case instFormat::Rtype:
-						//Forward the data to the ID stage
-						sysCore.stageInfoID.fwdedRd = instructionData->RdValHolder;
+						//Forward the Rd data to the ID stage
+						sysCore.stageInfoID.useFwdHashTable[consumerInstID].fwdedRd = instructionData->RdValHolder;
 						break;
 
 					case instFormat::Itype:
-						//Forward the data to the ID stage
-						sysCore.stageInfoID.fwdedRt = instructionData->RtValHolder;
+						//Forward the Rt data to the ID stage
+						sysCore.stageInfoID.useFwdHashTable[consumerInstID].fwdedRt = instructionData->RtValHolder;
 						break;
 
 					default:
