@@ -14,6 +14,7 @@ void MEMthread(SysCore& sysCore)
 	long long pastClkVal = -1;
 	std::chrono::milliseconds delay(MIN_SLEEP_TIME);
 	instInfoPtr_t instructionData;
+	bool forwardData = false;
 
 
 	while (true)
@@ -49,6 +50,20 @@ void MEMthread(SysCore& sysCore)
 
 			//Record the new clock value
 			pastClkVal = sysCore.clk;
+
+
+			//See if there is a forward request for the current instruction
+			if (sysCore.stageInfoMEM.useFwdHashTable.count(instructionData->generatedID)) {
+
+				if (sysCore.stageInfoMEM.useFwdHashTable[instructionData->generatedID].fwdedFrom != fowardInfo::NONE) {
+					//TODO: add code to revieve forwarded values here
+				}
+
+				if (sysCore.stageInfoMEM.useFwdHashTable[instructionData->generatedID].fwdTo != fowardInfo::NONE) {
+					forwardData = true;
+				}
+			}
+
 
 			/*-------------------MEM Functionality Work in Progress-----------------------
 			LDW Rt Rs Imm (Add the contents of Rs and the immediate value “Imm” to generate
@@ -89,6 +104,43 @@ void MEMthread(SysCore& sysCore)
 			}
 			else {
 				//do nothing for now?
+			}
+
+			//Forward data if needed
+			if (forwardData) {
+				switch (sysCore.stageInfoMEM.useFwdHashTable[instructionData->generatedID].fwdTo) {
+
+				case fowardInfo::IF:
+					std::cerr << "\nWARNING: [MEMthread] Told to forward to IF when code doesnt exist, skipping..\n";
+					break;
+
+				case fowardInfo::ID:
+					//Forward the data to the ID stage
+					sysCore.stageInfoID.fwdedRt = instructionData->RtValHolder;
+					break;
+
+				case fowardInfo::EX:
+					std::cerr << "\nWARNING: [MEMthread] Told to forward to EX when code doesnt exist, skipping..\n";
+					break;
+
+				case fowardInfo::MEM:
+					std::cerr << "\nWARNING: [MEMthread] Told to forward to MEM when code doesnt exist, skipping..\n";
+					break;
+
+				case fowardInfo::WB:
+					std::cerr << "\nWARNING: [MEMthread] Told to forward to WB when code doesnt exist, skipping..\n";
+					break;
+
+				default:
+					std::cerr << "\nWARNING: [MEMthread] Given invalid destination to forward to, skipping..\n";
+					break;
+				}
+
+				//Removed the forward request from the hash table
+				sysCore.stageInfoMEM.useFwdHashTable.erase(instructionData->generatedID);
+
+				//Reset the forward flag
+				forwardData = false;
 			}
 
 
