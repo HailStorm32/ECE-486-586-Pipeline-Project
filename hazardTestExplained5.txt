@@ -22,8 +22,8 @@ ADDI Rs: R11 Rt: R22 Imm: 10	R22 = R11 + 10
 Line 6: 32F900A4								<--Hazard #5b #7a
 LDW Rs: R23 Rt: R25 Imm: 164	R25 = MEM[164+1200] ((1364/4)+1 = line 342)
 
-Line 7: 0336E800								<--Hazard #6b #7b
-ADD Rs: R25 Rt: R22 Rd: R29		R29 = R25 + R22
+Line 7: 3F360003								<--Hazard #6b #7b
+BEQ Rs: R25 Rt: R22 Imm: 3		Branch if R25 == R22 to line 9
 
 Line 8: 0C06FFCE
 SUBI Rs: 0 Rt: 6 Imm: 65486		R6 = 0 - -50
@@ -69,4 +69,3 @@ R12 : 643
 R22 : 12
 R23 : 1200
 R25 : 36
-R29 : 48
