@@ -90,9 +90,6 @@ typedef struct stage {
     volatile bool die;
 
     // forwarded vals
-    volatile uint32_t fwdedRs;
-    volatile uint32_t fwdedRt;
-    volatile uint32_t fwdedRd;
     volatile uint32_t fwdedAluResult;
     volatile uint16_t fwdedImmediate;
 } stageThread_t, * stageThreadPtr_t;

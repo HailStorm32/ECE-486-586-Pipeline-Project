@@ -225,9 +225,6 @@ SysCore::SysCore(std::string filePath) {
 		.updatedPC =false,
 		.invalidateData = false,
 		.die = false,
-		.fwdedRs = 0,
-		.fwdedRt = 0,
-		.fwdedRd = 0,
 		.fwdedAluResult = 0,
 		.fwdedImmediate = 0,
 	};
@@ -238,9 +235,6 @@ SysCore::SysCore(std::string filePath) {
 		.updatedPC =false,
 		.invalidateData = false,
 		.die = false,
-		.fwdedRs = 0,
-		.fwdedRt = 0,
-		.fwdedRd = 0,
 		.fwdedAluResult = 0,
 		.fwdedImmediate = 0,
 	};
@@ -251,9 +245,6 @@ SysCore::SysCore(std::string filePath) {
 		.updatedPC =false,
 		.invalidateData = false,
 		.die = false,
-		.fwdedRs = 0,
-		.fwdedRt = 0,
-		.fwdedRd = 0,
 		.fwdedAluResult = 0,
 		.fwdedImmediate = 0,
 	};
@@ -264,9 +255,6 @@ SysCore::SysCore(std::string filePath) {
 		.updatedPC =false,
 		.invalidateData = false,
 		.die = false,
-		.fwdedRs = 0,
-		.fwdedRt = 0,
-		.fwdedRd = 0,
 		.fwdedAluResult = 0,
 		.fwdedImmediate = 0,
 	};
@@ -277,9 +265,6 @@ SysCore::SysCore(std::string filePath) {
 		.updatedPC =false,
 		.invalidateData = false,
 		.die = false,
-		.fwdedRs = 0,
-		.fwdedRt = 0,
-		.fwdedRd = 0,
 		.fwdedAluResult = 0,
 		.fwdedImmediate = 0,
 	};
