@@ -208,7 +208,7 @@ void displayResults (SysCore& sysCore)
 	std::cout << "\nFinal Register State:" << std::endl;
 	for (int i = 0; i <32; i++){
 		if (sysCore.modifiedReg[i] == 1) {
-			std::cout << "R" << i << " : " << sysCore.reg[i]  << std::endl;
+			std::cout << "R" << i << " : " << static_cast<int>(sysCore.reg[i])  << std::endl;
 		}
 	}
 }
