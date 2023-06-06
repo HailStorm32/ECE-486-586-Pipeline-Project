@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 		std::cout << "\n\nUsing internal file path\n\n";
 
 		//FOR DEBUG ONLY
-		filePath = "hazardTest3.txt";
+		filePath = "hazardTest1.txt";
 	}
 	
 

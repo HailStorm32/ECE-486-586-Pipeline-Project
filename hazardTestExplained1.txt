@@ -40,3 +40,15 @@ ADDI Rs: 0 Rt: 10 Imm: 13		r10 = 0 + 13
 
 Line 13: 44000000
 HALT Rs: 0 Rt: 0 Imm: 0			Halt
+
+
+Final Register State:
+R1 : 63
+R3 : 2531
+R4 : 600
+R5 : 1234
+R6 : 50
+R7 : 2468
+R8 : 4294967293
+R11 : 2
+R12 : 2448
