@@ -81,10 +81,10 @@ void WBthread(SysCore& sysCore)
                 else {
                      std::cerr << "DEBUG: [WBthread] unknown instruction type encountered" << std::endl;
                 }  
+                
+                //We no longer need the instruction data, delete it
+                delete instructionData;
             }
-
-            //We no longer need the instruction data, delete it
-            //delete instructionData;
 
             std::this_thread::sleep_for(delay);
         }
