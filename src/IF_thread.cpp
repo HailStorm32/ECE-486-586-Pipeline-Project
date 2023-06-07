@@ -190,6 +190,15 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
                 //Break b/c by design only one stall set is needed. By the time the other dependant instructions get to run, the data will be available already
                 break;
             }
+            //Special case for the BEQ instruction
+            else if (consumerInstData->opcode == opcodes::BEQ && consumerInstData->RtAddr == producerDestReg)
+            {
+                foundHazard = true;
+                depthFound = index + 1;
+
+                dependentRegister = instRegTypes::Rt;
+                break;
+            }
         }
 
         //Free up the space allocated for the decoded consumer instruction

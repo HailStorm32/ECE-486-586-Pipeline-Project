@@ -13,6 +13,7 @@ void IDthread(SysCore& sysCore)
 	std::chrono::milliseconds delay(MIN_SLEEP_TIME);
 	instPreInfoPtr_t instPreInfoPkg;
 	uint32_t forwardedValue = 0;
+	instRegTypes valNeeded = instRegTypes::REG_NONE;
 
 	while (true)
 	{		
@@ -113,22 +114,30 @@ void IDthread(SysCore& sysCore)
 				switch (instructionData->type)
 				{
 				case instFormat::Itype:
-					
-					//Figure out what register the forwarded value gets written to
-					switch (sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].regValNeeded)
+					valNeeded = sysCore.stageInfoID.useFwdHashTable[instructionData->generatedID].regValNeeded;
+
+					if (valNeeded == instRegTypes::Rs)
 					{
-					case instRegTypes::Rs:  //TODO: double check that these are the correct registers to read from
 						//Get the forwarded value
 						instructionData->RsValHolder = forwardedValue;
 
 						//Get remaining values the normal way
 						instructionData->RtValHolder = sysCore.reg[instructionData->RtAddr];
 						instructionData->RdValHolder = sysCore.reg[instructionData->RdAddr];
-						break;
+					}
+					//Special case for BEQ instruction 
+					else if (instructionData->opcode == opcodes::BEQ && valNeeded == instRegTypes::Rt)
+					{
+						//Get the forwarded value
+						instructionData->RtValHolder = forwardedValue;
 
-					default:
+						//Get remaining values the normal way
+						instructionData->RsValHolder = sysCore.reg[instructionData->RtAddr];
+						instructionData->RdValHolder = sysCore.reg[instructionData->RdAddr];
+					}
+					else
+					{
 						std::cerr << "\nERROR: [IDthread] given invalid forward register to read from\n\n";
-						break;
 					}
 
 					break;
