@@ -41,6 +41,9 @@ void WBthread(SysCore& sysCore)
                 {
                     std::cout << "DEBUG: [WBthread] Missed opportunity for this clock, will try again next clock" << std::endl;
                     sysCore.stageInfoWB.invalidateData = false;
+                    
+                    //We no longer need the instruction data, delete it
+                    delete instructionData;
                     continue;
                 }
 
@@ -79,6 +82,9 @@ void WBthread(SysCore& sysCore)
                      std::cerr << "DEBUG: [WBthread] unknown instruction type encountered" << std::endl;
                 }  
             }
+
+            //We no longer need the instruction data, delete it
+            delete instructionData;
 
             std::this_thread::sleep_for(delay);
         }

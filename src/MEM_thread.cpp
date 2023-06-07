@@ -45,6 +45,9 @@ void MEMthread(SysCore& sysCore)
 			{
 				std::cout << "DEBUG: [MEMthread] Skipped data due to invalid data this clock, will try again next clock" << std::endl;
 				sysCore.stageInfoMEM.invalidateData = false;
+
+				//We no longer need the instruction data, delete it
+				delete instructionData;
 				continue;
 			}
 
@@ -85,6 +88,9 @@ void MEMthread(SysCore& sysCore)
 				if (instructionData->RtValHolder == UINT_MAX) {
 					std::cout << "ERROR: [MEMthread] SysCore::memRead() return on error" << std::endl;
 					sysCore.stageInfoMEM.okToRun = false;
+
+					//We no longer need the instruction data, delete it
+					delete instructionData;
 					continue;
 				}
 

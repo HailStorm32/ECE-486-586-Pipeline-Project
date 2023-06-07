@@ -139,6 +139,9 @@ void EXthread(SysCore& sysCore)
 			{
 				std::cout << "DEBUG: [EXthread] Told to invalidate instuction, will try again next clock" << std::endl;
 				sysCore.stageInfoEX.invalidateData = false;
+
+				//We no longer need the instruction data, delete it
+				delete instructionData;
 				continue;
 			}
 
