@@ -84,7 +84,7 @@ void WBthread(SysCore& sysCore)
             }
 
             //We no longer need the instruction data, delete it
-            delete instructionData;
+            //delete instructionData;
 
             std::this_thread::sleep_for(delay);
         }
