@@ -228,7 +228,7 @@ private:
     *	uint8_t -- the maximum number of characters in any line ending in the file
     */
     uint8_t countLineEndings(const std::string& filePath);
-    
+ 
 
 public:        
     // Program Counter
@@ -276,6 +276,8 @@ public:
     }stallsRemaining;
 
     std::list<stallTargetPtr_t> stallTargetList;
+
+    void printAccessedCells();
 
     /*
     * Description:

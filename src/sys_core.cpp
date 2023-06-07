@@ -230,6 +230,16 @@ uint8_t SysCore::countLineEndings(const std::string& filePath)
 	return maxLineEndCount;
 }
 
+void SysCore::printAccessedCells()
+{
+	for (const auto& pair : dataMemoryHT) {
+		memWordCellPtr_t cell = pair.second;
+		if (cell && cell->hasBeenAccessed) {
+			std::cout << "Address: " << (pair.first - 1) * 4 << ", Value: " << cell->value << '\n';
+		}
+	}
+}
+
 // Core Constructor: Initialize variables and arrays to 0s
 SysCore::SysCore(std::string filePath) {
 	PC = 0;
