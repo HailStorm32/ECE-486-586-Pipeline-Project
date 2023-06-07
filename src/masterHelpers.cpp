@@ -91,6 +91,8 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 		case errorCodes::ERR_BRANCH_TAKEN:
 			//TODO: figure out what actualy needs to be invalidated
 			
+			sysCore.stageInfoIF.updatedPC = true;
+			
 			//Flush the pipeline
 			sysCore.stageInfoID.invalidateData = true;
 			sysCore.stageInfoEX.invalidateData = true;

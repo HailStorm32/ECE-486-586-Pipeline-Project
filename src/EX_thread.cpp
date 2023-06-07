@@ -178,15 +178,11 @@ void EXthread(SysCore& sysCore)
 				if (instructionData->isControlFlow == true) {
 					if ((updatedPcVal = updatePC(currentPC, instructionData)) != -1) {
 						sysCore.stageInfoIF.fwdedAluResult = static_cast<uint32_t>(updatedPcVal);
-						sysCore.stageInfoIF.updatedPC = true;
 
                         // Report to master thread that we have a branch taken
                         std::cout <<"DEBUG: [EXthread] Branch Taken\n";
                         sysCore.stageInfoEX.errorType = errorCodes::ERR_BRANCH_TAKEN;
 					} 
-					else {
-						sysCore.stageInfoEX.updatedPC = false;
-					}	
 				}
 				//calculate effecive mem address if mem access op
 				else if (instructionData->opcode == LDW || instructionData->opcode == STW) {
