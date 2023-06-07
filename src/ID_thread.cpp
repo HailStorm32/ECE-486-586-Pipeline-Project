@@ -135,7 +135,7 @@ void IDthread(SysCore& sysCore)
 						instructionData->RtValHolder = forwardedValue;
 
 						//Get remaining values the normal way
-						instructionData->RsValHolder = sysCore.reg[instructionData->RtAddr];
+						instructionData->RsValHolder = sysCore.reg[instructionData->RsAddr];
 						instructionData->RdValHolder = sysCore.reg[instructionData->RdAddr];
 					}
 					else
