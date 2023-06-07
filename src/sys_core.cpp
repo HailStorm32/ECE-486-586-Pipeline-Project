@@ -75,7 +75,7 @@ std::string SysCore::getLineFromLineNum(const uint32_t targetLineNum)
 	}
 
 	//Move the file pointer to the target line
-	file.seekg(TOTAL_FILE_LINE_LENGTH * adjustedTargetLine, std::ios_base::beg);
+	file.seekg(totalFileLineLegnth * adjustedTargetLine, std::ios_base::beg);
 
 	//Get the next line
 	std::getline(file, lineData);
@@ -105,7 +105,7 @@ uint32_t SysCore::getFileSize(const std::string filePath)
 	std::streamsize fileSize = file.tellg();
 
 	//Get the total number of lines the file has
-	totalNumOfLines = fileSize / TOTAL_FILE_LINE_LENGTH;
+	totalNumOfLines = fileSize / totalFileLineLegnth;
 
 	file.close();
 
@@ -149,7 +149,7 @@ void SysCore::initDataMemTable()
 	}
 
 	//Move the file pointer to the target line
-	file.seekg(TOTAL_FILE_LINE_LENGTH * adjustedTargetLine, std::ios_base::beg);
+	file.seekg(totalFileLineLegnth * adjustedTargetLine, std::ios_base::beg);
 
 	//Cycle through all the lines and write to the memory hash table
 	while (std::getline(file, lineData))
@@ -200,15 +200,50 @@ uint32_t SysCore::readDataMem(const uint32_t lineNum)
 	return memCell->value;
 }
 
+uint8_t SysCore::countLineEndings(const std::string& filePath)
+{
+	std::ifstream file(filePath, std::ios::binary);
+	if (!file) {
+		throw std::runtime_error("Could not open file");
+	}
+
+	char ch;
+	uint8_t lineEndCount = 0, maxLineEndCount = 0;
+
+	while (file.get(ch)) {
+		if (ch == '\n' || ch == '\r') {
+			++lineEndCount;
+		}
+		else if (lineEndCount > 0) {
+			if (lineEndCount > maxLineEndCount) {
+				maxLineEndCount = lineEndCount;
+			}
+			lineEndCount = 0;
+		}
+	}
+
+	// Checking at the end in case the file ends with a line ending
+	if (lineEndCount > maxLineEndCount) {
+		maxLineEndCount = lineEndCount;
+	}
+
+	return maxLineEndCount;
+}
+
 // Core Constructor: Initialize variables and arrays to 0s
 SysCore::SysCore(std::string filePath) {
 	PC = 0;
 	memset(reg, 0, sizeof(reg));
 	clk = 0;
 	memset(modifiedReg, 0, sizeof(modifiedReg));
+	uint8_t lineEndingCount = 0;
 
 	this->filePath = filePath;
 
+	//Find what line endings the file uses
+	lineEndingCount = countLineEndings(filePath);
+
+	totalFileLineLegnth = FILE_LINE_LENGTH + lineEndingCount;
 
 	instrCountStruct = {
 		.arithmeticCount = 0,

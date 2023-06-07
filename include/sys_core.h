@@ -11,7 +11,7 @@
 
 #define FILE_LINE_LENGTH        8 //In bytes
 #define FILE_LINE_END_LENGTH    1 //In bytes
-#define TOTAL_FILE_LINE_LENGTH  (FILE_LINE_LENGTH + FILE_LINE_END_LENGTH)
+//#define TOTAL_FILE_LINE_LENGTH  (FILE_LINE_LENGTH + FILE_LINE_END_LENGTH)
 
 // Enumerated values for telling a stage if they should read and/or write a forwarded value and to where
 enum fowardInfo {
@@ -118,6 +118,8 @@ private:
     //Mutex for data memory
     std::mutex m_dataMemLock;
 
+    uint8_t totalFileLineLegnth;
+
     /*
     * Description:
     *	Finds and returns the line number of the file
@@ -205,6 +207,27 @@ private:
     *	uint32_t -- data from the given line
     */
     uint32_t readDataMem(const uint32_t lineNum);
+
+    /*
+    * Description:
+    *	Opens a text file at the specified file path and iterates
+    *   through each line to count the number of characters in the
+    *   line endings. Line ending can be either "\r", "\n" or "\r\n".
+    *   In the case of "\r\n", it counts as two characters. The function
+    *   then returns the maximum number of characters found in any line
+    *   ending in the file.
+    *
+    *   NOTE: This function throws a runtime error if the file cannot be
+    *       opened. It is the user's responsibility to ensure that the
+    *       file path is valid and the file can be opened.
+    *
+    * Arguments:
+    *	(INPUT) filePath -- the path to the text file
+    *
+    * Return:
+    *	uint8_t -- the maximum number of characters in any line ending in the file
+    */
+    uint8_t countLineEndings(const std::string& filePath);
     
 
 public:        
