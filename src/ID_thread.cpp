@@ -51,6 +51,9 @@ void IDthread(SysCore& sysCore)
 
 			//Decode the instruction
 			instInfoPtr_t instructionData = decodeInstruction(instPreInfoPkg->rawInstruction);
+			
+			//update instruction PC value
+			instructionData->instrPC = instPreInfoPkg->instructionPC;
 
 			if (instructionData == NULL)
 			{
