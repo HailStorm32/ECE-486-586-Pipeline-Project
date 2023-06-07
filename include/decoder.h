@@ -54,12 +54,14 @@ typedef struct instInfo
 	uint16_t immediateValHolder;
 	uint32_t memAddressValHolder;	//calculated mem address for mem access instructions
 	bool isControlFlow;				//set true if control flow instruction
+	uint32_t instrPC;
 }instInfo_t, *instInfoPtr_t;
 
 typedef struct instPreInfo
 {
 	uint32_t generatedID;
 	uint32_t rawInstruction;
+	uint32_t instructionPC;
 }instPreInfo_t, *instPreInfoPtr_t;
 
 /*

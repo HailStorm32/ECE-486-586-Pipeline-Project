@@ -69,7 +69,7 @@ uint32_t signExtend(uint16_t immediate16_t){
 long long updatePC (uint32_t PC, instInfoPtr_t instructionData){
 	long long newPcVal;
 	uint32_t instruction;
-	instruction = (PC - 8) / 4;
+	instruction = PC/4;
 	switch(instructionData->opcode){
 		case BZ:	
 			if (instructionData->RsValHolder == 0) {
@@ -83,7 +83,7 @@ long long updatePC (uint32_t PC, instInfoPtr_t instructionData){
 		case BEQ:
 			if(instructionData->RsValHolder == instructionData->RtValHolder){
 				newPcVal = ((instruction + signExtend(instructionData->immediateValHolder)) * 4); 
-				std::cout << "New CALC PC in BEQ: " << newPcVal << "\n";
+				std::cout << "*****************New CALC PC in BEQ***********: " << newPcVal << "\n";
 			}
 			else {
 				newPcVal = -1;
@@ -107,7 +107,6 @@ void EXthread(SysCore& sysCore)
 	std::chrono::milliseconds delay(MIN_SLEEP_TIME);
 	instInfoPtr_t instructionData;
 	bool forwardData = false;
-	//exInfoPtr_t exInfo = new exInfo_t;
 
 	while (true)
 	{		
@@ -148,7 +147,8 @@ void EXthread(SysCore& sysCore)
 			//Record the new clock value
 			pastClkVal = sysCore.clk;
 
-			uint32_t currentPC = sysCore.PC;	//current PC for use in control flow ops
+			
+			uint32_t currentPC = instructionData->instrPC;
 			uint32_t extendedImm;				//sign extended immediate
 			long long updatedPcVal;				//updated PC value			
 

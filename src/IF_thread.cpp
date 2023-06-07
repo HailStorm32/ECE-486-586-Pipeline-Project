@@ -66,6 +66,8 @@ void IFthread(SysCore& sysCore){
             //Write the instruction 
             instPrePkg->rawInstruction = instruction;
 
+            instPrePkg->instructionPC = sysCore.PC;
+
             // Increment PC by 4 (bytes) aka 32 bits
             sysCore.PC = sysCore.PC + 4;
 
