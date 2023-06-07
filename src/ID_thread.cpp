@@ -34,14 +34,14 @@ void IDthread(SysCore& sysCore)
 			//If there was nothing for us to get, we missed our opportunity for this clock. Reset
 			if (instPreInfoPkg == NULL)
 			{
-				std::cout << "DEBUG: [IDthread] Missed opportunity for this clock, will try again next clock" << std::endl;
+				//std::cout << "DEBUG: [IDthread] Missed opportunity for this clock, will try again next clock" << std::endl;
 				continue;
 			}
 
 			//Skip the data if its invalid (aka we are told to flush)
 			if (sysCore.stageInfoID.invalidateData)
 			{
-				std::cout << "DEBUG: [IDthread] Told to Invalidate Data" << std::endl;
+				//std::cout << "DEBUG: [IDthread] Told to Invalidate Data" << std::endl;
 				sysCore.stageInfoID.invalidateData = false;
 				continue;
 			}

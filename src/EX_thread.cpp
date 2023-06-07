@@ -129,14 +129,14 @@ void EXthread(SysCore& sysCore)
 			//If there was nothing for us to get, we missed our opportunity for this clock. Reset
 			if (instructionData == NULL)
 			{
-				std::cout << "DEBUG: [EXthread] Missed opportunity for this clock, will try again next clock" << std::endl;
+				//std::cout << "DEBUG: [EXthread] Missed opportunity for this clock, will try again next clock" << std::endl;
 				continue;
 			}
 
 			//Skip the data if its invalid (aka we are told to flush)
 			if (sysCore.stageInfoEX.invalidateData)
 			{
-				std::cout << "DEBUG: [EXthread] Told to invalidate instuction, will try again next clock" << std::endl;
+				//std::cout << "DEBUG: [EXthread] Told to invalidate instuction, will try again next clock" << std::endl;
 				sysCore.stageInfoEX.invalidateData = false;
 
 				//We no longer need the instruction data, delete it
