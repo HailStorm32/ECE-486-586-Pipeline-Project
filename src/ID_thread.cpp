@@ -209,6 +209,7 @@ void IDthread(SysCore& sysCore)
 				}
 			}
 
+			//Log the time stamp
 			instructionData->timeStamp = sysCore.clk;
 
 			//Pass instruction data to EX stage (will block if it cannot immediately acquire the lock)

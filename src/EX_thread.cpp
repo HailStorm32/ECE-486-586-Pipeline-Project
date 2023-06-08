@@ -177,6 +177,9 @@ void EXthread(SysCore& sysCore)
 				//Reset the forward flag
 				forwardData = false;
 			}
+
+			//Log the time stamp
+			instructionData->timeStamp = sysCore.clk;
 			
 			//Pass alu data to MEM stage (will block if it cannot immediately acquire the lock)
 			sysCore.EXtoMEM.push(instructionData);

@@ -40,6 +40,14 @@ void MEMthread(SysCore& sysCore)
 				continue;
 			}
 
+			//If the instruction is not ready to be processed, put it back in the queue and try again next clock
+			if (instructionData->timeStamp == sysCore.clk)
+			{
+				std::cerr << "ERROR: [MEMthread] Instruction not ready to be processed, will try again next clock" << std::endl;
+				sysCore.EXtoMEM.push(instructionData);
+				continue;
+			}
+
 			//Skip the data if its invalid (aka we are told to flush)
 			if (sysCore.stageInfoMEM.invalidateData)
 			{
@@ -152,7 +160,8 @@ void MEMthread(SysCore& sysCore)
 				forwardData = false;
 			}
 
-
+			//Log the time stamp
+			instructionData->timeStamp = sysCore.clk;
 
 			//Pass instruction data to WB stage (will block if it cannot immediately acquire the lock)
 			sysCore.MEMtoWB.push(instructionData);
