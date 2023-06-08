@@ -71,6 +71,9 @@ void IFthread(SysCore& sysCore){
             // Increment PC by 4 (bytes) aka 32 bits
             sysCore.PC = sysCore.PC + 4;
 
+            //Log the timestamp
+            instPrePkg->timeStamp = sysCore.clk;
+
             // Push the returned instruction to buffer
             sysCore.IFtoID.push(instPrePkg);
         }

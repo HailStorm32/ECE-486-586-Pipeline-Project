@@ -61,6 +61,7 @@ typedef struct instInfo
 typedef struct instPreInfo
 {
 	uint32_t generatedID;
+	uint16_t timeStamp;
 	uint32_t rawInstruction;
 	uint32_t instructionPC;
 }instPreInfo_t, *instPreInfoPtr_t;
