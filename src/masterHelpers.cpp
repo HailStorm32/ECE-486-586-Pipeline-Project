@@ -109,13 +109,30 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 			//else
 			//	sysCore.stageInfoIF.errorInfo = NULL;
 			//sysCore.stageInfoEX.errorType = errorCodes::ERR_NONE;
-			//if (sysCore.stageInfoEX.errorInfo != NULL)
-			//{
-			//	delete sysCore.stageInfoEX.errorInfo;
-			//	sysCore.stageInfoEX.errorInfo = NULL;
-			//}
-			//else
-			//	sysCore.stageInfoEX.errorInfo = NULL;
+
+			if (sysCore.stageInfoID.errorInfo != NULL)
+			{
+				delete sysCore.stageInfoID.errorInfo;
+				sysCore.stageInfoID.errorInfo = NULL;
+			}
+			else
+				sysCore.stageInfoID.errorInfo = NULL;
+
+			if (sysCore.stageInfoEX.errorInfo != NULL)
+			{
+				delete sysCore.stageInfoEX.errorInfo;
+				sysCore.stageInfoEX.errorInfo = NULL;
+			}
+			else
+				sysCore.stageInfoEX.errorInfo = NULL;
+
+			if (sysCore.stageInfoMEM.errorInfo != NULL)
+			{
+				delete sysCore.stageInfoMEM.errorInfo;
+				sysCore.stageInfoMEM.errorInfo = NULL;
+			}
+			else
+				sysCore.stageInfoMEM.errorInfo = NULL;
 
 
 			//TODO: clear all the error structs, stall counts, forward requests
