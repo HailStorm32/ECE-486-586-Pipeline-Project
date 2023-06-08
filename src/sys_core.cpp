@@ -230,6 +230,12 @@ uint8_t SysCore::countLineEndings(const std::string& filePath)
 	return maxLineEndCount;
 }
 
+void SysCore::waitForAllThreads()
+{
+	std::unique_lock<std::mutex> lock(mutex);
+	mainCv.wait(lock, [this] { return threadsReady.load() == NUM_THREADS; });
+}
+
 void SysCore::printAccessedCells()
 {
 	for (const auto& pair : dataMemoryHT) {

@@ -163,6 +163,20 @@ int main(int argc, char* argv[])
 		//Increment the clock
 		sysCore.clk++;
 
+		// Reset for the next iteration
+		sysCore.threadsReady = 0;
+		sysCore.startThreads = false;
+
+		// Tell each thread to start
+		{
+			std::lock_guard<std::mutex> lock(sysCore.mutex);
+			sysCore.startThreads = true;
+		}
+		sysCore.threadCv.notify_all();
+
+		// Wait to receive signal from each thread
+		sysCore.waitForAllThreads();
+
 		//delete errorsList;
 		std::this_thread::sleep_for(delay);
 	}

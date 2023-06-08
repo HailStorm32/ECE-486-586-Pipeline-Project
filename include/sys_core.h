@@ -14,6 +14,8 @@
 #define FILE_LINE_END_LENGTH    1 //In bytes
 //#define TOTAL_FILE_LINE_LENGTH  (FILE_LINE_LENGTH + FILE_LINE_END_LENGTH)
 
+const int NUM_THREADS = 5;
+
 // Enumerated values for telling a stage if they should read and/or write a forwarded value and to where
 enum fowardInfo {
     NONE,
@@ -248,8 +250,8 @@ public:
 
     std::mutex mutex;
     std::condition_variable threadCv;
-    std::condition_variable mainCv;
     std::atomic<int> threadsReady;
+    std::condition_variable mainCv;
     bool startThreads = false;
 
     // 5 stages of pipline
@@ -283,6 +285,8 @@ public:
     }stallsRemaining;
 
     std::list<stallTargetPtr_t> stallTargetList;
+
+    void waitForAllThreads();
 
     void printAccessedCells();
 
