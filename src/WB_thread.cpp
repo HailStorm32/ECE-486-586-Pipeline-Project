@@ -81,6 +81,26 @@ void WBthread(SysCore& sysCore)
                 else {
                      std::cerr << "DEBUG: [WBthread] unknown instruction type encountered" << std::endl;
                 }  
+
+                switch (instructionData->opcode)
+                {
+                    case opcodes::ADD: case opcodes::SUB: case opcodes::MUL:case opcodes::ADDI: case opcodes::SUBI: case opcodes::MULI:
+                        sysCore.instrCountStruct.arithmeticCount += 1;
+                        break;
+                    case opcodes::OR: case opcodes::AND: case opcodes::XOR: case opcodes::ORI: case opcodes::ANDI: case opcodes::XORI: 
+                        sysCore.instrCountStruct.logicalCount += 1;
+                        break;
+                    case opcodes::LDW: case opcodes::STW: 
+                        sysCore.instrCountStruct.memAccesCount += 1;
+                        break;
+                    case opcodes::BZ: case opcodes::BEQ: case opcodes::JR: case opcodes::HALT:
+                        sysCore.instrCountStruct.controlTransferCount += 1;
+                        break;
+                    default:
+                        std::cerr << "\nERROR: can't ID instruction type" << std::endl;
+                    break;
+                }
+                
                 
                 //We no longer need the instruction data, delete it
                 delete instructionData;
