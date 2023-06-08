@@ -134,6 +134,15 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 			else
 				sysCore.stageInfoMEM.errorInfo = NULL;
 
+			//Clear the stall targets
+			sysCore.stallTargetList.clear();
+			sysCore.stallsRemaining.stallsRemainIF = 0;
+
+			//Clear forwarding requests
+			sysCore.stageInfoEX.useFwdHashTable.clear();
+			sysCore.stageInfoMEM.useFwdHashTable.clear();
+			sysCore.stageInfoID.useFwdHashTable.clear();
+
 
 			//TODO: clear all the error structs, stall counts, forward requests
 
