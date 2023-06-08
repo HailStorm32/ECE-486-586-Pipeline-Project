@@ -8,98 +8,7 @@
 
 #define MIN_SLEEP_TIME		50  //In ms
 #define _VERBOSE_ 0
-/* 
-* Description: *****WORK IN PROGRESS******** 
-*	Perform ALU functions.
-*
-* Arguments:
-*	(INPUT) operandA -- uint32_t value, source reg RS
-*	(INPUT) operandB -- uint32_t value, source varies by inst type
-*	(INPUT) operation -- enum opcodes value, source from instruction opcode
-* Return:
-*	uint32_t -- value calculated by ALU
-*/
-uint32_t alu (uint32_t operandA, uint32_t operandB, opcodes operation){
 
-	switch (operation){
-		//arithmetic and logical operations
-		case ADD: case ADDI: return operandA + operandB;
-		case SUB: case SUBI: return operandA - operandB;
-		case MUL: case MULI: return operandA * operandB;
-		case OR: case ORI: return operandA | operandB;
-		case AND: case ANDI: return operandA & operandB;
-		case XOR: case XORI: return operandA ^ operandB;
-
-		//Memory Access operations
-		case LDW: case STW: return operandA + operandB;
-
-		//control flow instructions
-		case BZ: case BEQ: case JR: case HALT: case INVALID: break;
-	}
-	return 0;
-}
-
-/*Perform Sign Extension on 16 bit immediates*/
-uint32_t signExtend(uint16_t immediate16_t){
-	uint32_t immediate32_t;	
-	if(immediate16_t & BITMASK){
-        immediate32_t = immediate16_t | SIGNEXTEND;
-	} 
-	else{
-		immediate32_t = immediate16_t;
-	}
-	#if (_VERBOSE_ == 2)
-		std::cout << "Before sign extend Immediate =  " << std::bitset<16>(immediate16_t) << '\n';
-		std::cout << "In sign extend Immediate =  " << std::bitset<32>(immediate32_t) << '\n';		
-	#endif
-	return immediate32_t;
-}
-
-/* 
-* Description: 
-*	Interpret Control Flow operations and update PC if necessary.
-*
-* Arguments:
-*	(INPUT) PC -- uint32_t value, current PC
-*	(INPUT) instructionData -- instInfoPtr_t current instruction info
-*
-* Return:
-*	long long -- new PC value or -1 if PC was not updated
-*/
-long long updatePC (uint32_t PC, instInfoPtr_t instructionData){
-	long long newPcVal;
-	uint32_t instruction;
-	instruction = PC/4;
-	switch(instructionData->opcode){
-		case BZ:	
-			if (instructionData->RsValHolder == 0) {
-				newPcVal = ((instruction + signExtend(instructionData->immediateValHolder)) * 4); 
-				std::cout << "New CALC PC in BZ: " << newPcVal << "\n";
-			}
-			else {
-				newPcVal = -1;
-			}
-			break;
-		case BEQ:
-			if(instructionData->RsValHolder == instructionData->RtValHolder){
-				newPcVal = ((instruction + signExtend(instructionData->immediateValHolder)) * 4); 
-				std::cout << "*****************New CALC PC in BEQ***********: " << newPcVal << "\n";
-			}
-			else {
-				newPcVal = -1;
-			}
-			break;
-		case JR:
-			newPcVal  = instructionData->RsValHolder;
-			std::cout << "New CALC PC in JR: " << newPcVal << "\n";
-			break;
-		case HALT: break;
-		default:
-			newPcVal = -1;	//signal PC was not updated
-			break;
-	}
-	return newPcVal;
-}
 
 void EXthread(SysCore& sysCore)
 {
@@ -195,7 +104,6 @@ void EXthread(SysCore& sysCore)
 				//calculate effecive mem address if mem access op
 				else if (instructionData->opcode == LDW || instructionData->opcode == STW) {
 					instructionData->memAddressValHolder = alu(instructionData->RsValHolder, extendedImm, instructionData->opcode);
-					//std::cout << "EX mem addr =  " << instructionData->memAddressValHolder << '\n';
 				}
 				//if arithmetic/logical immediate op perform operation and store in RT val holder
 				else {
@@ -205,14 +113,6 @@ void EXthread(SysCore& sysCore)
 			else
 				std::cerr << "\nERROR: [EXthread] ALU encountered unknown instruction type\n" << std::endl;
 			
-			#if (_VERBOSE_ > 0)
-				std::cout << "Opcode =  " << instructionData->opcode << '\n';
-				std::cout << "Rd Result =  " << instructionData->RdValHolder << '\n';
-				std::cout << "Rs =  " << instructionData->RsValHolder << '\n';
-				std::cout << "Rt =  " << instructionData->RtValHolder << '\n';
-				std::cout << "Immediate =  " << std::bitset<32>(instructionData->immediateValHolder) << '\n';
-				std::cout << "Updated PC =  " << updatedPcVal << '\n';
-			#endif
 
 			//Forward data if we are supposed to
 			if (forwardData) {
@@ -275,4 +175,97 @@ void EXthread(SysCore& sysCore)
 
 		std::this_thread::sleep_for(delay);
 	}
+}
+
+/* 
+* Description: *****WORK IN PROGRESS******** 
+*	Perform ALU functions.
+*
+* Arguments:
+*	(INPUT) operandA -- uint32_t value, source reg RS
+*	(INPUT) operandB -- uint32_t value, source varies by inst type
+*	(INPUT) operation -- enum opcodes value, source from instruction opcode
+* Return:
+*	uint32_t -- value calculated by ALU
+*/
+uint32_t alu (uint32_t operandA, uint32_t operandB, opcodes operation){
+
+	switch (operation){
+		//arithmetic and logical operations
+		case ADD: case ADDI: return operandA + operandB;
+		case SUB: case SUBI: return operandA - operandB;
+		case MUL: case MULI: return operandA * operandB;
+		case OR: case ORI: return operandA | operandB;
+		case AND: case ANDI: return operandA & operandB;
+		case XOR: case XORI: return operandA ^ operandB;
+
+		//Memory Access operations
+		case LDW: case STW: return operandA + operandB;
+
+		//control flow instructions
+		case BZ: case BEQ: case JR: case HALT: case INVALID: break;
+	}
+	return 0;
+}
+
+/*Perform Sign Extension on 16 bit immediates*/
+uint32_t signExtend(uint16_t immediate16_t){
+	uint32_t immediate32_t;	
+	if(immediate16_t & BITMASK){
+        immediate32_t = immediate16_t | SIGNEXTEND;
+	} 
+	else{
+		immediate32_t = immediate16_t;
+	}
+	#if (_VERBOSE_ == 2)
+		std::cout << "Before sign extend Immediate =  " << std::bitset<16>(immediate16_t) << '\n';
+		std::cout << "In sign extend Immediate =  " << std::bitset<32>(immediate32_t) << '\n';		
+	#endif
+	return immediate32_t;
+}
+
+/* 
+* Description: 
+*	Interpret Control Flow operations and update PC if necessary.
+*
+* Arguments:
+*	(INPUT) PC -- uint32_t value, current PC
+*	(INPUT) instructionData -- instInfoPtr_t current instruction info
+*
+* Return:
+*	long long -- new PC value or -1 if PC was not updated
+*/
+long long updatePC (uint32_t PC, instInfoPtr_t instructionData){
+	long long newPcVal;
+	uint32_t instruction;
+	instruction = PC/4;
+	switch(instructionData->opcode){
+		case BZ:	
+			if (instructionData->RsValHolder == 0) {
+				newPcVal = ((instruction + signExtend(instructionData->immediateValHolder)) * 4); 
+				std::cout << "New CALC PC in BZ: " << newPcVal << "\n";
+			}
+			else {
+				newPcVal = -1;
+			}
+			break;
+		case BEQ:
+			if(instructionData->RsValHolder == instructionData->RtValHolder){
+				newPcVal = ((instruction + signExtend(instructionData->immediateValHolder)) * 4); 
+				std::cout << "*****************New CALC PC in BEQ***********: " << newPcVal << "\n";
+			}
+			else {
+				newPcVal = -1;
+			}
+			break;
+		case JR:
+			newPcVal  = instructionData->RsValHolder;
+			std::cout << "New CALC PC in JR: " << newPcVal << "\n";
+			break;
+		case HALT: break;
+		default:
+			newPcVal = -1;	//signal PC was not updated
+			break;
+	}
+	return newPcVal;
 }
