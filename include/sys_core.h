@@ -8,6 +8,7 @@
 #include <thread>
 #include <future>
 #include <unordered_map>
+#include <list>
 
 #define FILE_LINE_LENGTH        8 //In bytes
 #define FILE_LINE_END_LENGTH    1 //In bytes
