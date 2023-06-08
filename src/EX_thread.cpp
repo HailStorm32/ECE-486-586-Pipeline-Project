@@ -93,6 +93,7 @@ void EXthread(SysCore& sysCore)
 				
 				//control flow ops: caclulate new PC value if applicable. 
 				if (instructionData->isControlFlow == true) {
+					sysCore.instrCountStruct.controlTransferCount += 1;
 					if ((updatedPcVal = updatePC(currentPC, instructionData)) != -1) {
 						sysCore.stageInfoIF.fwdedAluResult = static_cast<uint32_t>(updatedPcVal);
 

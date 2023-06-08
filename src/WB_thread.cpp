@@ -94,7 +94,7 @@ void WBthread(SysCore& sysCore)
                         sysCore.instrCountStruct.memAccesCount += 1;
                         break;
                     case opcodes::BZ: case opcodes::BEQ: case opcodes::JR: case opcodes::HALT:
-                        sysCore.instrCountStruct.controlTransferCount += 1;
+                       // sysCore.instrCountStruct.controlTransferCount += 1;
                         break;
                     default:
                         std::cerr << "\nERROR: can't ID instruction type" << std::endl;
