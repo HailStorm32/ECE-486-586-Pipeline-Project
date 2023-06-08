@@ -28,6 +28,9 @@ void IFthread(SysCore& sysCore){
             return;
         }
 
+        // Wait for the start signal
+        sysCore.threadWaitForStart();
+
         // Continue only if CLK has changed and go ahead from master thread
         if ((prevClkVal < sysCore.clk) && sysCore.stageInfoIF.okToRun) {
             // Clear our flag
@@ -73,6 +76,13 @@ void IFthread(SysCore& sysCore){
 
             // Push the returned instruction to buffer
             sysCore.IFtoID.push(instPrePkg);
+        }
+
+        // Send signal to main thread
+        {
+            std::unique_lock<std::mutex> lock(sysCore.mutex);
+            sysCore.threadsReady++;
+            sysCore.mainCv.notify_one();
         }
 
         // Apply delay

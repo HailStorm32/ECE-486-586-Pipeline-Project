@@ -22,6 +22,9 @@ void IDthread(SysCore& sysCore)
 			return;
 		}
 
+		// Wait for the start signal
+		sysCore.threadWaitForStart();
+
 		//Only coninue if the clock has changed and we have the go ahead from the master
 		if (pastClkVal < sysCore.clk && sysCore.stageInfoID.okToRun)
 		{
@@ -198,6 +201,13 @@ void IDthread(SysCore& sysCore)
 
 			//Pass instruction data to EX stage (will block if it cannot immediately acquire the lock)
 			sysCore.IDtoEX.push(instructionData);
+		}
+
+		// Send signal to main thread
+		{
+			std::unique_lock<std::mutex> lock(sysCore.mutex);
+			sysCore.threadsReady++;
+			sysCore.mainCv.notify_one();
 		}
 
 		std::this_thread::sleep_for(delay);

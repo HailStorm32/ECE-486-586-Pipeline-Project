@@ -20,6 +20,9 @@ void WBthread(SysCore& sysCore)
                 return;
             }
 
+            // Wait for the start signal
+            sysCore.threadWaitForStart();
+
             //Only coninue if the clock has changed and we have the go ahead from the master
             if (pastClkVal < sysCore.clk && sysCore.stageInfoWB.okToRun)
             {
@@ -84,6 +87,13 @@ void WBthread(SysCore& sysCore)
                 
                 //We no longer need the instruction data, delete it
                 delete instructionData;
+            }
+
+            // Send signal to main thread
+            {
+                std::unique_lock<std::mutex> lock(sysCore.mutex);
+                sysCore.threadsReady++;
+                sysCore.mainCv.notify_one();
             }
 
             std::this_thread::sleep_for(delay);
