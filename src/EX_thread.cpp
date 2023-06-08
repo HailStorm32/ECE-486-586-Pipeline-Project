@@ -144,6 +144,14 @@ void EXthread(SysCore& sysCore)
 				continue;
 			}
 
+			//Report if we found a HALT
+			if (instructionData->opcode == opcodes::HALT)
+			{
+				sysCore.stageInfoID.errorType = errorCodes::ERR_HALT;
+				delete instructionData;
+				continue;
+			}
+
 			//Record the new clock value
 			pastClkVal = sysCore.clk;
 

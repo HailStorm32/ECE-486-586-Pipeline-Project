@@ -82,15 +82,6 @@ void IDthread(SysCore& sysCore)
 				break;
 			}
 
-			//Report if we found a HALT
-			if (instructionData->opcode == opcodes::HALT)
-			{
-				sysCore.stageInfoID.errorType = errorCodes::ERR_HALT;
-				delete instructionData;
-				delete instPreInfoPkg;
-				continue;
-			}
-
 			//Write the ID
 			instructionData->generatedID = instPreInfoPkg->generatedID;
 			
