@@ -43,6 +43,7 @@ enum instFormat
 typedef struct instInfo
 {
 	uint32_t generatedID;
+	uint16_t timeStamp;
 	opcodes opcode;
 	instFormat type;
 	uint8_t RsAddr;

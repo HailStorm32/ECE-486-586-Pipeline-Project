@@ -42,6 +42,14 @@ void EXthread(SysCore& sysCore)
 				continue;
 			}
 
+			//If the instruction is not ready to be processed, put it back in the queue and try again next clock
+			if (instructionData->timeStamp == sysCore.clk)
+			{
+				std::cerr << "ERROR: [EXthread] Instruction not ready to be processed, will try again next clock" << std::endl;
+				sysCore.IDtoEX.push(instructionData);
+				continue;
+			}
+
 			//Skip the data if its invalid (aka we are told to flush)
 			if (sysCore.stageInfoEX.invalidateData)
 			{

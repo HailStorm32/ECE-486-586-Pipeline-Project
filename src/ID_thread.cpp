@@ -37,6 +37,9 @@ void IDthread(SysCore& sysCore)
 				//std::cout << "DEBUG: [IDthread] Missed opportunity for this clock, will try again next clock" << std::endl;
 				continue;
 			}
+			////FOR DEBUG ONLY
+			//instInfoPtr_t instructionDataTEMP = decodeInstruction(instPreInfoPkg->rawInstruction);
+			
 
 			//Skip the data if its invalid (aka we are told to flush)
 			if (sysCore.stageInfoID.invalidateData)
@@ -45,6 +48,8 @@ void IDthread(SysCore& sysCore)
 				sysCore.stageInfoID.invalidateData = false;
 				continue;
 			}
+			////FOR DEBUG ONLY
+			//delete instructionDataTEMP;
 
 			//Record the new clock value
 			pastClkVal = sysCore.clk;
@@ -54,6 +59,14 @@ void IDthread(SysCore& sysCore)
 			
 			//update instruction PC value
 			instructionData->instrPC = instPreInfoPkg->instructionPC;
+
+			////FOR DEBUG ONLY
+			//int debug = 0;
+			//if (sysCore.clk > 19)
+			//{
+			//	debug++;
+			//}
+
 
 			if (instructionData == NULL)
 			{
@@ -196,6 +209,8 @@ void IDthread(SysCore& sysCore)
 				}
 			}
 
+			instructionData->timeStamp = sysCore.clk;
+
 			//Pass instruction data to EX stage (will block if it cannot immediately acquire the lock)
 			sysCore.IDtoEX.push(instructionData);
 		}
@@ -203,3 +218,5 @@ void IDthread(SysCore& sysCore)
 		std::this_thread::sleep_for(delay);
 	}
 }
+
+

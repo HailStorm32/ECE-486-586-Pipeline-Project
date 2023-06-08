@@ -70,7 +70,12 @@ int main(int argc, char* argv[])
 		std::cout << "DEBUG: [Masterthread] Clock: " << sysCore.clk << std::endl;
 
 		errorsList = checkForErrors(sysCore);
-
+		////FOR DEBUG ONLY
+		//int debug = 0;
+		//if (sysCore.clk > 19)
+		//{
+		//	debug++;
+		//}
 		if (errorsList == NULL)
 		{
 			std::cerr << "\n\nERROR: [Masterthread] errorsList is NULL\n\n" << std::endl;
