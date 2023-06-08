@@ -257,6 +257,7 @@ void displayResults (SysCore& sysCore)
 	std::cout << "Memory Access Instructions: " << sysCore.instrCountStruct.memAccesCount << std::endl;
 	std::cout << "Control Transfer Instructions: " << sysCore.instrCountStruct.controlTransferCount << std::endl;
 	std::cout << "\nProgram Counter: " << sysCore.PC << std::endl;
+	std::cout << "\nStalls: " << sysCore.instrCountStruct.stalls << std::endl;
 	std::cout << "\nFinal Register States:" << std::endl;
 	for (int i = 0; i <32; i++){
 		if (sysCore.modifiedReg[i] == 1) {

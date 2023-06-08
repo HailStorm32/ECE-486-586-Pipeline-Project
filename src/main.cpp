@@ -119,6 +119,7 @@ int main(int argc, char* argv[])
 		{
 			//Decrement the stall count
 			sysCore.stallsRemaining.stallsRemainIF--;
+			sysCore.instrCountStruct.stalls++;
 		}
 
 		//ID stage

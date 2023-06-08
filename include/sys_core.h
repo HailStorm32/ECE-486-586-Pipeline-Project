@@ -100,6 +100,7 @@ typedef struct count {
     int logicalCount;
     int memAccesCount;
     int controlTransferCount;
+    int stalls;
 } instrCount_t, * instrCountPtr_t;
 
 class SysCore {

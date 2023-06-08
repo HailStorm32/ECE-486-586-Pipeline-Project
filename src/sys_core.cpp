@@ -260,6 +260,7 @@ SysCore::SysCore(std::string filePath) {
 		.logicalCount = 0,
 		.memAccesCount = 0,
 		.controlTransferCount = 0,
+		.stalls = 0,
 	};
 	
 	//Initalize stage structs
