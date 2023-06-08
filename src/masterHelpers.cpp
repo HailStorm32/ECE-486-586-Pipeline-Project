@@ -94,7 +94,7 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 			sysCore.stageInfoIF.updatedPC = true;
 			
 			//Flush the pipeline
-			//sysCore.stageInfoID.invalidateData = true;
+			sysCore.stageInfoID.invalidateData = true;
 			sysCore.stageInfoEX.invalidateData = true;
 			sysCore.stageInfoMEM.invalidateData = true;
 			//sysCore.stageInfoWB.invalidateData = true;
