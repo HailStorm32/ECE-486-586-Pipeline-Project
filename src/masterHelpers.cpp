@@ -99,6 +99,25 @@ int processError(SysCore& sysCore, std::list<stageThreadPtr_t>* structList)
 			sysCore.stageInfoMEM.invalidateData = true;
 			//sysCore.stageInfoWB.invalidateData = true;
 
+			//Clear all the error structs
+			//sysCore.stageInfoIF.errorType = errorCodes::ERR_NONE;
+			//if (sysCore.stageInfoIF.errorInfo != NULL)
+			//{
+			//	delete sysCore.stageInfoIF.errorInfo;
+			//	sysCore.stageInfoIF.errorInfo = NULL;
+			//}
+			//else
+			//	sysCore.stageInfoIF.errorInfo = NULL;
+			//sysCore.stageInfoEX.errorType = errorCodes::ERR_NONE;
+			//if (sysCore.stageInfoEX.errorInfo != NULL)
+			//{
+			//	delete sysCore.stageInfoEX.errorInfo;
+			//	sysCore.stageInfoEX.errorInfo = NULL;
+			//}
+			//else
+			//	sysCore.stageInfoEX.errorInfo = NULL;
+
+
 			//TODO: clear all the error structs, stall counts, forward requests
 
 			break;

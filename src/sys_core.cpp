@@ -265,6 +265,7 @@ SysCore::SysCore(std::string filePath) {
 	//Initalize stage structs
 	stageInfoIF = {
 		.stageType = fowardInfo::IF,
+		.errorInfo = NULL,
 		.errorType = errorCodes::ERR_NONE,
 		.okToRun = false,
 		.updatedPC =false,
@@ -275,6 +276,7 @@ SysCore::SysCore(std::string filePath) {
 	};
 	stageInfoID = {
 		.stageType = fowardInfo::ID,
+		.errorInfo = NULL,
 		.errorType = errorCodes::ERR_NONE,
 		.okToRun = false,
 		.updatedPC =false,
@@ -285,6 +287,7 @@ SysCore::SysCore(std::string filePath) {
 	};
 	stageInfoEX = {
 		.stageType = fowardInfo::EX,
+		.errorInfo = NULL,
 		.errorType = errorCodes::ERR_NONE,
 		.okToRun = false,
 		.updatedPC =false,
@@ -295,6 +298,7 @@ SysCore::SysCore(std::string filePath) {
 	};
 	stageInfoMEM = {
 		.stageType = fowardInfo::MEM,
+		.errorInfo = NULL,
 		.errorType = errorCodes::ERR_NONE,
 		.okToRun = false,
 		.updatedPC =false,
@@ -305,6 +309,7 @@ SysCore::SysCore(std::string filePath) {
 	};
 	stageInfoWB = {
 		.stageType = fowardInfo::WB,
+		.errorInfo = NULL,
 		.errorType = errorCodes::ERR_NONE,
 		.okToRun = false,
 		.updatedPC =false,
