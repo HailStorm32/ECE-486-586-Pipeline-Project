@@ -246,6 +246,12 @@ public:
     // Clock
     volatile long long clk;
 
+    std::mutex mutex;
+    std::condition_variable threadCv;
+    std::condition_variable mainCv;
+    std::atomic<int> threadsReady;
+    bool startThreads = false;
+
     // 5 stages of pipline
     stageThread_t stageInfoIF;
     stageThread_t stageInfoID;

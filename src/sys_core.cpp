@@ -248,6 +248,8 @@ SysCore::SysCore(std::string filePath) {
 	memset(modifiedReg, 0, sizeof(modifiedReg));
 	uint8_t lineEndingCount = 0;
 
+	threadsReady = 0;
+
 	this->filePath = filePath;
 
 	//Find what line endings the file uses
