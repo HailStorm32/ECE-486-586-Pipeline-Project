@@ -11,6 +11,7 @@
 #define MIN_SLEEP_TIME          50 // ms
 
 bool findHazards(SysCore& sysCore, uint32_t rawInstruction);
+static int hazardCount = 0;
 
 void IFthread(SysCore& sysCore){
     long long prevClkVal = -1;
@@ -214,6 +215,9 @@ bool findHazards(SysCore& sysCore, uint32_t rawProducerInstruction)
     if (foundHazard){
         //Create hazardErrInfo struct
         hazardErrInfoPtr_t hazardInfo = new hazardErrInfo_t;
+        hazardCount++; // Increase hazard counter
+        std::cout << "Hazard found, current count: " << hazardCount << std::endl;
+
 
         //Set the number of stalls based on when the consumer falls after the producer
         switch (depthFound)
